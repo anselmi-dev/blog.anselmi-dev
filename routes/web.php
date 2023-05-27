@@ -26,5 +26,6 @@ Route::view('/about', 'pages.about')->name('about');
 Route::get('/t', [TagController::class, 'index'])->name('tag.index');
 Route::get('/t/{tag:slug}', [TagController::class, 'show'])->name('tag.show');
 Route::get('/c', [CategoryController::class, 'index'])->name('category.index');
+Route::get('/blog', [PostsController::class, 'index'])->name('blog.index');
 Route::get('/{post:slug}', [PostsController::class, 'show'])->name('post.show');
 Route::get('/c/{category:slug}', [CategoryController::class, 'show'])->name('category.show');

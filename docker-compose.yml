@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  server:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - 81:80
+      - 444:443
+    networks:
+      - app-network
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+
+networks:
+  app-network:
+    driver: bridge

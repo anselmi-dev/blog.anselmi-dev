@@ -200,9 +200,12 @@
             <x-header.navbar.link :active="Route::is('category.index')" href="{{ route('category.index') }}">
                 {{ __('Categories') }}
             </x-header.navbar.link>
-            <x-header.navbar.link :active="Route::is('about')" href="{{ route('about') }}">
-                {{ __('About') }}
+            <x-header.navbar.link :active="Route::is('blog.index')" href="{{ route('blog.index') }}">
+                {{ __('Blog') }}
             </x-header.navbar.link>
+            {{-- <x-header.navbar.link :active="Route::is('about')" href="{{ route('about') }}">
+                {{ __('About') }}
+            </x-header.navbar.link> --}}
         </div>
 
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">

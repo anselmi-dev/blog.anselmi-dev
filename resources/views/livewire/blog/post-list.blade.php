@@ -7,7 +7,7 @@
 
     @if ($posts->hasMorePages() || !$posts->onFirstPage())
         <div class="my-5 py-5 w-full">
-            {{ $posts->links() }}
+            {{ $posts->links('vendor.livewire.simple-tailwind') }}
         </div>
     @endif
 </x-blog.list>

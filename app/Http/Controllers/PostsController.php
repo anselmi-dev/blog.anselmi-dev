@@ -12,7 +12,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.blog.index');
     }
 
     /**
