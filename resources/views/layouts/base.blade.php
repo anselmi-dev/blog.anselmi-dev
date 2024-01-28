@@ -12,9 +12,11 @@
             } else {
                 this.darkMode = 'dark';
             }
-        }
+        },
     }"
-    x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"
+    x-init="
+        $watch('darkMode', val => localStorage.setItem('darkMode', val))
+    "
     x-bind:class="{'dark': darkMode === 'dark' || (darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)}"
 >
 
@@ -25,6 +27,13 @@
     <meta name="description" content="@yield('description')">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         [x-cloak] {
             display: none
@@ -40,70 +49,39 @@
     @livewireStyles
 </head>
 
-<body class="h-full | bg-zinc-50 dark:bg-black">
+<body class="h-full | bg-zinc-50 dark:bg-zinc-900/90">
     <!--[if lte IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
+    <svg
+        style="position: absolute; height: 89%; opacity: .02; right: 100px; top: 50px"
+        viewBox="207.36978118272356 114.99999999999997 135.2604376345529 130.27551443502497">
+        <g data-paper-data="{&quot;isIcon&quot;:&quot;true&quot;,&quot;iconType&quot;:&quot;icon&quot;,&quot;rawIconId&quot;:&quot;3964630&quot;,&quot;selectedEffects&quot;:{&quot;container&quot;:&quot;&quot;,&quot;transformation&quot;:&quot;&quot;,&quot;pattern&quot;:&quot;&quot;},&quot;isDetailed&quot;:false,&quot;fillRule&quot;:&quot;evenodd&quot;,&quot;bounds&quot;:{&quot;x&quot;:207.36978118272356,&quot;y&quot;:114.99999999999997,&quot;width&quot;:135.2604376345529,&quot;height&quot;:130.27551443502497},&quot;iconStyle&quot;:&quot;standalone&quot;,&quot;suitableAsStandaloneIcon&quot;:true}"
+            fill-rule="evenodd">
+            <path
+                d="M298.37379,135.8567l43.9625,91.63361c0.45585,1.22384 0.37878,2.5827 -0.21247,3.74724c-0.72144,1.32969 -2.03529,2.23405 -3.53477,2.43377l-87.50005,11.58941c-0.20552,0.0197 -0.41258,0.0197 -0.6181,0h-1.89294l-0.32837,-0.15453h-0.11589l-38.63137,-22.23235c-0.05428,-0.04964 -0.11241,-0.09484 -0.17384,-0.13521c-0.14409,-0.08364 -0.27988,-0.1806 -0.40563,-0.28973l-0.32837,-0.28973l-0.32837,-0.34768l-0.17384,-0.32837l-0.23179,-0.38631c-0.07842,-0.13116 -0.14931,-0.26656 -0.21247,-0.40563c-0.05795,-0.13521 -0.15453,-0.28973 -0.15453,-0.42495c-0.04752,-0.13907 -0.08634,-0.28104 -0.11589,-0.42495c-0.00927,-0.15433 -0.00927,-0.30925 0,-0.46358c-0.01043,-0.14796 -0.01043,-0.2963 0,-0.44426c-0.00966,-0.14796 -0.00966,-0.2963 0,-0.44426c-0.00966,-0.15433 -0.00966,-0.30925 0,-0.46358c0.02299,-0.14989 0.05524,-0.29824 0.09658,-0.44426c0.05795,-0.15453 0.15453,-0.38631 0.15453,-0.46358v-0.21247l43.5955,-99.2633c0.0593,-0.12246 0.13038,-0.23894 0.21247,-0.34768c0.07649,-0.14583 0.16032,-0.28761 0.2511,-0.42495l0.28973,-0.32837l0.32837,-0.367l0.34768,-0.2511c0.12033,-0.1072 0.24956,-0.20417 0.38631,-0.28973l0.367,-0.19316l0.44426,-0.19316c0.13251,-0.04752 0.2681,-0.08615 0.40563,-0.11589l0.46358,-0.11589c0.141,-0.02009 0.28394,-0.02009 0.42495,0h1.41004l0.44426,0.19316l0.38631,0.13521h0.11589l38.63137,18.29195l0.19316,0.11589l0.44426,0.27042l0.27042,0.19316c0.20474,0.15337 0.39249,0.32818 0.56015,0.52152l0.13521,0.15453l0.367,0.50221l0.13521,0.2511zM279.15469,161.23751l8.8659,-20.99615l-25.05245,-11.84052zM276.23802,168.13321l-19.50884,-39.59716l-38.0519,86.65017l39.57784,-4.5585zM275.56197,208.73479l19.62473,-2.2213l-9.90894,-19.9531l2.74282,-7.24338l13.57892,27.48622l27.37033,14.64129l-34.57508,-72.06682l-36.29417,85.9548l67.99121,-8.98179l-27.19649,-14.56403l-25.76712,2.91667zM223.96977,220.28556l24.31845,14.00387l7.43654,-17.61591z"
+                data-paper-data="{&quot;isPathIcon&quot;:true}"></path>
+        </g>
+    </svg>
+
     @section('body')
-        <div class="flex flex-row w-full h-full">
-            <div class="bg-gray-100 dark:bg-gray-900 h-full z-10 fixed">
-                <div class="hidden _lg:sticky lg:top-0 lg:flex w-10 lg:w-16 lg:flex-none lg:items-center lg:whitespace-nowrap lg:py-6 lg:text-sm lg:leading-7 lg:[writing-mode:vertical-rl] h-full flex-row">
-                    <div class="flex-1 flex flex-row">
-                        <span class="font-mono text-slate-500 dark:text-white">Hosted by</span>
-                        <span class="mt-3 flex gap-3 font-bold text-slate-900 dark:text-white">Eric Gordon<span aria-hidden="true" class="text-slate-400">/</span>Wes Mantooth</span>
-                    </div>
-                    <div class="flex-row flex space-y-2">
-                        <a href="#" class="text-gray-400 dark:text-white hover:text-primary-default">
-                            <span class="sr-only">Facebook</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill-rule="evenodd"
-                                    d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-            
-                        <a href="#" class="text-gray-400 dark:text-white hover:text-primary-default">
-                            <span class="sr-only">Instagram</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill-rule="evenodd"
-                                    d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-            
-                        <a href="#" class="text-gray-400 dark:text-white hover:text-primary-default">
-                            <span class="sr-only">Twitter</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path
-                                    d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                            </svg>
-                        </a>
-            
-                        <a href="#" class="text-gray-400 dark:text-white hover:text-primary-default">
-                            <span class="sr-only">GitHub</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill-rule="evenodd"
-                                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div id="app" class="flex flex-col h-full flex-1">
-                @section('navigation')
-                    {{-- Comment this include to remove navigation --}}
-                    @include('layouts.parts.navigation')
-                @show
+        <div class="flex flex-row w-full h-full _space-x-5 font-roboto">
+            @section('navigation')
+                @include('layouts.parts.navigation')
+            @show
+            <div id="app" class="flex flex-col h-full flex-1 w-full">
 
                 @section('header')
-                    {{-- Comment this include to remove header section --}}
                     @include('layouts.parts.header')
                 @show
 
                 {{-- CONTENT --}}
                 <div class="flex-1">
                     @yield('content')
+
+                    @isset($slot)
+                        {{ $slot }}
+                    @endisset
                 </div>
                 {{-- /CONTENT --}}
 

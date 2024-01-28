@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use App\Models\Tag;
+
 return new class extends Migration
 {
     /**
@@ -19,17 +21,10 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('tag_posts', function (Blueprint $table) {
+        Schema::create('tags_models', function (Blueprint $table) {
             $table->id();
-
-            $table->unsignedBiginteger('tag_id');
-
-            $table->unsignedBiginteger('post_id');
-
-            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
-
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
-
+            $table->morphs('model');
+            $table->foreignIdFor(Tag::class);
             $table->timestamps();
         });
     }
@@ -39,8 +34,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tag_posts');
-
+        Schema::dropIfExists('tags_models');
         Schema::dropIfExists('tags');
     }
 };

@@ -2,14 +2,14 @@
     type="button"
     x-on:click="toggleDarkMode()"
     class="bg-white  dark:bg-zinc-800/90 rounded-full h-10 w-10 flex items-center justify-center shadow">
-    <svg x-cloak :class="{ 'hidden': darkMode == 'dark' }" viewBox="0 0 24 24" fill="none" stroke-width="2"
+    <svg x-cloak :class="{ 'hidden': darkMode == 'dark' || darkMode == 'system'  }" viewBox="0 0 24 24" fill="none" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
         <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" class="fill-primary-default/20 stroke-primary-default"></path>
         <path
             d="M12 4v1M17.66 6.344l-.828.828M20.005 12.004h-1M17.66 17.664l-.828-.828M12 20.01V19M6.34 17.664l.835-.836M3.995 12.004h1.01M6 6l.835.836"
             class="stroke-primary-default"></path>
     </svg>
-    <svg x-cloak :class="{ 'hidden': darkMode == 'light' }" viewBox="0 0 24 24" fill="none"
+    <svg x-cloak :class="{ 'hidden': darkMode == 'light'}" viewBox="0 0 24 24" fill="none"
         class="w-6 h-6 mr-2">
         <path fill-rule="evenodd" clip-rule="evenodd"
             d="M17.715 15.15A6.5 6.5 0 0 1 9 6.035C6.106 6.922 4 9.645 4 12.867c0 3.94 3.153 7.136 7.042 7.136 3.101 0 5.734-2.032 6.673-4.853Z"

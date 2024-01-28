@@ -50,14 +50,14 @@ class Post extends Model
                 ->saveSlugsTo('slug');
     }
 
-    /**
-     * Get tags that belong to the Post
-     *
-     * @return BelongsToMany
-     */
-    public function tags () : BelongsToMany
+    public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'tag_posts');
+        return $this->morphToMany(Tag::class, 'model', 'tags_models');
+    }
+
+    public function likes()
+    {
+        return $this->morphMany(LikesModel::class, 'model');
     }
 
     /**

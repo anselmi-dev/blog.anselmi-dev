@@ -1,58 +1,75 @@
-<header class="mx-auto max-w-7xl w-full z-1" x-data="{
-    openPanel: false,
-    togglePanel() {
-        if (this.openPanel) {
-            return this.close()
+<header class="mx-auto max-w-7xl w-full z-1"
+    x-data="{
+        openPanel: false,
+        togglePanel() {
+            if (this.openPanel) {
+                return this.close()
+            }
+
+            this.$refs.button.focus()
+
+            this.openPanel = !this.openPanel
+        },
+        closePanel(focusAfter) {
+            if (!this.openPanel) return
+
+            this.openPanel = false
+
+            focusAfter && focusAfter.focus()
+        },
+        open: false,
+        toggle() {
+            if (this.open) {
+                return this.close()
+            }
+
+            this.$refs.button.focus()
+
+            this.open = true
+        },
+        close(focusAfter) {
+            if (!this.open) return
+
+            this.open = false
+
+            focusAfter && focusAfter.focus()
         }
-
-        this.$refs.button.focus()
-
-        this.openPanel = true
-    },
-    closePanel(focusAfter) {
-        if (!this.openPanel) return
-
-        this.openPanel = false
-
-        focusAfter && focusAfter.focus()
-    },
-    open: false,
-    toggle() {
-        if (this.open) {
-            return this.close()
-        }
-
-        this.$refs.button.focus()
-
-        this.open = true
-    },
-    close(focusAfter) {
-        if (!this.open) return
-
-        this.open = false
-
-        focusAfter && focusAfter.focus()
-    }
-}">
-    <nav class="w-full flex items-center justify-between p-6 lg:px-8 | x-text-base-color" aria-label="Global">
+    }">
+    <nav class="w-full flex items-center justify-between pl-6 pr-2 py-2 lg:py-4 lg:px-8 | x-text-base-color" aria-label="Global">
         <div class="flex lg:flex-1">
             <x-logos.link />
         </div>
 
         <div class="flex lg:hidden">
-            <button type="button" x-ref="button" x-on:click="togglePanel()" :aria-expanded="open"
+            <button type="button"
+                class="group flex h-14 w-14 cursor-pointer items-center justify-center rounded | _shadow_bg-white_hover:bg-slate-200"
+                x-ref="button"
+                x-on:click="togglePanel()"
+                :aria-expanded="open"
                 :aria-controls="$id('panel-button')"
-                class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
-                <span class="sr-only">Open main menu</span>
-                <x-icons.menu />
+                :class="openPanel ? 'z-100' : null"
+                >
+                <div class="space-y-2">
+                    <span
+                        :class="openPanel ? 'translate-y-1.5 rotate-45 bg-white' : null"
+                        class="block h-1 w-10 origin-center rounded-full bg-slate-500 transition-transform ease-in-out"></span>
+                    <span
+                        :class="openPanel ? 'w-10 -translate-y-1.5 -rotate-45' : null"
+                        class="block h-1 w-8 origin-center rounded-full bg-primary-default transition-transform ease-in-out _group-hover:w-10 _group-hover:-translate-y-1.5 _group-hover:-rotate-45"></span>
+                </div>
             </button>
         </div>
 
         <div
-            class="hidden lg:flex lg:gap-x-12 px-6 | flex rounded-full px-3 text-base shadow shadow-zinc-800/5 ring-0 ring-zinc-900/5 bg-white dark:bg-zinc-800/90 dark:ring-white/10">
-            <div class="relative" x-on:keydown.escape.prevent.stop="close($refs.button)"
-                x-on:focusin.window="! $refs.panel.contains($event.target) && close()" x-id="['dropdown-button']">
-                <button x-ref="button" x-on:click="toggle()" :aria-expanded="open"
+            class="hidden lg:flex lg:gap-x-12 px-6 | rounded-full text-base shadow shadow-zinc-800/5 ring-0 ring-zinc-900/5 bg-white dark:bg-zinc-800/90 dark:ring-white/10">
+            {{--
+            <div class="relative"
+                x-on:keydown.escape.prevent.stop="close($refs.button)"
+                x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
+                x-id="['dropdown-button']">
+                <button x-ref="button"
+                    x-on:click="togglePanel()"
+                    :aria-expanded="open"
                     :aria-controls="$id('dropdown-button')" type="button" :class="{ 'text-primary-default': open }"
                     class="flex items-center gap-x-1 text-sm font-semibold leading-6 py-3 relative | transition"
                     aria-expanded="false">
@@ -67,7 +84,10 @@
                         class="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary-default/0 via-primary-default/40 to-primary-default/0 dark:from-primary-700/0 dark:via-primary-700/40 dark:to-primary-700/0"></span>
                 </button>
 
-                <div @animation_bottom_to_top x-ref="panel" x-show="open" x-on:click.outside="close($refs.button)"
+                <div @animation_bottom_to_top
+                    x-ref="panel"
+                    x-show="open"
+                    x-on:click.outside="close($refs.button)"
                     :id="$id('dropdown-button')"
                     class="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl backdrop-blur-xl bg-white/90 shadow-lg ring-1 ring-gray-900/5">
                     <div class="p-4">
@@ -193,19 +213,23 @@
                     </div>
                 </div>
             </div>
+            --}}
 
-            <x-header.navbar.link :active="Route::is('tag.index')" href="{{ route('tag.index') }}">
-                {{ __('Tags') }}
+            <x-header.navbar.link wire:navigate :active="Route::is('home')" href="{{ route('home') }}">
+                {{ __('Home') }}
             </x-header.navbar.link>
-            <x-header.navbar.link :active="Route::is('category.index')" href="{{ route('category.index') }}">
-                {{ __('Categories') }}
+
+            <x-header.navbar.link wire:navigate :active="Route::is('gallery.index')" href="{{ route('gallery.index') }}">
+                {{ __('Photos') }}
             </x-header.navbar.link>
-            <x-header.navbar.link :active="Route::is('blog.index')" href="{{ route('blog.index') }}">
+
+            <x-header.navbar.link wire:navigate :active="Route::is('blog.index')" href="{{ route('blog.index') }}">
                 {{ __('Blog') }}
             </x-header.navbar.link>
-            {{-- <x-header.navbar.link :active="Route::is('about')" href="{{ route('about') }}">
+
+            <x-header.navbar.link :active="Route::is('about')" href="{{ route('about') }}">
                 {{ __('About') }}
-            </x-header.navbar.link> --}}
+            </x-header.navbar.link>
         </div>
 
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -213,22 +237,24 @@
         </div>
     </nav>
 
-    <x-sidebar.default class="lg:hidden" x-show="openPanel" x-show="openPanel">
+    <x-sidebar.default class="lg:hidden" x-show="openPanel" x-cloak>
         <x-slot name="logo">
             <x-logos.default/>
         </x-slot>
-        <x-sidebar.link :active="Route::is('tag.index')" href="{{ route('tag.index') }}">
-            <x-icons.home/>
-            {{ __('Tags') }}
+
+        <x-sidebar.link wire:navigate :active="Route::is('home')" href="{{ route('home') }}">
+            {{ __('home') }}
         </x-sidebar.link>
 
-        <x-sidebar.link :active="Route::is('category.index')" href="{{ route('category.index') }}">
-            <x-icons.home/>
-            {{ __('Categories') }}
+        <x-sidebar.link wire:navigate :active="Route::is('gallery.index')" href="{{ route('gallery.index') }}">
+            {{ __('Photos') }}
+        </x-header.navbar.link>
+
+        <x-sidebar.link wire:navigate :active="Route::is('blog.index')" href="{{ route('blog.index') }}">
+            {{ __('Blog') }}
         </x-sidebar.link>
 
-        <x-sidebar.link :active="Route::is('about')" href="{{ route('about') }}">
-            <x-icons.home/>
+        <x-sidebar.link wire:navigate :active="Route::is('about')" href="{{ route('about') }}">
             {{ __('About') }}
         </x-sidebar.link>
     </x-sidebar.default>

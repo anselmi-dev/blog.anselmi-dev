@@ -18,11 +18,16 @@ class PostSeeder extends Seeder
     public function run(): void
     {
         Post::factory()
-            ->count(10)
-            ->has(Tag::factory()->count(Arr::random([
-                1, 2, 3, 4, 5
-            ])))
+            ->count(20)
             ->for(Category::factory())
             ->create();
+
+        $tags = Tag::all();
+        // Populate the pivot table
+        Post::all()->each(function ($post) use ($tags) {
+            $post->tags()->attach(
+                $tags->random(rand(1, 3))->pluck('id')->toArray()
+            );
+        });
     }
 }

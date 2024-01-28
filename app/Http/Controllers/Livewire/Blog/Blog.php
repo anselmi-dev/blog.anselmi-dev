@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Livewire\Blog;
 
 use App\Models\Post;
-use App\Models\Tag;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class PostList extends Component
+class Blog extends Component
 {
     use WithPagination;
 
@@ -19,13 +18,17 @@ class PostList extends Component
     public $tag;
 
     public $filters = [
-        'paginate' => 5
+        'paginate' => 10
     ];
 
     public function render()
     {
-        return view('livewire.blog.post-list', [
-            'posts' => $this->getPosts()
+        return view('livewire.blog.blog', [
+            'posts' => Post::when($this->tag, function ($query) {
+                $query->whereHas('tags', function ($q) {
+                    $q->where('slug', $this->tag);
+                });
+            })->paginate($this->filters['paginate'])
         ]);
     }
 

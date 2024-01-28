@@ -1,6 +1,6 @@
 <footer class="backdrop-blur dark:text-primary-text text-primary relative">
     <div class="mx-auto max-w-7xl overflow-hidden py-6 px-6 lg:px-8">
-        <nav class="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
+        <nav class="hidden -mb-6 columns-2 _sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
             <div class="pb-6">
                 <a href="#" class="text-sm leading-6 hover:text-primary-default">About</a>
             </div>
@@ -25,7 +25,8 @@
                 <a href="#" class="text-sm leading-6 hover:text-primary-default">Partners</a>
             </div>
         </nav>
-        <div class="mt-5 flex justify-center space-x-10">
+
+        <div class="hidden mt-5 flex flex-wrap justify-center gap-6">
             <a href="#" class="text-gray-400 hover:text-primary-default">
                 <span class="sr-only">Facebook</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -70,8 +71,9 @@
                 </svg>
             </a>
         </div>
-        <p class="mt-5 text-center text-xs leading-5 text-gray-500">
-            &copy; 2020 Your Company, Inc. All rights reserved.
+
+        <p class="mt-5 text-center text-xs leading-5 text-gray-500 dark:text-white">
+            &copy; {{ date('Y') }} Anselmi. All rights reserved.
         </p>
     </div>
 </footer>

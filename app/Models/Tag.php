@@ -15,6 +15,18 @@ class Tag extends Model
     use HasSlug;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        "model_id",
+        "model_type",
+        "name",
+        "slug"
+    ];
+
+    /**
      * Get the options for generating the slug.
      */
     public function getSlugOptions() : SlugOptions

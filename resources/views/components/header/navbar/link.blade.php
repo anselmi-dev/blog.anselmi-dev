@@ -1,9 +1,11 @@
-@props(['active' => false, 'href' => null])
+@props([
+    'active' => false
+])
 
-<a href="{{ $href }}"
+<a  {{ $attributes }}
     @class([
-        'text-primary-default' => $active,
-        "text-sm font-semibold leading-6 py-3 relative | transition hover:text-primary-default"
+        'font-semibold' => $active,
+        "text-sm leading-6 py-3 relative | transition text-black dark:text-white font-ligth"
     ])>
     {{ $slot }}
     <span
