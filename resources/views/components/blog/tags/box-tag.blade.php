@@ -15,6 +15,6 @@
             ])>[<span>{{ $posts_count }}</span>]</span>
         @endif
         <span>{{ $tag->name }}</span>
-        <x-heroicon-o-arrow-long-right class="h-5 w-5 transition-all"/>
+        <x-heroicon-o-arrow-long-right class="h-5 w-0 group-hover:w-5 transition-all"/>
     </span>
 </a>

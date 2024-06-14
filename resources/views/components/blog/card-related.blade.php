@@ -32,7 +32,7 @@
                 </div>
                 <div class="text-base font-medium leading-6">
                     <a
-                        class="text-primary-default hover:text-primary-default dark:hover:text-primary-default"
+                        class="text-app-default hover:text-app-default dark:hover:text-app-default"
                         aria-label=""
                         href="{{ $post->url }}"
                         wire:navigate

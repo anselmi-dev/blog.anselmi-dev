@@ -3,8 +3,8 @@
 <a {{ $attributes }}
     @class([
         "group flex items-center rounded-md px-2 py-2 text-base font-medium",
-        'bg-black text-white dark:bg-primary-400 dark:text-black' => $active,
-        "text-gray-600 hover:bg-gray-50 hover:text-primary-400 dark:text-white dark:hover:bg-transparent dark:hover:text-white" => !$active
+        'bg-black text-white dark:bg-app-400 dark:text-black' => $active,
+        "text-gray-600 hover:bg-gray-50 _hover:text-app-400 dark:text-white dark:hover:bg-transparent dark:hover:text-white" => !$active
     ])>
     <x-heroicon-s-chevron-double-right @class(["w-3 mr-1"])/>
     <span>{{ $slot }}</span>

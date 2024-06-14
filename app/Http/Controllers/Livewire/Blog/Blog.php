@@ -28,16 +28,7 @@ class Blog extends Component
                 $query->whereHas('tags', function ($q) {
                     $q->where('slug', $this->tag);
                 });
-            })->paginate($this->filters['paginate'])
+            })->where('status', 'published')->orderByDesc('published_at')->paginate($this->filters['paginate'])
         ]);
-    }
-
-    public function getPosts ()
-    {
-        return Post::when($this->tag, function ($query) {
-            $query->whereHas('tags', function ($q) {
-                $q->where('tag_id', $this->tag->id);
-            });
-        })->paginate($this->filters['paginate']);
     }
 }

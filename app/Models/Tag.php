@@ -20,8 +20,6 @@ class Tag extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        "model_id",
-        "model_type",
         "name",
         "slug"
     ];

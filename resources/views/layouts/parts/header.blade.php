@@ -1,4 +1,4 @@
-<header class="mx-auto max-w-7xl w-full z-1"
+<header id="app-header" class="mx-auto max-w-7xl w-full z-1"
     x-data="{
         openPanel: false,
         togglePanel() {
@@ -37,27 +37,11 @@
     }">
     <nav class="w-full flex items-center justify-between pl-6 pr-2 py-2 lg:py-4 lg:px-8 | x-text-base-color" aria-label="Global">
         <div class="flex lg:flex-1">
-            <x-logos.link />
-        </div>
-
-        <div class="flex lg:hidden">
-            <button type="button"
-                class="group flex h-14 w-14 cursor-pointer items-center justify-center rounded | _shadow_bg-white_hover:bg-slate-200"
-                x-ref="button"
-                x-on:click="togglePanel()"
-                :aria-expanded="open"
-                :aria-controls="$id('panel-button')"
-                :class="openPanel ? 'z-100' : null"
-                >
-                <div class="space-y-2">
-                    <span
-                        :class="openPanel ? 'translate-y-1.5 rotate-45 bg-white' : null"
-                        class="block h-1 w-10 origin-center rounded-full bg-slate-500 transition-transform ease-in-out"></span>
-                    <span
-                        :class="openPanel ? 'w-10 -translate-y-1.5 -rotate-45' : null"
-                        class="block h-1 w-8 origin-center rounded-full bg-primary-default transition-transform ease-in-out _group-hover:w-10 _group-hover:-translate-y-1.5 _group-hover:-rotate-45"></span>
-                </div>
-            </button>
+            <a href="{{ route('home') }}" wire:navigate class="-m-1.5 p-1.5">
+                <span class="dark:text-app-default text-black">
+                    <x-application-logo class='h-8 w-auto fill-current' />
+                </span>
+            </a>
         </div>
 
         <div
@@ -70,7 +54,7 @@
                 <button x-ref="button"
                     x-on:click="togglePanel()"
                     :aria-expanded="open"
-                    :aria-controls="$id('dropdown-button')" type="button" :class="{ 'text-primary-default': open }"
+                    :aria-controls="$id('dropdown-button')" type="button" :class="{ 'text-app-default': open }"
                     class="flex items-center gap-x-1 text-sm font-semibold leading-6 py-3 relative | transition"
                     aria-expanded="false">
                     Product
@@ -81,7 +65,7 @@
                             clip-rule="evenodd" />
                     </svg>
                     <span :class="{ hidden: !open }"
-                        class="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary-default/0 via-primary-default/40 to-primary-default/0 dark:from-primary-700/0 dark:via-primary-700/40 dark:to-primary-700/0"></span>
+                        class="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-app-default/0 via-app-default/40 to-app-default/0 dark:from-primary-700/0 dark:via-primary-700/40 dark:to-primary-700/0"></span>
                 </button>
 
                 <div @animation_bottom_to_top
@@ -95,7 +79,7 @@
                             class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
                             <div
                                 class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                <svg class="h-6 w-6 text-gray-600 group-hover:text-primary-default" fill="none"
+                                <svg class="h-6 w-6 text-gray-600 group-hover:text-app-default" fill="none"
                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
@@ -215,46 +199,74 @@
             </div>
             --}}
 
-            <x-header.navbar.link wire:navigate :active="Route::is('home')" href="{{ route('home') }}">
+            <x-header.navbar.link wire:navigate :active="request()->routeIs('home')" href="{{ route('home') }}">
                 {{ __('Home') }}
             </x-header.navbar.link>
 
-            <x-header.navbar.link wire:navigate :active="Route::is('gallery.index')" href="{{ route('gallery.index') }}">
+            <x-header.navbar.link wire:navigate :active="request()->routeIs('gallery.index')" href="{{ route('gallery.index') }}">
                 {{ __('Photos') }}
             </x-header.navbar.link>
 
-            <x-header.navbar.link wire:navigate :active="Route::is('blog.index')" href="{{ route('blog.index') }}">
+            <x-header.navbar.link wire:navigate :active="request()->routeIs('blog.index')" href="{{ route('blog.index') }}">
                 {{ __('Blog') }}
             </x-header.navbar.link>
 
-            <x-header.navbar.link :active="Route::is('about')" href="{{ route('about') }}">
+            <x-header.navbar.link wire:navigate :active="request()->routeIs('about')" href="{{ route('about') }}">
                 {{ __('About') }}
             </x-header.navbar.link>
         </div>
 
-        <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <x-header.navbar.toggle-dark />
+        <div class="flex items-center flex-1 space-x-4">
+
+            <div class="flex flex-1 justify-end">
+                <x-header.navbar.toggle-dark />
+            </div>
+
+            <div class="flex lg:hidden">
+                <button type="button"
+                    class="group flex h-14 w-14 cursor-pointer items-center justify-center rounded | _shadow_bg-white_hover:bg-slate-200"
+                    x-ref="button"
+                    x-on:click="togglePanel()"
+                    :aria-expanded="open"
+                    :aria-controls="$id('panel-button')"
+                    :class="openPanel ? 'z-100' : null"
+                    >
+                    <div class="space-y-2">
+                        <span
+                            :class="openPanel ? 'translate-y-1.5 rotate-45 bg-white' : null"
+                            class="block h-1 w-10 origin-center rounded-full bg-slate-500 transition-transform ease-in-out"></span>
+                        <span
+                            :class="openPanel ? 'w-10 -translate-y-1.5 -rotate-45' : null"
+                            class="block h-1 w-8 origin-center rounded-full bg-app-default transition-transform ease-in-out _group-hover:w-10 _group-hover:-translate-y-1.5 _group-hover:-rotate-45"></span>
+                    </div>
+                </button>
+            </div>
         </div>
+
     </nav>
 
     <x-sidebar.default class="lg:hidden" x-show="openPanel" x-cloak>
         <x-slot name="logo">
-            <x-logos.default/>
+            <a href="{{ route('home') }}" wire:navigate class="-m-1.5 p-1.5">
+                <span class="dark:text-app-default text-black">
+                    <x-application-logo class='h-8 w-auto fill-current' />
+                </span>
+            </a>
         </x-slot>
 
-        <x-sidebar.link wire:navigate :active="Route::is('home')" href="{{ route('home') }}">
+        <x-sidebar.link wire:navigate :active="request()->routeIs('home')" href="{{ route('home') }}">
             {{ __('home') }}
         </x-sidebar.link>
 
-        <x-sidebar.link wire:navigate :active="Route::is('gallery.index')" href="{{ route('gallery.index') }}">
+        <x-sidebar.link wire:navigate :active="request()->routeIs('gallery.index')" href="{{ route('gallery.index') }}">
             {{ __('Photos') }}
         </x-header.navbar.link>
 
-        <x-sidebar.link wire:navigate :active="Route::is('blog.index')" href="{{ route('blog.index') }}">
+        <x-sidebar.link wire:navigate :active="request()->routeIs('blog.index')" href="{{ route('blog.index') }}">
             {{ __('Blog') }}
         </x-sidebar.link>
 
-        <x-sidebar.link wire:navigate :active="Route::is('about')" href="{{ route('about') }}">
+        <x-sidebar.link wire:navigate :active="request()->routeIs('about')" href="{{ route('about') }}">
             {{ __('About') }}
         </x-sidebar.link>
     </x-sidebar.default>

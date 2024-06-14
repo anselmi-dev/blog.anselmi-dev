@@ -28,7 +28,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,17 +39,24 @@
             display: none
         }
     </style>
-    @section('styles')
+
+    @section('vite')
         @vite([
             'resources/css/app.css',
             'resources/js/app.js'
         ])
     @show
 
+    @stack('styles')
+
     @livewireStyles
 </head>
 
-<body class="h-full | bg-zinc-50 dark:bg-zinc-900/90">
+<body
+    x-init="() => {
+        {{-- $el.classList.remove('fade-out') --}}
+    }"
+    class="h-full | bg-zinc-50 dark:bg-zinc-900/90 | fade-in">
     <!--[if lte IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
@@ -69,6 +76,7 @@
             @section('navigation')
                 @include('layouts.parts.navigation')
             @show
+
             <div id="app" class="flex flex-col h-full flex-1 w-full">
 
                 @section('header')
@@ -76,13 +84,13 @@
                 @show
 
                 {{-- CONTENT --}}
-                <div class="flex-1">
+                <main id="app-content" class="flex-1 z-0 relative">
                     @yield('content')
 
                     @isset($slot)
                         {{ $slot }}
                     @endisset
-                </div>
+                </main>
                 {{-- /CONTENT --}}
 
                 @section('footer')
@@ -93,7 +101,11 @@
         </div>
     @show
 
-    @livewireScripts
+    {{-- @livewireScripts --}}
+    @livewireScriptConfig
+
+    @stack('scripts')
+
 </body>
 
 </html>

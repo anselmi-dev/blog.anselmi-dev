@@ -1,5 +1,5 @@
-<div class="h-screen w-10 lg:w-13 relative _hidden lg:block">
-    <div class="z-10 fixed h-full bg-gray-100 dark:bg-primary-default">
+<div id="app-navigation" class="h-screen w-10 lg:w-13 relative lg:block">
+    <div class="z-10 fixed h-full bg-app-default">
         <div class="w-10 lg:w-13 lg:top-0 py-5 flex lg:flex-none items-center lg:whitespace-nowrap lg:py-6 lg:text-sm leading-7 [writing-mode:vertical-rl] h-full flex-row">
             <div class="flex-1 flex flex-row">
                 <span class="font-roboto _text-slate-500 text-black dark:text-black">CARLOS ANSELMI</span>
@@ -14,7 +14,7 @@
 
             </div>
             <div class="flex-row flex space-y-2">
-                <a href="#" class="text-gray-400 dark:text-black hover:text-black">
+                <a href="#" class="text-gray-400_ text-black hover:text-app-900">
                     <span class="sr-only">Facebook</span>
                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path fill-rule="evenodd"
@@ -23,7 +23,7 @@
                     </svg>
                 </a>
 
-                <a href="#" class="text-gray-400 dark:text-black hover:text-black">
+                <a href="#" class="text-gray-400_ text-black hover:text-app-900">
                     <span class="sr-only">Instagram</span>
                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path fill-rule="evenodd"
@@ -32,7 +32,7 @@
                     </svg>
                 </a>
 
-                <a href="#" class="text-gray-400 dark:text-black hover:text-black">
+                <a href="#" class="text-gray-400_ text-black hover:text-app-900">
                     <span class="sr-only">Twitter</span>
                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path
@@ -40,7 +40,7 @@
                     </svg>
                 </a>
 
-                <a href="#" class="text-gray-400 dark:text-black hover:text-black">
+                <a href="#" class="text-gray-400_ text-black hover:text-app-900">
                     <span class="sr-only">GitHub</span>
                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path fill-rule="evenodd"

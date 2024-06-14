@@ -10,9 +10,14 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Carbon\Carbon;
 
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Post extends Model
+class Post extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     use HasFactory;
 
     use HasSlug;
@@ -26,7 +31,7 @@ class Post extends Model
         "title",
         "status",
         "slug",
-        "short_description",
+        "description",
         "content",
         "published_at",
     ];
@@ -80,6 +85,15 @@ class Post extends Model
         return route('post.show', $this->slug);
     }
 
+    public function getCoverattribute() : Media|null
+    {
+        if ($images = $this->getFirstMedia("cover")) {
+            return $images;
+        }
+
+        return null;
+    }
+
     public function getPublishedAtForHumansAttribute() : string
     {
         try {
@@ -90,5 +104,13 @@ class Post extends Model
         } catch (\Throwable $th) {
             return $this->published_at;
         }
+    }
+
+    public function registerMediaConversions (Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+              ->width(368)
+              ->height(232)
+              ->sharpen(10);
     }
 }

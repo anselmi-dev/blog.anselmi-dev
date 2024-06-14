@@ -3,6 +3,11 @@
 use App\Http\Controllers\{
     TagController
 };
+use App\Http\Controllers\Livewire\Admin\{
+    PostsAdmin,
+    PostFormAdmin,
+};
+
 use App\Http\Controllers\Livewire\{
     Pages\Home,
     Pages\About,
@@ -25,7 +30,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', Home::class)->name('home');
+Route::get('/', About::class)->name('home');
+Route::get('/home-2', Home::class);
 Route::get('/blog', Blog::class)->name('blog.index');
 Route::get('/gallery', Gallery::class)->name('gallery.index');
 Route::get('/blog/categories', Categories::class)->name('categories.index');
@@ -39,3 +45,24 @@ Route::get('/about', About::class)->name('about');
 // Route::get('/b', [PostsController::class, 'index'])->name('posts');
 Route::get('/t', [TagController::class, 'index'])->name('tag.index');
 
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+Route::get('dashaboard/posts', PostsAdmin::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.posts');
+
+Route::get('dashaboard/posts/edit/{post:slug}', PostFormAdmin::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.posts.edit');
+
+Route::get('dashaboard/posts/new', PostFormAdmin::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.posts.create');
+
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
+
+require __DIR__.'/auth.php';

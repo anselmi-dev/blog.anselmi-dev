@@ -1,19 +1,39 @@
+import forms from '@tailwindcss/forms';
+
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors')
 
 module.exports = {
     darkMode: 'class',
+    presets: [
+        require('./vendor/wireui/wireui/tailwind.config.js'),
+        require('tailwind-scrollbar'),
+    ],
     content: [
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
+        './vendor/wireui/wireui/resources/**/*.blade.php',
+        './vendor/wireui/wireui/ts/**/*.ts',
+        './vendor/wireui/wireui/src/View/**/*.php'
     ],
     theme: {
         extend: {
             colors: {
                 primary: {
-                    'default': '#FFDF1B'
-                }
+                    'default': '#6fbd6b',
+                    '50': '#f4faf3',
+                    '100': '#e4f5e3',
+                    '200': '#caeac8',
+                    '300': '#86cd82',
+                    '400': '#6fbd6b',
+                    '500': '#4ba146',
+                    '600': '#398435',
+                    '700': '#2f682d',
+                    '800': '#295427',
+                    '900': '#234522',
+                    '950': '#0e250e',
+                },
             },
             fontSize: {
                 xxs: '0.6rem',
@@ -40,22 +60,23 @@ module.exports = {
                 '100': '100',
             },
             colors: {
-                primary: {
-                    'default': '#FFDF1B',
-                    '100': '#fff75e',
-                    '200': '#fff056',
-                    '300': '#ffe94e',
-                    '400': '#fff6c4',
-                    '500': '#FBE813',
-                    '600': '#ffd53e',
-                    '700': '#fecf3e',
-                    '800': '#fdc43f',
-                    '900': '#04464d',
-                },
-                secondary: '#ecc94b'
+                app: {
+                    'default': '#6fbd6b',
+                    '50': '#f4faf3',
+                    '100': '#e4f5e3',
+                    '200': '#caeac8',
+                    '300': '#86cd82',
+                    '400': '#6fbd6b',
+                    '500': '#4ba146',
+                    '600': '#398435',
+                    '700': '#2f682d',
+                    '800': '#295427',
+                    '900': '#234522',
+                    '950': '#0e250e',
+                }
             },
 
         },
     },
-    plugins: [],
+    plugins: [forms],
 }

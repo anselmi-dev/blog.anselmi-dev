@@ -23,6 +23,12 @@
 
         <div class="fixed inset-0 z-40 flex">
             <div
+            x-transition:enter="transition-opacity ease-linear duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-linear duration-300"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
                 {{ $attributes->whereStartsWith('x-show') }}
                 @animation_sidebar
                 class="relative flex w-full max-w-xs flex-1 flex-col bg-white dark:bg-zinc-900/90"
@@ -30,9 +36,12 @@
 
                 <div
                     {{ $attributes->whereStartsWith('x-show') }}
-                    x-transition:enter="ease-in-out duration-300" x-transition:enter-start="opacity-0"
-                    x-transition:enter-end="opacity-100" x-transition:leave="ease-in-out duration-300"
-                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                    x-transition:enter="transition-opacity ease-linear duration-300"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition-opacity ease-linear duration-300"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
                     class="absolute top-0 right-0 -mr-12 pt-2">
                 </div>
 

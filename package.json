@@ -5,14 +5,18 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "autoprefixer": "^10.4.14",
+        "@tailwindcss/forms": "^0.5.2",
+        "autoprefixer": "^10.4.2",
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.7.2",
-        "postcss": "^8.4.21",
-        "tailwindcss": "^3.3.5",
+        "postcss": "^8.4.31",
+        "tailwind-scrollbar": "^3.1.0",
+        "tailwindcss": "^3.1.0",
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@ryangjchandler/alpine-clipboard": "^2.3.0",
+        "alpine-splide": "^1.2.0",
         "alpinejs": "^3.12.0"
     }
 }

@@ -1,0 +1,5 @@
+Please store these credentials safely, as they will not be shown again.
+Sudo Password: 
+1a6tCZlZNnPPl1RkB24x
+Database Password: 
+WmGIhf2tXkOQGFBeeqqO

@@ -1,11 +1,5 @@
 <article {{ $attributes->whereDoesntStartWith('post') }}>
     <div class="relative isolate flex flex-col gap-8 lg:flex-row">
-        {{--
-        <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
-            <img src="https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=3603&amp;q=80" alt="" class="absolute inset-0 h-full w-full rounded-2xl bg-gray-50 object-cover">
-            <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
-        </div>
-        --}}
         <div class="space-y-5 xl:col-span-5">
             <div class="space-y-6">
                 <div>
@@ -35,10 +29,14 @@
             </div>
             <div class="text-base font-medium leading-6">
                 <a
-                    class="group inline-block border-none px-2 py-1 text-black uppercase bg-primary-default transition-all hover:text-white hover:bg-black _dark:hover:text-primary-default"
-                    aria-label=""
+                    class="group inline-block border-none px-2 py-1 text-black uppercase bg-app-default transition-all hover:text-white hover:bg-black _dark:hover:text-app-default"
                     href="{{ $post->url }}"
-                    wire:navigate
+                    {{-- x-on:click="
+                        if(!event.metaKey) {
+                            event.preventDefault();
+                            Alpine.navigate($el.getAttribute('href'));
+                        }
+                    " --}}
                     >
                     <span class="flex items-center space-x-2">
                         <span>{{ __('Read more') }}</span>

@@ -2,32 +2,32 @@
     <div class="mx-auto max-w-7xl overflow-hidden py-6 px-6 lg:px-8">
         <nav class="hidden -mb-6 columns-2 _sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
             <div class="pb-6">
-                <a href="#" class="text-sm leading-6 hover:text-primary-default">About</a>
+                <a href="#" class="text-sm leading-6 hover:text-app-default">About</a>
             </div>
 
             <div class="pb-6">
-                <a href="#" class="text-sm leading-6 hover:text-primary-default">Blog</a>
+                <a href="#" class="text-sm leading-6 hover:text-app-default">Blog</a>
             </div>
 
             <div class="pb-6">
-                <a href="#" class="text-sm leading-6 hover:text-primary-default">Jobs</a>
+                <a href="#" class="text-sm leading-6 hover:text-app-default">Jobs</a>
             </div>
 
             <div class="pb-6">
-                <a href="#" class="text-sm leading-6 hover:text-primary-default">Press</a>
+                <a href="#" class="text-sm leading-6 hover:text-app-default">Press</a>
             </div>
 
             <div class="pb-6">
-                <a href="#" class="text-sm leading-6 hover:text-primary-default">Accessibility</a>
+                <a href="#" class="text-sm leading-6 hover:text-app-default">Accessibility</a>
             </div>
 
             <div class="pb-6">
-                <a href="#" class="text-sm leading-6 hover:text-primary-default">Partners</a>
+                <a href="#" class="text-sm leading-6 hover:text-app-default">Partners</a>
             </div>
         </nav>
 
         <div class="hidden mt-5 flex flex-wrap justify-center gap-6">
-            <a href="#" class="text-gray-400 hover:text-primary-default">
+            <a href="#" class="text-gray-400 hover:text-app-default">
                 <span class="sr-only">Facebook</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path fill-rule="evenodd"
@@ -36,7 +36,7 @@
                 </svg>
             </a>
 
-            <a href="#" class="text-gray-400 hover:text-primary-default">
+            <a href="#" class="text-gray-400 hover:text-app-default">
                 <span class="sr-only">Instagram</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path fill-rule="evenodd"
@@ -45,7 +45,7 @@
                 </svg>
             </a>
 
-            <a href="#" class="text-gray-400 hover:text-primary-default">
+            <a href="#" class="text-gray-400 hover:text-app-default">
                 <span class="sr-only">Twitter</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path
@@ -53,7 +53,7 @@
                 </svg>
             </a>
 
-            <a href="#" class="text-gray-400 hover:text-primary-default">
+            <a href="#" class="text-gray-400 hover:text-app-default">
                 <span class="sr-only">GitHub</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path fill-rule="evenodd"
@@ -62,7 +62,7 @@
                 </svg>
             </a>
 
-            <a href="#" class="text-gray-400 hover:text-primary-default">
+            <a href="#" class="text-gray-400 hover:text-app-default">
                 <span class="sr-only">YouTube</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path fill-rule="evenodd"
