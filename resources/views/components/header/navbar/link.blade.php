@@ -5,7 +5,7 @@
 <a  {{ $attributes }}
     @class([
         'font-semibold' => $active,
-        "text-sm leading-6 py-3 relative | transition text-black dark:text-white font-ligth"
+        "text-sm leading-6 py-2 relative | transition text-black dark:text-white font-ligth"
     ])>
     {{ $slot }}
     <span

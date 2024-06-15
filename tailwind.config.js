@@ -2,6 +2,7 @@ import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors')
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
     darkMode: 'class',
@@ -18,6 +19,10 @@ module.exports = {
         './vendor/wireui/wireui/src/View/**/*.php'
     ],
     theme: {
+        screens: {
+            'xs':'440px',
+            ...defaultTheme.screens,
+        },
         extend: {
             colors: {
                 primary: {
@@ -61,7 +66,7 @@ module.exports = {
             },
             colors: {
                 app: {
-                    'default': '#6fbd6b',
+                    'default': '#398435',
                     '50': '#f4faf3',
                     '100': '#e4f5e3',
                     '200': '#caeac8',

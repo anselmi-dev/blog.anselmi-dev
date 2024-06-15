@@ -1,0 +1,63 @@
+
+html:not(.nprogress-busy) .fade-in .nprogress-busy--card {
+    animation: bodyInAnimation .5s forwards;
+}
+html:not(.nprogress-busy) .fade-in #app-content {
+    animation: bodyInAnimation 1s forwards;
+}
+
+html.nprogress-busy #app-content {
+    animation: bodyOutAnimation 1s forwards;
+}
+html:not(.nprogress-busy) .fade-in #app-content {
+    opacity: 0;
+    transform: translateY(200px);
+}
+
+html.nprogress-busy .nprogress-busy--card {
+    animation: bodyOutAnimation .5s forwards;
+}
+html:not(.nprogress-busy) .fade-in .nprogress-busy--card {
+    opacity: 0;
+    transform: translateY(200px);
+}
+
+@keyframes bodyInAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+    to {
+        opacity: 100;
+        transform: translateY(0px);
+    }
+}
+
+@keyframes bodyOutAnimation {
+    from {
+        opacity: 100;
+        transform: translateY(0px);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(200px);
+    }
+}
+
+@keyframes opacityAnimation {
+    from {
+        opacity: 100;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes expandAnimation {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}

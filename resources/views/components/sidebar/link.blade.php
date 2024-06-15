@@ -6,7 +6,7 @@
         'bg-black text-white dark:bg-app-400 dark:text-black' => $active,
         "text-gray-600 hover:bg-gray-50 _hover:text-app-400 dark:text-white dark:hover:bg-transparent dark:hover:text-white" => !$active
     ])>
-    <x-heroicon-s-chevron-double-right @class(["w-3 mr-1"])/>
+    {{-- <x-heroicon-s-chevron-double-right @class(["w-3 mr-1"])/> --}}
     <span>{{ $slot }}</span>
     <x-heroicon-o-arrow-long-right class="ml-2 h-5 w-5 group-hover:w-5 transition-all"/>
 </a>
