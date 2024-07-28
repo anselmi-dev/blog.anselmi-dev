@@ -1,63 +1,177 @@
 
-html:not(.nprogress-busy) .fade-in .nprogress-busy--card {
-    animation: bodyInAnimation .5s forwards;
-}
-html:not(.nprogress-busy) .fade-in #app-content {
-    animation: bodyInAnimation 1s forwards;
+// html:not(.nprogress-busy) .fade-in .nprogress-busy--card {
+//     animation: bodyInAnimation .5s forwards
+// }
+
+// INT
+// html body.fade-in #app-content,
+body.in #app-content {
+    animation: bodyInAnimation 1s forwards
 }
 
-html.nprogress-busy #app-content {
+// OUT
+body.out #app-content {
     animation: bodyOutAnimation 1s forwards;
 }
-html:not(.nprogress-busy) .fade-in #app-content {
-    opacity: 0;
-    transform: translateY(200px);
+
+// INT
+// html body.fade-in #app-content,
+body.in #app-header {
+    animation: headerInAnimation 2s forwards
+}
+body.out #app-header {
+    animation: headerOutAnimation 2s forwards;
 }
 
-html.nprogress-busy .nprogress-busy--card {
-    animation: bodyOutAnimation .5s forwards;
+// INT
+// html body.fade-in #app-content,
+body.in footer {
+    animation: footerInAnimation 1s forwards
 }
-html:not(.nprogress-busy) .fade-in .nprogress-busy--card {
-    opacity: 0;
-    transform: translateY(200px);
+body.out footer {
+    animation: footerOutAnimation 1s forwards;
 }
 
-@keyframes bodyInAnimation {
-    from {
+body.in #app-navigation {
+    animation: navigationInAnimation 1.5s forwards
+}
+body.out #app-navigation {
+    animation: navigationOutAnimation 1.5s forwards;
+}
+
+@keyframes navigationInAnimation {
+    0% {
         opacity: 0;
-        transform: translateY(100px);
+        transform: translateX(-200px)
     }
+
     to {
         opacity: 100;
-        transform: translateY(0px);
+        transform: translateX(0)
+    }
+}
+
+@keyframes navigationOutAnimation {
+    0% {
+        opacity: 100;
+        transform: translateX(0)
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-200px)
+    }
+}
+
+
+@keyframes headerInAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(-200px)
+    }
+
+    to {
+        opacity: 100;
+        transform: translateY(0)
+    }
+}
+
+@keyframes headerOutAnimation {
+    0% {
+        opacity: 100;
+        transform: translateY(0)
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-200px)
+    }
+}
+
+
+@keyframes footerInAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(200px)
+    }
+
+    to {
+        opacity: 100;
+        transform: translateY(0)
+    }
+}
+
+@keyframes footerOutAnimation {
+    0% {
+        opacity: 100;
+        transform: translateY(0)
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(200px)
+    }
+}
+
+// html:not(.nprogress-busy) #app-content {
+//     opacity: 0;
+//     transform: translateY(200px)
+// }
+
+// html.nprogress-busy .nprogress-busy--card {
+//     animation: bodyOutAnimation .5s forwards
+// }
+
+// html:not(.nprogress-busy) .fade-in .nprogress-busy--card {
+//     opacity: 0;
+//     transform: translateY(200px)
+// }
+
+@keyframes bodyInAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(200px)
+    }
+
+    to {
+        opacity: 100;
+        transform: translateY(0)
     }
 }
 
 @keyframes bodyOutAnimation {
-    from {
+    0% {
         opacity: 100;
-        transform: translateY(0px);
+        transform: translateY(0)
     }
-    to {
+
+    90% {
         opacity: 0;
-        transform: translateY(200px);
+        transform: translateY(200px)
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(0px)
     }
 }
 
 @keyframes opacityAnimation {
-    from {
-        opacity: 100;
+    0% {
+        opacity: 100
     }
+
     to {
-        opacity: 0;
+        opacity: 0
     }
 }
 
 @keyframes expandAnimation {
-    from {
-        width: 0%;
+    0% {
+        width: 0%
     }
+
     to {
-        width: 100%;
+        width: 100%
     }
 }

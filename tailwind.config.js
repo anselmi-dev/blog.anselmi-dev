@@ -45,7 +45,8 @@ module.exports = {
             },
             fontFamily: {
                 'oswald': ['Oswald', 'sans-serif'],
-                'roboto': ['Roboto', 'sans-serif']
+                'secondary': ['Roboto', 'sans-serif'],
+                'primary': ['Montserrat', 'sans-serif']
             },
             animation: {
                 'infinite-scroll': 'infinite-scroll 25s linear infinite',
@@ -65,8 +66,26 @@ module.exports = {
                 '100': '100',
             },
             colors: {
+                secondary: {
+                    dark: '#333333',
+                    hover: '#dcd9cc',
+                    default: '#f2f1ec',
+                    '50': '#f8f7f4',
+                    '100': '#f2f1ec',
+                    '200': '#dcd9cc',
+                    '300': '#c5c0ac',
+                    '400': '#ada38a',
+                    '500': '#9d8f72',
+                    '600': '#907f66',
+                    '700': '#786956',
+                    '800': '#635749',
+                    '900': '#51473d',
+                    '950': '#2b251f',
+                },
                 app: {
-                    'default': '#398435',
+                    'primary': '#398435',
+                    'hover': '#398435',
+                    'default': '#00d495',
                     '50': '#f4faf3',
                     '100': '#e4f5e3',
                     '200': '#caeac8',
@@ -80,7 +99,11 @@ module.exports = {
                     '950': '#0e250e',
                 }
             },
-
+            flex: {
+                '2': '2 2 0%',
+                '3': '3 3 0%',
+                '4': '4 4 0%',
+            }
         },
     },
     plugins: [forms],

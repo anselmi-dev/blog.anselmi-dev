@@ -31,6 +31,7 @@
                 <a
                     class="group inline-block border-none px-2 py-1 text-black uppercase bg-app-default transition-all hover:text-white hover:bg-black _dark:hover:text-app-default"
                     href="{{ $post->url }}"
+                    wire:navigate
                     {{-- x-on:click="
                         if(!event.metaKey) {
                             event.preventDefault();

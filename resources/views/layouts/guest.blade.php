@@ -12,11 +12,26 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
-        @vite(['resources/css/sapp.css', 'resources/js/app.js'])
+
+        <style>
+            [x-cloak] {
+                display: none
+            }
+        </style>
+
+        @section('vite')
+            @vite([
+                'resources/css/app.scss',
+                'resources/js/app.js'
+            ])
+        @show
+
+        @stack('styles')
+
+        @livewireStyles
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-secondary-default dark:bg-secondary-dark">
             <div>
                 <a href="/" wire:navigate>
                     <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
@@ -27,5 +42,10 @@
                 {{ $slot }}
             </div>
         </div>
+        {{-- @livewireScripts --}}
+        
+        @livewireScriptConfig
+
+        @stack('scripts')
     </body>
 </html>

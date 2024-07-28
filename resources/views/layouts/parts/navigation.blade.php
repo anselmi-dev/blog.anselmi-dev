@@ -1,6 +1,6 @@
 <div id="app-navigation"
     class="h-screen w-10 lg:w-13 relative lg:block">
-    <div class="z-10 fixed h-full bg-app-default">
+    <div class="z-10 fixed h-full bg-app-default dot-pattern">
         <div class="w-10 lg:w-13 lg:top-0 py-5 flex lg:flex-none items-center lg:whitespace-nowrap lg:py-6 lg:text-sm leading-7 [writing-mode:vertical-rl] h-full flex-row">
             <div class="flex-1 flex flex-row">
                 {{-- <span class="font-roboto _text-slate-500 text-black dark:text-black">CARLOS ANSELMI</span> --}}

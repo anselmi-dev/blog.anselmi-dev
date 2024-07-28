@@ -1,7 +1,10 @@
 <div class="flex flex-col space-y-2 | x-text-base-color">
     <div class="flex justify-between | flex-col xs:flex-row">
         @isset($title)
-            <div class="text-lg text-gray-500 dark:text-white/50 | order-2 xs:order-1 leading-none">
+        <div class="text-md text-gray-500 dark:text-white/50 | order-2 xs:order-1 leading-none | flex items-center gap-1">
+                @isset($icon)
+                    {{ $icon }}
+                @endisset
                 {{ $title }}
             </div>
         @endisset

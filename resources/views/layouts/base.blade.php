@@ -48,9 +48,7 @@
             focusAfter && focusAfter.focus()
         }
     }"
-    x-init="
-        $watch('darkMode', val => localStorage.setItem('darkMode', val))
-    "
+    x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"
     x-bind:class="{'dark': darkMode === 'dark' || (darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)}"
 >
 
@@ -68,6 +66,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <style>
         [x-cloak] {
             display: none
@@ -84,15 +86,35 @@
     @stack('styles')
 
     @livewireStyles
+
+    <script>
+        document.addEventListener('livewire:navigate', (event) => {
+            document.body.classList.remove('in');
+            document.body.classList.add('out');
+        })
+        
+        document.addEventListener('livewire:navigating', () => {
+            // Triggered when new HTML is about to swapped onto the page...
+        
+            // This is a good place to mutate any HTML before the page
+            // is nagivated away from...
+            console.log('livewire:navigating');
+        })
+        
+        document.addEventListener('livewire:navigated', () => {
+            document.body.classList.remove('out');
+            document.body.classList.add('in');
+        })
+    </script>
 </head>
 
-<body class="h-full | bg-zinc-50 dark:bg-zinc-900/90 | fade-in">
+<body class="h-full | bg-secondary-default dark:bg-secondary-dark | fade-in">
     <!--[if lte IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
 
     @section('body')
-        <div class="flex flex-row w-full h-full _space-x-5 font-roboto">
+        <div class="flex flex-row w-full h-full _space-x-5 font-primary">
             @section('navigation')
                 @include('layouts.parts.navigation')
             @show

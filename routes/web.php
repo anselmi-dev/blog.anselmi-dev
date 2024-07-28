@@ -3,9 +3,11 @@
 use App\Http\Controllers\{
     TagController
 };
-use App\Http\Controllers\Livewire\Admin\{
-    PostsAdmin,
+use App\Livewire\Admin\{
     PostFormAdmin,
+    PostsAdmin,
+    PhotosAdmin,
+    PhotoFormAdmin,
 };
 
 use App\Http\Controllers\Livewire\{
@@ -51,26 +53,40 @@ Route::group(
     // Route::get('/b', [PostsController::class, 'index'])->name('posts');
     Route::get('/t', [TagController::class, 'index'])->name('tag.index');
 
-    Route::view('dashboard', 'dashboard')
-        ->middleware(['auth', 'verified'])
-        ->name('dashboard');
-
-    Route::get('dashaboard/posts', PostsAdmin::class)
-        ->middleware(['auth', 'verified'])
-        ->name('admin.posts');
-
-    Route::get('dashaboard/posts/edit/{post:slug}', PostFormAdmin::class)
-        ->middleware(['auth', 'verified'])
-        ->name('admin.posts.edit');
-
-    Route::get('dashaboard/posts/new', PostFormAdmin::class)
-        ->middleware(['auth', 'verified'])
-        ->name('admin.posts.create');
-
-    Route::view('profile', 'profile')
-        ->middleware(['auth'])
-        ->name('profile');
-
-
-    require __DIR__.'/auth.php';
+    
+    
 });
+
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+Route::get('dashaboard/posts', PostsAdmin::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.posts');
+
+Route::get('dashaboard/posts/edit/{post:slug}', PostFormAdmin::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.posts.edit');
+
+Route::get('dashaboard/posts/new', PostFormAdmin::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.posts.create');
+
+Route::get('dashaboard/photos', PhotosAdmin::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.photos');
+
+Route::get('dashaboard/photos/edit/{post:slug}', PhotoFormAdmin::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.photo.edit');
+
+Route::get('dashaboard/photos/new', PhotoFormAdmin::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.photo.create');
+
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
+
+require __DIR__.'/auth.php';

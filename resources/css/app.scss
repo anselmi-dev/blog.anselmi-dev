@@ -8,9 +8,14 @@
 @import 'parts/container';
 @import 'parts/ripple-wrap';
 @import 'parts/scrollbar';
+@import 'parts/expanding-cards';
+
+.dot-pattern {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAACqADAAQAAAABAAAACgAAAAAYsJrPAAAAHUlEQVQYGWNgYGBQhWIghRswQaX+41YyKkPNEAAA4OoBTP5jT7kAAAAASUVORK5CYII=);
+}
 
 .x-text-base-color {
-    @apply text-zinc-800 dark:text-white;
+    @apply text-secondary-950 dark:text-white;
 }
 
 .x-text-base-primary {
@@ -53,7 +58,9 @@
     border: 1px solid #333;
 }
 
+#nprogress .bar.bar {
+    @apply bg-app-default
+}
 ::selection {
-    background: #398435;
-    color: #FFF;
+    @apply bg-app-default text-white;
 }

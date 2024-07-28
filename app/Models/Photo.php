@@ -5,8 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Photo extends Model
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
+class Photo extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     use HasFactory;
 
     /**
@@ -41,4 +47,20 @@ class Photo extends Model
         return $this->morphToMany(Tag::class, 'model', 'tags_models');
     }
 
+    public function getCoverattribute() : Media|null
+    {
+        if ($images = $this->getFirstMedia("photos")) {
+            return $images;
+        }
+
+        return null;
+    }
+
+    public function registerMediaConversions (Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+              ->width(1000)
+              ->height(1000)
+              ->sharpen(10);
+    }
 }

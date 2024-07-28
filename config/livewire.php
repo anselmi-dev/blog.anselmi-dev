@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'class_namespace' => 'App\\Http\\Controllers\\Livewire',
+    'class_namespace' => 'App\\Livewire',
 
     /*
     |---------------------------------------------------------------------------
@@ -38,6 +38,7 @@ return [
     |
     */
 
+    // 'layout' => 'components.layouts.app',
     'layout' => 'layouts.base',
 
     /*
@@ -74,6 +75,7 @@ return [
             'jpg', 'jpeg', 'mpga', 'webp', 'wma',
         ],
         'max_upload_time' => 5, // Max duration (in minutes) before an upload is invalidated...
+        'cleanup' => true, // Should cleanup temporary uploads older than 24 hrs...
     ],
 
     /*
