@@ -64,3 +64,58 @@
 ::selection {
     @apply bg-app-default text-white;
 }
+
+
+.splide--app {
+    .splide__slide.is-active.is-visible  {
+        .splide-tag {
+            animation: splideTagInAnimation 1s forwards
+        }
+    }
+    .splide__slide:not(.is-visible) {
+        .splide-tag {
+            animation: splideTagOutAnimation 1s forwards
+        }
+        
+    }
+
+    button.splide__arrow {
+        &:hover {
+            opacity: 1;
+        }
+    }
+    .splide__arrows .splide__arrow {
+        width: auto;
+        height: auto;
+        opacity: .3;
+        padding: .2rem;
+        svg {
+            height: 1em;
+            width: 1em;
+        }
+    }
+}
+
+@keyframes splideTagInAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(50px)
+    }
+
+    to {
+        opacity: 100;
+        transform: translateY(0)
+    }
+}
+
+@keyframes splideTagOutAnimation {
+    0% {
+        opacity: 100;
+        transform: translateY(0)
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(50px)
+    }
+}

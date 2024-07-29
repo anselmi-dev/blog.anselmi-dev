@@ -17,10 +17,10 @@ body.out #app-content {
 // INT
 // html body.fade-in #app-content,
 body.in #app-header {
-    animation: headerInAnimation 2s forwards
+    animation: headerInAnimation 1.5s forwards
 }
 body.out #app-header {
-    animation: headerOutAnimation 2s forwards;
+    animation: headerOutAnimation 1.5s forwards;
 }
 
 // INT

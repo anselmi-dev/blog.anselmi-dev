@@ -114,12 +114,12 @@
     <![endif]-->
 
     @section('body')
-        <div class="flex flex-row w-full h-full _space-x-5 font-primary">
+        <div class="flex flex-row w-full min-h-screen _space-x-5 font-primary">
             @section('navigation')
                 @include('layouts.parts.navigation')
             @show
 
-            <div id="app" class="flex flex-col h-full flex-1 w-full">
+            <div id="app" class="flex flex-col h-full flex-1 w-full min-h-screen">
 
                 @section('header')
                     @include('layouts.parts.header')

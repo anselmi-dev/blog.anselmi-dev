@@ -1,3 +1,8 @@
+@props([
+    'hasLike' => false,
+    'likes' => 0
+])
+
 <div x-data="{
     hasLike: {{ $hasLike ? 'true' : 'false' }},
     likes: {{ $likes }},
@@ -54,6 +59,6 @@ x-init="$watch('hasLike', (value) => {
     </x-buttons.circle>
 
     <div class="text-center">
-        <span x-text="likes"></span>
+        {{-- <span x-text="likes"></span> --}}
     </div>
 </div>
