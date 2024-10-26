@@ -3,6 +3,11 @@
 use App\Http\Controllers\{
     TagController
 };
+use App\Livewire\{
+    Pages\Projects,
+    Pages\Project,
+};
+
 use App\Livewire\Admin\{
     PostFormAdmin,
     PostsAdmin,
@@ -50,11 +55,11 @@ Route::group(
     Route::get('/contact', Contact::class)->name('contact');
     Route::get('/about', About::class)->name('about');
 
+    Route::get('/projects', Projects::class)->name('projects');
+    Route::get('/projects/{project}', Project::class)->name('project');
+
     // Route::get('/b', [PostsController::class, 'index'])->name('posts');
     Route::get('/t', [TagController::class, 'index'])->name('tag.index');
-
-    
-    
 });
 
 Route::view('dashboard', 'dashboard')

@@ -5,7 +5,7 @@
 <div class="flex flex-col mt-10 mx-auto">
     <x-containers.content>
         <div class="space-y-12">
-            <div class="flex flex-col space-y-4">
+            <div class="flex flex-col space-y-12">
                 <!-- ME -->
                 <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 max-w-3xl">
                     <div class="h-[90px] w-[90px] relative">
@@ -47,15 +47,16 @@
             </div>
 
             <div class="space-y-4">
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 space-y-12">
                     <!-- My projects -->
                     <x-containers.card class="col-span-full">
-                        <x-about.section :title="__('My projects')">
-                            <div class="expanding-cards | flex gap-2">
+                        <x-containers.card-section :title="__('Developments')">
+                            <div class="expanding-cards | grid grid-cols-1 md:grid-cols-2 gap-2">
                                 @php
                                     $projects = [
                                         [
                                             'bg' => asset('images/projects/peronda/bg.png'),
+                                            'url' => route('project', ['project' => 'peronda']),
                                             'logo' => asset('images/projects/peronda/logo-white.png'),
                                             'description' => 'En este proyecto, desarrollé un sistema que permite a los usuarios explorar una amplia gama de productos cerámicos, cada uno cuidadosamente diseñado para aportar valor y elegancia a cualquier espacio. La plataforma facilita la búsqueda de productos según las preferencias del cliente y muestra detalles exhaustivos que destacan la calidad y singularidad de cada pieza.',
                                             'tags' => [
@@ -69,6 +70,7 @@
                                         ],
                                         [
                                             'bg' => asset('images/projects/brickstarter/bg.jpg'),
+                                            'url' => route('project', ['project' => 'brickstarter']),
                                             'logo' => asset('images/projects/brickstarter/logo.svg'),
                                             'description' => 'En este proyecto, desarrollé un sistema que permite a los usuarios explorar una amplia gama de productos cerámicos, cada uno cuidadosamente diseñado para aportar valor y elegancia a cualquier espacio. La plataforma facilita la búsqueda de productos según las preferencias del cliente y muestra detalles exhaustivos que destacan la calidad y singularidad de cada pieza.',
                                             'tags' => [
@@ -82,6 +84,7 @@
                                         ],
                                         [
                                             'bg' => asset('images/projects/tim/bg.jpg'),
+                                            'url' => route('project', ['project' => 'tim']),
                                             'logo' => asset('images/projects/tim/logo.svg'),
                                             'description' => 'En este proyecto, desarrollé un sistema que permite a los usuarios explorar una amplia gama de productos cerámicos, cada uno cuidadosamente diseñado para aportar valor y elegancia a cualquier espacio. La plataforma facilita la búsqueda de productos según las preferencias del cliente y muestra detalles exhaustivos que destacan la calidad y singularidad de cada pieza.',
                                             'tags' => [
@@ -96,6 +99,7 @@
                                         ],
                                         [
                                             'bg' => asset('images/projects/apadrinaunolivo/bg.jpg'),
+                                            'url' => route('project', ['project' => 'apadrinaunolivo']),
                                             'logo' => asset('images/projects/apadrinaunolivo/logo_white.svg'),
                                             'description' => 'En este proyecto, desarrollé un sistema que permite a los usuarios explorar una amplia gama de productos cerámicos, cada uno cuidadosamente diseñado para aportar valor y elegancia a cualquier espacio. La plataforma facilita la búsqueda de productos según las preferencias del cliente y muestra detalles exhaustivos que destacan la calidad y singularidad de cada pieza.',
                                             'tags' => [
@@ -115,7 +119,7 @@
                                     <x-projects.card :project="$project"/>
                                 @endforeach
                             </div>
-                        </x-about.section>
+                        </x-containers.card-section>
                     </x-containers.card>
                     {{--
                     <x-containers.card class="col-span-full">
@@ -196,199 +200,55 @@
                     --}}
                     <!-- END:My projects  -->
 
-                    <!-- My experience -->
-                    <x-containers.card class="col-span-2 | relative overflow-hidden">
-                        <x-about.section :title="__('Work Experiences')">
-                            <div class="relative">
-                                <div class="h-[2rem] w-[95%] | bg-gradient-to-b from-secondary-50 dark:from-zinc-800 via-transparent via-2% | absolute pointer-events-none z-10"></div>
-                                <div class="h-[2rem] w-[95%] | bg-gradient-to-b from-transparent via-transparent via-99% to-secondary-50  dark:to-zinc-800 | absolute pointer-events-none z-10 | bottom-0"></div>
-                                <div class="text-base relative | h-[300px] overflow-auto | scrollbar">
-                                    <div class="absolute left-[6px] h-full w-[1px] bg-slate-500 block"></div>
-                                    <ul class="space-y-6 py-2">
-                                        <li class="max-w-2xl">
-                                            <x-about.item :title="__('Infinety.es - Agencia digital')">
-                                                <x-slot name="date">2020 - 2024</x-slot>
-                                                <p>Full-Stack</p>
-                                            </x-about.item>
-                                        </li>
-                                        <li class="max-w-2xl">
-                                            <x-about.item :title="__('Kudos eCommerce')">
-                                                <x-slot name="date">2019 - 2020</x-slot>
-                                                <p>Front-End</p>
-                                            </x-about.item>
-                                        </li>
-                                        <li class="max-w-2xl">
-                                            <x-about.item :title="__('Oenergy.cl – Distribución Solar Chile')">
-                                                <x-slot name="date">2015 - 2019</x-slot>
-                                                <p>Full Stack</p>
-                                            </x-about.item>
-                                        </li>
-                                        <li class="max-w-2xl">
-                                            <x-about.item :title="__('Ocean DevGroup')">
-                                                <x-slot name="date">2014 - 2015</x-slot>
-                                                <p>Front-End</p>
-                                            </x-about.item>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </x-about.section>
-                    </x-containers.card>
-                    <!-- END:My experience  -->
-
-                    <!--  My dogs -->
-                    <x-containers.card class="col-span-2 sm:col-span-1 | relative overflow-hidden">
-                        <x-about.section :title="__('My dogs')">
-                            <div class="relative rounded-md overflow-hidden bg-gray-200 | h-[300px]">
-                                <section class="splide splide--app h-full" aria-label="{{ __('My dogs') }}" x-data="
-                                        Splide({
-                                            options: { type: 'loop' }
-                                        })
-                                    ">
-                                    <div class="splide__arrows splide__arrows--ltr">
-                                        <button
-                                          class="splide__arrow splide__arrow--prev hover:bg-app-default opacity-10 hover:opacity-100 transition-all ease-linear ease-[cubic-bezier(0.68,-0.3,0.32,1)] duration-700 transform "
-                                          type="button"
-                                          aria-label="Previous slide"
-                                          aria-controls="splide01-track"
-                                        >
-                                            <x-heroicon-s-chevron-right class="transition-all ease-linear"/>
-                                        </button>
-                                        <button
-                                          class="splide__arrow splide__arrow--next hover:bg-app-default opacity-10 hover:opacity-100 transition-all ease-linear ease-[cubic-bezier(0.68,-0.3,0.32,1)] duration-700 transform "
-                                          type="button"
-                                          aria-label="Next slide"
-                                          aria-controls="splide01-track"
-                                        >
-                                            <x-heroicon-s-chevron-right class="transition-all ease-linear"/>
-                                        </button>
-                                    </div>
-                                    <div class="splide__track h-full">
-                                        <ul class="splide__list h-full">
-                                            <li class="splide__slide h-full | relative">
-                                                <div class="absolute top-0 p-4 z-1 | splide-tag">
-                                                    <span class="bg-app-default rounded-xl px-2 shadow text-sm | flex items-center gap-1">
-                                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M102,140a10,10,0,1,1-10-10A10,10,0,0,1,102,140Zm62-10a10,10,0,1,0,10,10A10,10,0,0,0,164,130Zm65.77,10.72a14.24,14.24,0,0,1-5.89,1.29,13.72,13.72,0,0,1-9.88-4.23V184a38,38,0,0,1-38,38H80a38,38,0,0,1-38-38V137.78A13.76,13.76,0,0,1,32.11,142a14.23,14.23,0,0,1-5.88-1.29,13.82,13.82,0,0,1-8-15.34l16.42-88a14,14,0,0,1,17.16-11l.24.07L104.86,42h46.28l52.79-15.51.24-.07a14,14,0,0,1,17.16,11l16.42,88A13.81,13.81,0,0,1,229.77,140.72ZM93.88,51.27,48.84,38a1.9,1.9,0,0,0-1.49.27,2,2,0,0,0-.88,1.32l-16.42,88a2,2,0,0,0,3.54,1.61ZM202,184V122.43L149.06,54H106.94L54,122.43V184a26,26,0,0,0,26,26h42V194.48l-14.24-14.24a6,6,0,0,1,8.48-8.48L128,183.51l11.76-11.75a6,6,0,0,1,8.48,8.48L134,194.48V210h42A26,26,0,0,0,202,184ZM226,127.6l-16.42-88a2,2,0,0,0-.88-1.31,2.07,2.07,0,0,0-1.49-.27l-45,13.23,60.32,78A2,2,0,0,0,226,127.6Z"></path></svg>
-                                                        <span>Drogo</span>
-                                                    </span>
-                                                </div>
-                                                <img src="{{ asset('images/drogo.jpg') }}" alt="" class="object-cover absolute min-w-full min-h-full">
-                                            </li>
-                                            <li class="splide__slide | relative">
-                                                <div class="absolute top-0 p-4 z-1 | splide-tag">
-                                                    <span class="bg-app-default rounded-xl px-2 shadow text-sm | flex items-center gap-1">
-                                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,120.38V184a32,32,0,0,1-32,32H80a32,32,0,0,1-32-32V120.38L104,48h48Z" opacity="0.2"></path><path d="M239.71,125l-16.42-88a16,16,0,0,0-19.61-12.58l-.31.09L150.85,40h-45.7L52.63,24.56l-.31-.09A16,16,0,0,0,32.71,37.05L16.29,125a15.77,15.77,0,0,0,9.12,17.52A16.26,16.26,0,0,0,32.12,144,15.48,15.48,0,0,0,40,141.84V184a40,40,0,0,0,40,40h96a40,40,0,0,0,40-40V141.85a15.5,15.5,0,0,0,7.87,2.16,16.31,16.31,0,0,0,6.72-1.47A15.77,15.77,0,0,0,239.71,125ZM32,128h0L48.43,40,90.5,52.37Zm144,80H136V195.31l13.66-13.65a8,8,0,0,0-11.32-11.32L128,180.69l-10.34-10.35a8,8,0,0,0-11.32,11.32L120,195.31V208H80a24,24,0,0,1-24-24V123.11L107.93,56h40.14L200,123.11V184A24,24,0,0,1,176,208Zm48-80L165.5,52.37,207.57,40,224,128ZM104,140a12,12,0,1,1-12-12A12,12,0,0,1,104,140Zm72,0a12,12,0,1,1-12-12A12,12,0,0,1,176,140Z"></path></svg>
-                                                        <span>Mooncake</span>
-                                                    </span>
-                                                </div>
-                                                <img src="{{ asset('images/mooncake.jpg') }}" alt="" class="object-cover absolute min-w-full min-h-full">
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </section>
-                            </div>
-                        </x-about.section>
-                    </x-containers.card>
-                    <!-- END:My dogs -->
-
                     <!-- What I am reading -->
                     <x-containers.card class="col-span-2 sm:col-span-1 | relative overflow-hidden">
-                        <x-about.section :title="__('What I am reading')">
-                            <div class="h-[300px]">
-                                <div class="relative rounded-md text-2xl">
-                                    The intelligent investor
-                                    <br>
-                                    Benjamin Graham
+                        <x-containers.card-section :title="__('What I am reading')">
+                            <a href="https://www.amazon.com/-/es/Shunmyo-Masuno-ebook/dp/B07VYMP378" target="__blank" title="El arte de vivir con sencillez - Shunmyo Masuno">
+                                <div class="bg-gray-app h-[152px] rounded p-2 text-white z-1 relative">
+                                    <x-card.external-link/>
+                                    <div class="relative rounded-md text-xl pr-10 z-1">
+                                        <i>El arte de vivir con sencillez</i>
+                                        <br>
+                                        - Shunmyo Masuno
+                                    </div>
+                                    <img src="{{ asset('images/el-arte-de-viviar-con-sencillez.jpg') }}" alt="El arte de vivir con sencillez - Shunmyo Masuno" class="card-book__image">
                                 </div>
-                                <img src="{{ asset('images/51Xur1KZWKL.jpg') }}" style="position: absolute; bottom: -50px; max-width: 50%; right: -5px; max-height: 70%; transform: rotate(15deg); opacity: 0.7;">
-                            </div>
-                        </x-about.section>
+                            </a>
+                        </x-containers.card-section>
                     </x-containers.card>
                     <!-- END:What I am reading -->
 
                     <!-- Where do I live -->
                     <x-containers.card class="col-span-2 sm:col-span-1 | relative overflow-hidden">
-                        <x-about.section :title="__('Where do I live?')">
+                        <x-containers.card-section :title="__('Where do I live?')">
                             <x-slot name="actions">
                                 <x-about.actions-button href="https://maps.app.goo.gl/6jtvkALmD64tEbkY9" target="_blank">
-                                    <x-heroicon-m-arrow-up-circle class="h-4 w-4 mr-1"/>
+                                    {{-- <x-heroicon-m-arrow-up-circle class="h-4 w-4 mr-1"/> --}}
+                                    <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="injected-svg" data-src="https://cdn.hugeicons.com/icons/maps-circle-01-duotone-rounded.svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" >
+                                        <path class="fill-current" fill="currentColor" opacity="0.4" fill-rule="evenodd" clip-rule="evenodd" d="M21.9993 12C21.9993 16.3491 19.223 20.0497 15.346 21.4263L2.62891 8.5001C4.04761 4.70338 7.70777 2 11.9993 2C17.5222 2 21.9993 6.47715 21.9993 12ZM14.4991 14C14.7337 14 14.9591 13.9092 15.1277 13.7468C15.2455 13.6334 15.3662 13.5188 15.4884 13.403C16.9721 11.9957 18.6636 10.3913 17.7323 8.15187C17.1866 6.83966 15.8767 6 14.4991 6C13.1215 6 11.8116 6.83966 11.2659 8.15187C10.3383 10.3823 12.0112 11.9747 13.4869 13.3795C13.6169 13.5033 13.7454 13.6256 13.8705 13.7468C14.0391 13.9092 14.2645 14 14.4991 14Z"></path>
+                                        <path d="M15.1287 13.7468C14.9601 13.9092 14.7347 14 14.5001 14C14.2655 14 14.0401 13.9092 13.8715 13.7468C12.3272 12.2504 10.2576 10.5788 11.2669 8.15187C11.8126 6.83966 13.1225 6 14.5001 6C15.8777 6 17.1876 6.83966 17.7333 8.15187C18.7413 10.5757 16.6768 12.2555 15.1287 13.7468Z" stroke="#000000" stroke-width="1.5"></path>
+                                        <path d="M14.5 9.5H14.509" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="#000000" stroke-width="1.5"></path>
+                                        <path d="M9 15L5 19M15 21L3 9" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path>
+                                    </svg>
                                     <x-slot name="text">
                                         {{ __('Google maps') }}
                                     </x-slot>
                                 </x-about.actions-button>
                             </x-slot>
-                            <div class="relative rounded-md overflow-hidden h-[160px]">
-                                <img src="{{ asset('images/map.png') }}" alt="Drogo" class="min-w-full min-h-full">
-                            </div>
-                        </x-about.section>
+                            <a href="https://maps.app.goo.gl/6jtvkALmD64tEbkY9" target="__blank">
+                                <div class="relative rounded-md overflow-hidden h-[152px] bg-app-default">
+                                    <x-card.external-link/>
+                                    <img src="{{ asset('images/mapa.svg') }}" alt="Where do I Live?" class="min-w-full min-h-full absolute bottom-0 z-0">
+                                </div>
+                            </a>
+                        </x-containers.card-section>
                     </x-containers.card>
                     <!-- END:Where do I live -->
 
-                    <!-- My photos -->
-                    <x-containers.card class="col-span-2 sm:col-span-1 | relative overflow-hidden">
-                        <x-about.section :title="__('My photos')">
-                            <x-slot name="icon">
-                                <x-hugeicons-image-crop class="h-5"/>
-                            </x-slot>
-                            <x-slot name="actions">
-                                <x-about.actions-button wire:navigate href="{{ route('gallery.index') }}">
-                                    <x-heroicon-m-arrow-up-circle class="h-4 w-4 mr-1"/>
-                                    <x-slot name="text">
-                                        {{ __('More') }}
-                                    </x-slot>
-                                </x-about.actions-button>
-                            </x-slot>
-                            <div class="relative rounded-md overflow-hidden bg-gray-200 | h-[152px]">
-                                <section class="splide splide--app h-full bg-gray-500" aria-label="{{ __('My photos') }}" x-data="Splide({ options: { type: 'loop' } })">
-                                    <div class="splide__arrows splide__arrows--ltr">
-                                        <button
-                                          class="splide__arrow splide__arrow--prev hover:bg-app-default opacity-10 hover:opacity-100 transition-all ease-linear ease-[cubic-bezier(0.68,-0.3,0.32,1)] duration-700 transform "
-                                          type="button"
-                                          aria-label="Previous slide"
-                                          aria-controls="splide01-track"
-                                        >
-                                            <x-heroicon-s-chevron-right class="transition-all ease-linear"/>
-                                        </button>
-                                        <button
-                                          class="splide__arrow splide__arrow--next hover:bg-app-default opacity-10 hover:opacity-100 transition-all ease-linear ease-[cubic-bezier(0.68,-0.3,0.32,1)] duration-700 transform "
-                                          type="button"
-                                          aria-label="Next slide"
-                                          aria-controls="splide01-track"
-                                        >
-                                            <x-heroicon-s-chevron-right class="transition-all ease-linear"/>
-                                        </button>
-                                    </div>
-                                    <div class="splide__track h-full">
-                                        <ul class="splide__list h-full">
-                                            <li class="splide__slide h-full | relative">
-                                                {{-- <div class="absolute top-0 p-4 z-1">
-                                                    <span class="bg-white rounded-xl px-4 x-text-base-primary dark:x-text-base-primary shadow">Drogo</span>
-                                                </div> --}}
-                                                <img src="{{ asset('images/DSC_0307.jpg') }}" class="object-cover absolute min-w-full min-h-full bottom-0 top-0 mx-auto">
-                                            </li>
-                                            <li class="splide__slide h-full | relative">
-                                                {{-- <div class="absolute top-0 p-4 z-1">
-                                                    <span class="bg-white rounded-xl px-4 x-text-base-primary dark:x-text-base-primary shadow">Drogo</span>
-                                                </div> --}}
-                                                <img src="{{ asset('images/DSC_0307.jpg') }}" class="object-cover absolute min-w-full min-h-full bottom-0 top-0 mx-auto">
-                                            </li>
-                                            <li class="splide__slide h-full | relative">
-                                                {{-- <div class="absolute top-0 p-4 z-1">
-                                                    <span class="bg-white rounded-xl px-4 x-text-base-primary dark:x-text-base-primary shadow">Drogo</span>
-                                                </div> --}}
-                                                <img src="{{ asset('images/DSC_0307.jpg') }}" class="object-cover absolute min-w-full min-h-full bottom-0 top-0 mx-auto">
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </section>
-                            </div>
-                        </x-about.section>
-                    </x-containers.card>
-                    <!-- END:My photos -->
-
                     <!-- END:What do I hear -->
-                    <x-containers.card class="col-span-2 relative overflow-hidden">
-                        <x-about.section :title="__('What do I hear?')">
+                    <x-containers.card class="col-span-2 sm:col-span-2 relative overflow-hidden">
+                        <x-containers.card-section :title="__('What do I hear?')">
                             <x-slot name="icon">
                                 <svg class="h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none">
                                     <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" />
@@ -396,12 +256,12 @@
                                 </svg>
                             </x-slot>
                             <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/6MjfEIHOMW6MaDO3LpFcmW?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                        </x-about.section>
+                        </x-containers.card-section>
                     </x-containers.card>
                     <!-- END:What do I hear -->
                 </div>
 
-                <div class="rounded-md bg-app-default dot-pattern p-4 w-full">
+                <div class="rounded-md bg-app-default dot-pattern p-4 w-full hidden">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <x-hugeicons-information-square class="h-6 w-6 text-white"/>
@@ -419,4 +279,51 @@
             </div>
         </div>
     </x-containers.content>
+    <style>
+        .project-card-link {
+            width: 50px;
+            height: 50px;
+            top: -7px;
+            right: -7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f2f1ec;
+            position: absolute;
+            z-index: 111;
+            transform: scale(.8);
+        }
+        .project-card-link:before {
+            content: "";
+            position: absolute;
+            bottom: -18px;
+            background: radial-gradient(circle at bottom left, transparent 42%, #f0efea 42.5%);
+            right: -11px;
+            z-index: -1;
+            width: 30px;
+            height: 30px;
+        }
+        .project-card-link:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            top: -12px;
+            right: 0;
+            background: radial-gradient(circle at bottom left, transparent 42%, #f0efea 42.5%);
+            left: -18px;
+            z-index: -1;
+            width: 30px;
+            height: 30px;
+        }
+        .card-book__image {
+            z-index: 0;
+            position: absolute;
+            bottom: 0px;
+            max-width: 60%;
+            right: 0px;
+            max-height: 90%;
+            transform: rotate(15deg);
+            opacity: 0.7;
+        }
+    </style>
 </div>

@@ -1,3 +1,5 @@
-<small class="inline-block border-none p-0.5 text-gray-100 uppercase bg-app-default _text-xs leading-none shadow-sm">
+<small {{ $attributes->merge([
+    "class" => "inline-block border-none p-0.5 uppercase bg-gray-app text-base leading-none shadow-sm rounded-sm text-white px-1"
+]) }}>
     {{ $slot }}
 </small>
