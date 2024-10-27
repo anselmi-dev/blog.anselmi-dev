@@ -130,7 +130,12 @@
                 @show
 
                 {{-- CONTENT --}}
-                <main id="app-content" class="flex-1 z-0 relative overflow-x-hidden">
+                <main
+                    id="app-content"
+                    @class([
+                        "flex-1 z-0 relative",
+                        "overflow-x-hidden" => !request()->is('/')
+                    ])>
                     @yield('content')
 
                     @isset($slot)
