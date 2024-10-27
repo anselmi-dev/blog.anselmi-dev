@@ -198,6 +198,9 @@
     line-height: 1;
     background: transparent;
     text-transform: uppercase;
+    svg {
+        display: none;
+    }
 }
 .app-navigation__menu:not(.show) {
     display: none;

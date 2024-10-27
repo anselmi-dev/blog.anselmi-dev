@@ -1,5 +1,5 @@
-<div class="w-10 lg:w-13 px-1">
-    <div id="app-navigation" :class="openPanel ? 'show' : null" class="max-h-screen py-1 fixed h-full z-1 transition-all">
+<div class="w-[3rem]" :class="openPanel ? 'z-1' : 'z-0'" >
+    <div id="app-navigation" :class="openPanel ? 'show' : null" class="max-h-screen py-1 fixed h-full z-1 transition-all ml-1">
         <div
             class="h-full w-full lg:block dot-pattern bg-gray-app rounded">
             <div class="z-10 sticky top-0 h-screen">
@@ -48,15 +48,15 @@
             </div>
         </div>
         <div class="app-navigation__menu" :class="openPanel ? 'show' : null">
-            <x-sidebar.link wire:navigate :active="request()->routeIs('home')" href="{{ route('home') }}" title="{{ __('home') }}">
+            <x-sidebar.link wire:navigate x-on:click="setTimeout(() => { togglePanel() }, 1000)" :active="request()->routeIs('home')" href="{{ route('home') }}" title="{{ __('home') }}">
                 {{ __('home') }}
             </x-sidebar.link>
     
-            <x-sidebar.link wire:navigate :active="request()->routeIs('gallery.index')" href="{{ route('gallery.index') }}" title="{{ __('Photos') }}">
+            <x-sidebar.link wire:navigate x-on:click="setTimeout(() => { togglePanel() }, 1000)" :active="request()->routeIs('gallery.index')" href="{{ route('gallery.index') }}" title="{{ __('Photos') }}">
                 {{ __('Photos') }}
             </x-header.navbar.link>
     
-            <x-sidebar.link wire:navigate :active="request()->routeIs('blog.index')" href="{{ route('blog.index') }}" title="{{ __('Blog') }}">
+            <x-sidebar.link wire:navigate x-on:click="setTimeout(() => { togglePanel() }, 1000)" :active="request()->routeIs('blog.index')" href="{{ route('blog.index') }}" title="{{ __('Blog') }}">
                 {{ __('Blog') }}
             </x-sidebar.link>
         </div>

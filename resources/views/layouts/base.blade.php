@@ -46,16 +46,21 @@
             this.open = false
 
             focusAfter && focusAfter.focus()
+        },
+        handlePageChange () {
+            this.openPanel = false
         }
     }"
-    x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"
+    x-init="
+        $watch('darkMode', val => localStorage.setItem('darkMode', val))
+    "
     x-bind:class="{'dark': darkMode === 'dark' || (darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)}"
 >
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{{ config('app.name') }} | @yield('title')</title>
+    <title>{{ config('app.name') }} @yield('title')</title>
     <meta name="description" content="@yield('description')">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -98,7 +103,6 @@
         
             // This is a good place to mutate any HTML before the page
             // is nagivated away from...
-            console.log('livewire:navigating');
         })
         
         document.addEventListener('livewire:navigated', () => {
@@ -108,7 +112,7 @@
     </script>
 </head>
 
-<body class="h-full | bg-secondary-default dark:bg-secondary-dark | fade-in">
+<body class="h-full | bg-secondary-default dark:bg-secondary-dark overflow-x-hidden   | fade-in" :class="openPanel ? 'overflow-hidden' : null">
     <!--[if lte IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
