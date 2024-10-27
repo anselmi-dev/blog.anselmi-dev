@@ -37,12 +37,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(
-    [
-        'prefix' => LaravelLocalization::setLocale(),
-        'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
-    ], function() {
-
+// Route::group(
+//     [
+//         'prefix' => LaravelLocalization::setLocale(),
+//         'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
+//     ], function() {
     Route::get('/', About::class)->name('home');
     Route::get('/home-2', Home::class);
     Route::get('/blog', Blog::class)->name('blog.index');
@@ -60,7 +59,7 @@ Route::group(
 
     // Route::get('/b', [PostsController::class, 'index'])->name('posts');
     Route::get('/t', [TagController::class, 'index'])->name('tag.index');
-});
+// });
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

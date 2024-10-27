@@ -3,7 +3,7 @@
         <div class="flex flex-col space-y-10 text-gray-app dark:text-white text-base">
             <div class="w-full">
                 <p class="font-semibold leading-7 text-app-default dark:text-app-default">
-                    {{ __('Project') }}
+                    {{ __('Desarrollo') }}
                 </p>
 
                 <h1
@@ -33,7 +33,7 @@
 
                 <div class="details mt-6">
                     <span class="info flex flex-col space-y-1 top-0">
-                        <div class="flex flex-wrap gap-0.5">
+                        <div class="flex flex-wrap gap-1">
                             @foreach([
                                 'PHP',
                                 'Laravel',
@@ -67,13 +67,13 @@
                         class="block size-full object-cover">
                 </div>
                 <div
-                    class="aspect-square overflow-hidden rounded-xl shadow-xl outline-1 -outline-offset-1 outline-black/10">
+                    class="aspect-square overflow-hidden rounded shadow-xl outline-1 -outline-offset-1 outline-black/10">
                     <img alt=""
                         src="{{ asset('images/projects/brickstarter/brickstarted-screen-3.jpg') }}"
                         class="block size-full object-cover">
                 </div>
                 <div
-                    class="-mt-8 aspect-square overflow-hidden rounded-xl shadow-xl outline-1 -outline-offset-1 outline-black/10 lg:-mt-40">
+                    class="-mt-8 aspect-square overflow-hidden rounded shadow-xl outline-1 -outline-offset-1 outline-black/10 lg:-mt-40">
                     <img alt=""
                         src="{{ asset('images/projects/brickstarter/brickstarted-screen-4.jpg') }}"
                         class="block size-full object-cover">

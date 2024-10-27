@@ -112,7 +112,7 @@
     </script>
 </head>
 
-<body class="h-full | bg-secondary-default dark:bg-secondary-dark overflow-x-hidden   | fade-in" :class="openPanel ? 'overflow-hidden' : null">
+<body class="h-full | bg-secondary-default dark:bg-secondary-dark | fade-in" :class="openPanel ? 'overflow-hidden' : null">
     <!--[if lte IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
@@ -130,7 +130,7 @@
                 @show
 
                 {{-- CONTENT --}}
-                <main id="app-content" class="flex-1 z-0 relative">
+                <main id="app-content" class="flex-1 z-0 relative overflow-x-hidden">
                     @yield('content')
 
                     @isset($slot)

@@ -13,6 +13,7 @@
 
         <div
             class="hidden lg:flex lg:gap-x-12 px-6 | rounded-full text-base shadow shadow-zinc-800/5 ring-0 ring-zinc-900/5 bg-white dark:bg-zinc-800/90 dark:ring-white/10">
+            {{--
             <x-header.navbar.link wire:navigate :active="request()->routeIs('home')" href="{{ route('home') }}" title="{{ __('Home') }}">
                 {{ __('Home') }}
             </x-header.navbar.link>
@@ -24,7 +25,7 @@
             <x-header.navbar.link wire:navigate :active="request()->routeIs('blog.index')" href="{{ route('blog.index') }}" title="{{ __('Blog') }}">
                 {{ __('Blog') }}
             </x-header.navbar.link>
-            {{--
+
             <x-header.navbar.link wire:navigate :active="request()->routeIs('about')" href="{{ route('about') }}" title="{{ __('About') }}">
                 {{ __('About') }}
             </x-header.navbar.link>
@@ -37,7 +38,7 @@
                 <x-header.navbar.toggle-dark />
             </div>
 
-            <div class="flex lg:hidden">
+            {{-- <div class="flex lg:hidden">
                 <button type="button"
                     class="group flex h-14 w-14 cursor-pointer items-center justify-center rounded | _shadow_bg-white_hover:bg-slate-200"
                     x-ref="button"
@@ -55,7 +56,7 @@
                             class="block h-1 w-8 origin-center rounded-full bg-app-default transition-transform ease-in-out _group-hover:w-10 _group-hover:-translate-y-1.5 _group-hover:-rotate-45"></span>
                     </div>
                 </button>
-            </div>
+            </div> --}}
         </div>
     </nav>
 </header>

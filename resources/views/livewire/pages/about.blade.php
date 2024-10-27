@@ -83,9 +83,9 @@
                                             ]
                                         ],
                                         [
-                                            'bg' => asset('images/projects/tim/bg.jpg'),
-                                            'url' => route('project', ['project' => 'tim']),
-                                            'logo' => asset('images/projects/tim/logo.svg'),
+                                            'bg' => asset('images/projects/tilesinmind/background.jpg'),
+                                            'url' => route('project', ['project' => 'tilesinmind']),
+                                            'logo' => asset('images/projects/tilesinmind/logo.svg'),
                                             'description' => 'En este proyecto, desarrollé un sistema que permite a los usuarios explorar una amplia gama de productos cerámicos, cada uno cuidadosamente diseñado para aportar valor y elegancia a cualquier espacio. La plataforma facilita la búsqueda de productos según las preferencias del cliente y muestra detalles exhaustivos que destacan la calidad y singularidad de cada pieza.',
                                             'tags' => [
                                                 'PHP',
