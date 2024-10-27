@@ -9,9 +9,9 @@
                             <h2 class="text-base font-semibold leading-7 text-app-default dark:text-app-default">
                                 {{ __('Project') }}
                             </h2>
-                            <p class="mt-2 text-pretty text-4xl font-semibold tracking-tight sm:text-5xl">
+                            <h1 class="mt-2 text-pretty text-4xl font-semibold tracking-tight sm:text-5xl">
                                 Peronda
-                            </p>
+                            </h1>
                             <p class="mt-6 text-lg leading-8">
                                 Peronda es una plataforma web para una empresa especializada en el diseño y fabricación de
                                 cerámicas de alta calidad. El sitio permite a los usuarios explorar catálogos de productos
@@ -34,9 +34,9 @@
                                         @foreach([
                                             'PHP',
                                             'Laravel',
+                                            'Livewire',
                                             'Javascript',
-                                            'Lemonway',
-                                            'GIT',
+                                            'BITBUCKET',
                                             'AWS',
                                             ] as $tag)
                                             <x-projects.tag class="lg:text-lg">
