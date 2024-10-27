@@ -36,7 +36,7 @@
             x-transition:leave-end="opacity-0"
         >
             <div
-                class="relative bg-secondary-dark p-5 rounded-lg shadow-xl text-left text-sm text-slate-200 font-medium space-y-3"
+                class="relative bg-gray-900 p-5 rounded-lg shadow-xl text-left text-sm text-slate-200 font-medium space-y-3"
                 x-init="$watch('open', value => { $nextTick(() => {
                     $refs.tooltip.getBoundingClientRect().left < 0 ? $el.style.left = Math.abs($refs.tooltip.getBoundingClientRect().left) + $root.getBoundingClientRect().left - 4 + 'px' : $el.style.left = null;
                     $refs.tooltip.getBoundingClientRect().right > document.documentElement.offsetWidth ? $el.style.right = Math.abs($refs.tooltip.getBoundingClientRect().right) - $root.getBoundingClientRect().right - 4 + 'px' : $el.style.right = null;

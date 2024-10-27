@@ -1,6 +1,6 @@
 <footer id="app-footer" class="backdrop-blur dark:text-primary-text text-primary relative text-base">
-    <div class="mx-auto max-w-7xl overflow-hidden py-6 px-6 lg:px-8">
-        <div class="text-center mt-5 | text-gray-app dark:text-white">
+    <div class="mx-auto max-w-7xl overflow-hidden py-3 px-3 lg:px-8">
+        <div class="text-center | text-gray-app dark:text-white">
             <p>
                 {{ __('Feel free to reach out for projects, collaborations, or just to say hello!') }}
             </p>

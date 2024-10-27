@@ -17,9 +17,6 @@ class Project extends Component
     {
         $view = 'livewire.pages.projects.' . $this->project;
 
-        if ($view)
-            return view($view);
-
-        return abort(404);
+        return view()->exists($view) ? view($view) : abort(404);
     }
 }
