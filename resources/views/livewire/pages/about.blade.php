@@ -204,7 +204,7 @@
                     <x-containers.card class="col-span-2 sm:col-span-1 | relative overflow-hidden">
                         <x-containers.card-section :title="__('What I am reading')">
                             <a href="https://www.amazon.com/-/es/Shunmyo-Masuno-ebook/dp/B07VYMP378" target="__blank" title="El arte de vivir con sencillez - Shunmyo Masuno">
-                                <div class="bg-gray-app h-[152px] rounded p-2 text-white z-1 relative">
+                                <div class="bg-gray-app h-[152px] rounded p-2 text-white z-1 relative overflow-hidden">
                                     <x-card.external-link/>
                                     <div class="relative rounded-md text-xl pr-10 z-1">
                                         <i>El arte de vivir con sencillez</i>
@@ -279,51 +279,4 @@
             </div>
         </div>
     </x-containers.content>
-    <style>
-        .project-card-link {
-            width: 50px;
-            height: 50px;
-            top: -7px;
-            right: -7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f2f1ec;
-            position: absolute;
-            z-index: 111;
-            transform: scale(.8);
-        }
-        .project-card-link:before {
-            content: "";
-            position: absolute;
-            bottom: -18px;
-            background: radial-gradient(circle at bottom left, transparent 42%, #f0efea 42.5%);
-            right: -11px;
-            z-index: -1;
-            width: 30px;
-            height: 30px;
-        }
-        .project-card-link:after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            top: -12px;
-            right: 0;
-            background: radial-gradient(circle at bottom left, transparent 42%, #f0efea 42.5%);
-            left: -18px;
-            z-index: -1;
-            width: 30px;
-            height: 30px;
-        }
-        .card-book__image {
-            z-index: 0;
-            position: absolute;
-            bottom: 0px;
-            max-width: 60%;
-            right: 0px;
-            max-height: 90%;
-            transform: rotate(15deg);
-            opacity: 0.7;
-        }
-    </style>
 </div>

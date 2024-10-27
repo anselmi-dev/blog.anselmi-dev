@@ -2,6 +2,7 @@
 
 <a
     href="{{ $project['url'] }}"
+    wire:navigate
     class="expanding-cards--card active | h-[200px] md:h-[200px] w-full bg-gray-200 flex-1 transition-all hover:flex-9 lg:hover:flex-3 hover:bg-gray-300 duration-300 ease-in-out group">
 
     <img src="{{ $project['bg'] }}" alt="BG Project"

@@ -1,4 +1,4 @@
-<div class="flex flex-col space-y-4 | x-text-base-color">
+<div class="flex flex-col space-y-2 | x-text-base-color">
     <div class="flex justify-between | flex-col xs:flex-row">
         @isset($title)
         <div class="text-lg lg:text-xl uppercase text-gray-app dark:text-white/50 | order-2 xs:order-1 leading-none | flex items-center gap-1">

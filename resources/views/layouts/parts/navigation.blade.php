@@ -1,9 +1,9 @@
-<div class="w-10 lg:w-13">
-    <div id="app-navigation" class="max-h-screen px-1 py-1 fixed h-full z-1">
+<div class="w-10 lg:w-13 px-1">
+    <div id="app-navigation" :class="openPanel ? 'show' : null" class="max-h-screen py-1 fixed h-full z-1 transition-all">
         <div
-            class="h-full w-10 lg:w-13 lg:block dot-pattern bg-gray-app rounded">
+            class="h-full w-full lg:block dot-pattern bg-gray-app rounded">
             <div class="z-10 sticky top-0 h-screen">
-                <div class="w-10 lg:w-13 lg:top-0 py-5 flex lg:flex-none items-center lg:whitespace-nowrap lg:py-6 lg:text-sm leading-7 [writing-mode:vertical-rl] h-full flex-row">
+                <div class="w-10 lg:w-13 lg:top-0 py-5 lg:py-6 flex lg:flex-none items-center lg:whitespace-nowrap lg:text-sm leading-7 [writing-mode:vertical-rl] h-full flex-row">
                     <div class="flex-1 flex flex-row">
                         {{-- <span class="font-roboto _text-slate-500 text-black dark:text-black">CARLOS ANSELMI</span> --}}
                     </div>
@@ -46,6 +46,19 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="app-navigation__menu" :class="openPanel ? 'show' : null">
+            <x-sidebar.link wire:navigate :active="request()->routeIs('home')" href="{{ route('home') }}" title="{{ __('home') }}">
+                {{ __('home') }}
+            </x-sidebar.link>
+    
+            <x-sidebar.link wire:navigate :active="request()->routeIs('gallery.index')" href="{{ route('gallery.index') }}" title="{{ __('Photos') }}">
+                {{ __('Photos') }}
+            </x-header.navbar.link>
+    
+            <x-sidebar.link wire:navigate :active="request()->routeIs('blog.index')" href="{{ route('blog.index') }}" title="{{ __('Blog') }}">
+                {{ __('Blog') }}
+            </x-sidebar.link>
         </div>
     </div>
 </div>

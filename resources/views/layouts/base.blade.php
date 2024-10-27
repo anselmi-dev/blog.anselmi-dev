@@ -15,13 +15,13 @@
         },
         openPanel: false,
         togglePanel() {
+            this.openPanel = !this.openPanel
+            
             if (this.openPanel) {
                 return this.close()
             }
 
             this.$refs.button.focus()
-
-            this.openPanel = !this.openPanel
         },
         closePanel(focusAfter) {
             if (!this.openPanel) return
@@ -114,7 +114,7 @@
     <![endif]-->
 
     @section('body')
-        <div class="flex flex-row w-full min-h-screen _space-x-5 font-primary">
+        <div x-cloak class="flex flex-row w-full min-h-screen _space-x-5 font-primary">
             @section('navigation')
                 @include('layouts.parts.navigation')
             @show
