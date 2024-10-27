@@ -4,15 +4,15 @@
             <div
                 class="mx-auto grid grid-cols-1 gap-x-8 gap-y-10 lg:mx-0 lg:grid-cols-2">
                 <div class="lg:pr-8">
-                    <div class="flex flex-col space-y-10 lg:max-w-lg">
+                    <div class="flex flex-col space-y-10 lg:max-w-lg | text-gray-app dark:text-white text-base">
                         <div class="w-full">
                             <h2 class="text-base font-semibold leading-7 text-app-default dark:text-app-default">
                                 {{ __('Project') }}
                             </h2>
-                            <p class="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                            <p class="mt-2 text-pretty text-4xl font-semibold tracking-tight sm:text-5xl">
                                 Peronda
                             </p>
-                            <p class="mt-6 text-lg leading-8 text-gray-600">
+                            <p class="mt-6 text-lg leading-8">
                                 Peronda es una plataforma web para una empresa especializada en el diseño y fabricación de
                                 cerámicas de alta calidad. El sitio permite a los usuarios explorar catálogos de productos
                                 detallados, consultar colecciones exclusivas, y acceder a recursos para profesionales del
