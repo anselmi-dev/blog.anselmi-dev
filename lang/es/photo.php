@@ -19,5 +19,8 @@ return [
         'text' => [
             'label' => 'Texto',
         ],
+        'tags' => [
+            'label' => 'Tags',
+        ],
     ],
 ];

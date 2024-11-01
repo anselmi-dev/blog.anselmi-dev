@@ -7,7 +7,6 @@
             {{ $post->title }}
         </h1>
     </div>
-    <div>
-        <x-blog.tags.list :tags="$post->tags"/>
-    </div>
+    
+    <x-tag.list :tags="$post->tags"/>
 </header>

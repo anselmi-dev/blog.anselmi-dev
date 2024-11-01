@@ -7,9 +7,7 @@
     @endif
     <div class="p-4 absolute bottom-0 left-0 z-20">
         @foreach ($post->tags as $tag)
-            <span class="px-4 py-1 bg-black text-gray-200 inline-flex items-center justify-center mb-2">
-                {{ $tag->name }}
-            </span>
+            <x-tag.item :tags="$tag"/>
         @endforeach
         <h2 class="text-3xl font-semibold text-gray-100 leading-tight">
             {{ $post->title }}

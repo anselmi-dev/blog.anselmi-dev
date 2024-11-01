@@ -92,7 +92,7 @@ module.exports = {
                 app: {
                     'primary': '#398435',
                     'hover': '#398435',
-                    'default': '#00d495',
+                    'default': '#398435',
                     '50': '#f4faf3',
                     '100': '#e4f5e3',
                     '200': '#caeac8',

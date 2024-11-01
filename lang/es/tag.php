@@ -13,6 +13,9 @@ return [
         'slug' => [
             'label' => 'Slug',
         ],
+        'description' => [
+            'label' => 'Descripción',
+        ],
     ],
 
 ];

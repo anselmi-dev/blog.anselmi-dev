@@ -4,7 +4,7 @@ return [
 
     'label' => 'Categoría',
 
-    'plural_label' => 'Categorias',
+    'plural_label' => 'Categorías',
 
     'form' => [
         'name' => [
@@ -12,6 +12,9 @@ return [
         ],
         'slug' => [
             'label' => 'Slug',
+        ],
+        'description' => [
+            'label' => 'Descripción',
         ],
     ],
 ];

@@ -52,7 +52,7 @@
                                         </div>
                                         <div class="text-base font-medium leading-6">
                                             <a
-                                                class="group inline-block border-none px-2 py-1 text-black uppercase bg-app-default transition-all hover:text-white hover:bg-black _dark:hover:text-app-default"
+                                                class="group inline-block border-none px-2 py-1 text-white uppercase bg-app-default transition-all hover:text-white hover:bg-black _dark:hover:text-app-default"
                                                 aria-label=""
                                                 href="{{ route('admin.posts.edit', $post->slug) }}"
                                                 >

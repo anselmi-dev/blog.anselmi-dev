@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Livewire\Blog;
 
 use Livewire\Component;
 use App\Models\Post as Model;
-use App\Models\Like;
 
 class Post extends Component
 {
@@ -13,7 +12,7 @@ class Post extends Component
      *
      * @var Model
      */
-    public $post;
+    public Model $post;
 
     public function mount(Model $post)
     {

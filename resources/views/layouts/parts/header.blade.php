@@ -13,18 +13,24 @@
 
         <div
             class="hidden lg:flex lg:gap-x-12 px-6 | rounded-full text-base shadow shadow-zinc-800/5 ring-0 ring-zinc-900/5 bg-white dark:bg-zinc-800/90 dark:ring-white/10">
+
+            @if (\App\Models\Photo::exists())    
+                <x-header.navbar.link wire:navigate :active="request()->routeIs('gallery.index')" href="{{ route('gallery.index') }}" title="{{ __('Photos') }}">
+                    {{ __('Photos') }}
+                </x-header.navbar.link>
+            @endif
+
+            @if (\App\Models\Post::exists())    
+                <x-header.navbar.link wire:navigate :active="request()->routeIs('blog.index')" href="{{ route('blog.index') }}" title="{{ __('Blog') }}">
+                    {{ __('Blog') }}
+                </x-header.navbar.link>
+            @endif
+
             {{--
             <x-header.navbar.link wire:navigate :active="request()->routeIs('home')" href="{{ route('home') }}" title="{{ __('Home') }}">
                 {{ __('Home') }}
             </x-header.navbar.link>
 
-            <x-header.navbar.link wire:navigate :active="request()->routeIs('gallery.index')" href="{{ route('gallery.index') }}" title="{{ __('Photos') }}">
-                {{ __('Photos') }}
-            </x-header.navbar.link>
-
-            <x-header.navbar.link wire:navigate :active="request()->routeIs('blog.index')" href="{{ route('blog.index') }}" title="{{ __('Blog') }}">
-                {{ __('Blog') }}
-            </x-header.navbar.link>
 
             <x-header.navbar.link wire:navigate :active="request()->routeIs('about')" href="{{ route('about') }}" title="{{ __('About') }}">
                 {{ __('About') }}

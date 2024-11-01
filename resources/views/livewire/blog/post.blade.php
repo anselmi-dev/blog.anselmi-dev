@@ -23,7 +23,7 @@
 
         </x-post.container>
 
-        <x-blog.related-posts></x-blog.related-posts>
+        <x-blog.related-posts :post="$post"></x-blog.related-posts>
 
     </x-containers.content>
 </div>

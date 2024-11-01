@@ -25,6 +25,9 @@ return [
         'category' => [
             'label' => 'Categoría'
         ],
+        'tags' => [
+            'label' => 'Tags'
+        ],
     ],
 
 ];

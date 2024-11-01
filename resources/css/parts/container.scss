@@ -1,7 +1,7 @@
 
 /* LIKE */
 .heart-container {
-    --heart-color: #398435;
+    --heart-color: theme('colors.app.default');
     position: relative;
     width: 20px;
     height: 20px;
