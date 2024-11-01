@@ -12,7 +12,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Filament\Tables\Columns\{
+    TextColumn,
+    DateTimePicker
+};
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
@@ -36,13 +39,25 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')->label(__('user.form.name.label')),
+
+                TextColumn::make('email')->label(__('user.form.email.label')),
+
+                TextColumn::make('created_at')
+                    ->sortable()
+                    ->dateTime()
+                    ->label('filament.form.created_at.label'),
+        
+                TextColumn::make('updated_at')
+                    ->sortable()
+                    ->dateTime()
+                    ->label('filament.form.updated_at.label'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

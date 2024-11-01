@@ -76,9 +76,14 @@ class CategoryResource extends Resource
                 TextColumn::make('slug')->label(__('category.form.slug.label')),
                 TextColumn::make('description')->label(__('category.form.description.label')),
                 TextColumn::make('created_at')
+                    ->sortable()
                     ->dateTime()
-                    ->label('filament.form.created_at.label')
-                    ->sortable(),
+                    ->label('filament.form.created_at.label'),
+        
+                TextColumn::make('updated_at')
+                    ->sortable()
+                    ->dateTime()
+                    ->label('filament.form.updated_at.label'),
             ])
             ->filters([
                 //
