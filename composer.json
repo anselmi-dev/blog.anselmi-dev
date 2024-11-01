@@ -68,6 +68,11 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "optimize": [
+            "@php artisan optimize:clear",
+            "@php artisan optimize",
+            "@php artisan filament:optimize"
         ]
     },
     "extra": {

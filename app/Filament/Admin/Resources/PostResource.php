@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\PostResource\Pages;
 use App\Filament\Admin\Resources\PostResource\RelationManagers;
 use App\Models\Post;
+
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,12 +14,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\{
+    RichEditor,
+    TextInput,
+    Select,
+    DateTimePicker,
+    Fieldset,
+};
+
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\Fieldset;
 
 class PostResource extends Resource
 {
