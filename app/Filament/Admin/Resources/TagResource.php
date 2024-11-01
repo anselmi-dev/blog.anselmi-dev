@@ -73,14 +73,17 @@ class TagResource extends Resource
                 TextColumn::make('name')->label(__('tag.form.name.label')),
 
                 TextColumn::make('slug')->label(__('tag.form.slug.label')),
-                
+
                 TextColumn::make('description')->label(__('tag.form.description.label')),
 
-                DateTimePicker::make('created_at')
-                ->label('filament.form.created_at.label'),
-    
-                DateTimePicker::make('updated_at')
-                    ->disabled()
+                TextColumn::make('created_at')
+                    ->sortable()
+                    ->dateTime()
+                    ->label('filament.form.created_at.label'),
+        
+                TextColumn::make('updated_at')
+                    ->sortable()
+                    ->dateTime()
                     ->label('filament.form.updated_at.label'),
             ])
             ->filters([
