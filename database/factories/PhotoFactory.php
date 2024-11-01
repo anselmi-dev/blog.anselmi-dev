@@ -21,13 +21,7 @@ class PhotoFactory extends Factory
             "title" => fake()->sentence(),
             "description" => fake()->text(200),
             "text" => fake()->text(500),
-            "size" => 1000,
-            "height" => 10,
-            "width" => 10,
-            "name" => 'name',
-            "type" => 'jpg',
-            "path" => 'path',
-            "localization" => [],
+            "attributes" => [],
         ];
     }
 }

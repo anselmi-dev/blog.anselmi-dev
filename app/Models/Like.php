@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LikesModel extends Model
+class Like extends Model
 {
     use HasFactory;
 
@@ -16,6 +16,7 @@ class LikesModel extends Model
      */
     protected $fillable = [
         "ip",
+        "attributes",
     ];
 
     /**
@@ -24,6 +25,7 @@ class LikesModel extends Model
      * @var array<int, string>
      */
     protected $casts = [
+        'attributes' => 'array'
     ];
 
 }

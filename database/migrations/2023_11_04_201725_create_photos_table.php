@@ -16,13 +16,7 @@ return new class extends Migration
             $table->string("title");
             $table->string("description")->nullable();
             $table->longText("text")->nullable();
-            $table->string("size")->nullable();
-            $table->string("height")->nullable();
-            $table->string("width")->nullable();
-            $table->string("name")->nullable();
-            $table->string("type")->nullable();
-            $table->string("path")->nullable();
-            $table->jsonb("localization")->nullable();
+            $table->json("attributes")->nullable();
             $table->timestamps();
         });
     }

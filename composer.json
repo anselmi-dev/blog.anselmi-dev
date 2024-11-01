@@ -9,6 +9,9 @@
         "afatmustafa/blade-hugeicons": "dev-main",
         "blade-ui-kit/blade-heroicons": "^2.2",
         "blade-ui-kit/blade-icons": "^1.5",
+        "filament/filament": "3.2",
+        "filament/infolists": "3.2",
+        "filament/spatie-laravel-media-library-plugin": "3.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/octane": "^2.3",
@@ -54,7 +57,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",

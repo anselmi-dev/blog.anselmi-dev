@@ -1,4 +1,5 @@
 import forms from '@tailwindcss/forms';
+import preset from './vendor/filament/support/tailwind.config.preset'
 
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors')
@@ -7,6 +8,7 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
     darkMode: 'class',
     presets: [
+        preset,
         require('./vendor/wireui/wireui/tailwind.config.js'),
         require('tailwind-scrollbar'),
     ],
@@ -16,7 +18,10 @@ module.exports = {
         "./resources/**/*.vue",
         './vendor/wireui/wireui/resources/**/*.blade.php',
         './vendor/wireui/wireui/ts/**/*.ts',
-        './vendor/wireui/wireui/src/View/**/*.php'
+        './vendor/wireui/wireui/src/View/**/*.php',
+        './app/Filament/**/*.php',
+        './resources/views/filament/**/*.blade.php',
+        './vendor/filament/**/*.blade.php',
     ],
     theme: {
         screens: {

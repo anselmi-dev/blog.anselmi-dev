@@ -62,7 +62,7 @@ class Post extends Model implements HasMedia
 
     public function likes()
     {
-        return $this->morphMany(LikesModel::class, 'model');
+        return $this->morphMany(Like::class, 'model');
     }
 
     /**

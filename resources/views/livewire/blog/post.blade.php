@@ -17,7 +17,7 @@
             <div>
                 <x-post.header :post="$post" />
                 <div class="my-10 text-gray-900 dark:text-gray-100">
-                    {!! $post->content !!}
+                    {!! str($post->content)->markdown()->sanitizeHtml() !!}
                 </div>
             </div>
 

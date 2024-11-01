@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Livewire\Blog;
 
-use App\Models\LikesModel;
 use Livewire\Component;
 use App\Models\Post as Model;
+use App\Models\Like;
 
 class Post extends Component
 {

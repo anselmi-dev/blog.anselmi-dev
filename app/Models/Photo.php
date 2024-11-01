@@ -15,6 +15,8 @@ class Photo extends Model implements HasMedia
 
     use HasFactory;
 
+    const DISK = 'photos';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -47,13 +49,9 @@ class Photo extends Model implements HasMedia
         return $this->morphToMany(Tag::class, 'model', 'tags_models');
     }
 
-    public function getCoverattribute() : Media|null
+    public function getImageAttribute() : Media|null
     {
-        if ($images = $this->getFirstMedia("photos")) {
-            return $images;
-        }
-
-        return null;
+        return $this->getFirstMedia(self::DISK);
     }
 
     public function registerMediaConversions (Media $media = null): void
