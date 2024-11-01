@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string("title");
             $table->enum("status", ["draft", "published"])->default("draft");
             $table->string("slug")->unique();
-            $table->string("description");
+            $table->string("description")->nullable();
             $table->text("content");
             $table->dateTime("published_at");
 

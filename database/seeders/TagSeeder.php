@@ -13,6 +13,29 @@ class TagSeeder extends Seeder
      */
     public function run(): void
     {
-        Tag::factory()->count(10)->create();
+        // Tag::factory()->count(10)->create();
+        Tag::firstOrCreate([
+            'name' => 'Laravel'
+        ]);
+
+        Tag::firstOrCreate([
+            'name' => 'PHP'
+        ]);
+
+        Tag::firstOrCreate([
+            'name' => 'Tailwind'
+        ]);
+
+        Tag::firstOrCreate([
+            'name' => 'HTML'
+        ]);
+
+        Tag::firstOrCreate([
+            'name' => 'VUE'
+        ]);
+
+        Tag::firstOrCreate([
+            'name' => 'Javascript'
+        ]);
     }
 }

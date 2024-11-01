@@ -13,6 +13,29 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory()->count(3)->create();
+        // Category::factory()->count(3)->create();
+        Category::firstOrCreate([
+            'name' => 'Laravel',
+        ]);
+
+        Category::firstOrCreate([
+            'name' => 'PHP',
+        ]);
+
+        Category::firstOrCreate([
+            'name' => 'Tailwind',
+        ]);
+
+        Category::firstOrCreate([
+            'name' => 'HTML',
+        ]);
+
+        Category::firstOrCreate([
+            'name' => 'VUE',
+        ]);
+
+        Category::firstOrCreate([
+            'name' => 'Javascript',
+        ]);
     }
 }
