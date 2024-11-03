@@ -3,7 +3,7 @@
     'count' => null
 ])
 
-<a class="bg-gray-app hover:bg-app-primary rounded-sm px-2 mb-2 text-white | mr-1 text-sm font-medium uppercase leading-6 group/tag"
+<a class="bg-gray-app dark:bg-secondary-dark hover:bg-app-primary rounded-sm px-1 md:px-2 mb-1 md:mb-2 text-white | mr-1 text-xs md:text-sm font-medium uppercase leading-6 group/tag"
     href="{{ $tag->url }}"
     title="{{ $tag->description ?? $tag->name }}"
     wire:navigate

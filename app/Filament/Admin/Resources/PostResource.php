@@ -13,7 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\{
     RichEditor,
     TextInput,
@@ -21,6 +21,8 @@ use Filament\Forms\Components\{
     DateTimePicker,
     Fieldset,
 };
+
+use Filament\Forms\Components\Repeater;
 
 use Filament\Tables\Columns\TextColumn;
 
@@ -63,37 +65,76 @@ class PostResource extends Resource
                     ->label(__('post.form.slug.label'))
                     ->unique(ignoreRecord: true)
                     ->label('Slug'),
-                    
-                Fieldset::make('Content')
+
+                TextInput::make('description')
+                    ->label(__('post.form.description.label'))
+                    ->required()
+                    ->label('Description'),
+
+                Fieldset::make()
                     ->schema([
-                        TextInput::make('description')
-                            ->label(__('post.form.description.label'))
-                            ->required()
-                            ->label('Description'),
-                        RichEditor::make('content')
-                        ->label(__('post.form.content.label'))
-                        ->toolbarButtons([
-                            'attachFiles',
-                            'blockquote',
-                            'bold',
-                            'bulletList',
-                            'codeBlock',
-                            'h2',
-                            'h3',
-                            'italic',
-                            'link',
-                            'orderedList',
-                            'redo',
-                            'strike',
-                            'underline',
-                            'undo',
-                        ])
-                            ->required(),
-                    ])
-                    ->columns(1),
+                        Repeater::make('content')
+                            ->label(__('post.form.content.label'))
+                            ->schema([
+                                Select::make('type')
+                                    ->label(__('post.form.type.label'))
+                                    ->options([
+                                        'view' => 'View',
+                                        'richEditor' => 'richEditor',
+                                        'image' => 'imagen',
+                                    ])
+                                    ->required()
+                                    ->reactive(), // Asegura que el campo se vuelva a evaluar cuando cambie
+                                Select::make('view')
+                                    ->label(__('post.form.view.label'))
+                                    ->options(function () {
+                                        $files = \Illuminate\Support\Facades\File::files(resource_path('views/components/post/contents'));  
+                                        $options = [];
+                                        foreach ($files as $file) {
+                                            $filename = str_replace('.blade', '', pathinfo($file->getFilename(), PATHINFO_FILENAME));
+                                            $options[$filename] = ucfirst($filename); // Usa el nombre del archivo como opción
+                                        }
+                                
+                                        return $options;
+                                    })
+                                    ->visible(fn ($get) => $get('type') === 'view')
+                                    ->required(),
+
+                                SpatieMediaLibraryFileUpload::make('image')
+                                    ->label(__('photo.form.image.label'))
+                                    // ->collection(Post::DISK)
+                                    ->responsiveImages()
+                                    ->conversion('thumb')
+                                    ->visible(fn ($get) => $get('type') === 'image'), 
+
+                                RichEditor::make('richEditor')
+                                    ->label(__('post.form.content.label'))
+                                    ->toolbarButtons([
+                                        'attachFiles',
+                                        'blockquote',
+                                        'bold',
+                                        'bulletList',
+                                        'codeBlock',
+                                        'h2',
+                                        'h3',
+                                        'italic',
+                                        'link',
+                                        'orderedList',
+                                        'redo',
+                                        'strike',
+                                        'underline',
+                                        'undo',
+                                    ])
+                                    ->required()
+                                    ->visible(fn ($get) => $get('type') === 'richEditor'), 
+                            ])
+                            ->columns(1),
+                    ])->columns(1),
+
 
                 DateTimePicker::make('published_at')
-                    ->label(__('post.form.published_at.label')),
+                    ->label(__('post.form.published_at.label'))
+                    ->required(),
 
                 Select::make('category_id')
                     ->label(__('post.form.category.label'))

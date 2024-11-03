@@ -1,5 +1,5 @@
-<header class="flex flex-col mb-10 gap-3">
-    <div class="flex flex-col gap-3">
+<header class="flex flex-col mb-5 gap-3">
+    <div class="flex flex-col gap-2">
         <time datetime="{{ $post->published_at_for_humans }}" class="flex items-center dark:text-gray-500">
             <x-heroicon-s-chevron-double-right class="w-3" /> {{ $post->published_at_for_humans }}
         </time>

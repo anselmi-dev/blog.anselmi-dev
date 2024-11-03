@@ -51,10 +51,10 @@
 }
 
 .x-box-shadow-circle {
-    @apply flex min-h-[40px] min-w-[40px] h-[40px] w-[40px] items-center justify-center rounded-sm;
+    @apply flex min-h-[30px] min-w-[30px] h-[30px] w-[30px] items-center justify-center rounded-sm;
     @apply shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 transition dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0 dark:ring-white/10;
     @apply bg-white hover:bg-app-default hover:text-white dark:text-white dark:hover:border-zinc-700 dark:hover:ring-white/20;
-    box-shadow: 3px 3px 0px #333, 0px 0px 1px #333;
+    box-shadow: -2px -2px 0px #333, 0px 0px 1px #333;
     border: 1px solid #333;
 }
 

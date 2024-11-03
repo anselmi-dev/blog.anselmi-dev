@@ -7,50 +7,123 @@
         <div class="space-y-12">
             <div class="flex flex-col space-y-12">
                 <!-- ME -->
-                <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 max-w-3xl">
+                <div class="flex flex-wrap gap-4 max-w-3xl">
                     <div class="h-[90px] w-[90px] relative">
                         <img alt="" loading="lazy"
-                            class="aspect-square rounded-xl bg-zinc-100 object-cover dark:bg-zinc-800"
+                            class="aspect-square rounded bg-zinc-100 object-cover dark:bg-zinc-800"
                             src="{{ asset('images/DSC_0307.jpg') }}">
                     </div>
                     <div class="flex justify-center flex-col max-w-full flex-1 | x-text-base-color">
-                        <h1 class="text-4xl font-bold tracking-tight | font-secondary">
-                            <span class="x-text-base-primary">
-                                {{ __("Hi, I'm Carlos Anselmi") }}
+                        <h1 class="font-bold tracking-tight | font-secondary">
+                            <span class="text-base block">Hola, mi nombre es</span>
+                            <span class="text-xl md:text-3xl x-text-base-primary uppercase">
+                                Carlos Anselmi
                             </span>
-                            <span>-</span>
-                            <span>{{ __("I'm a Full Stack Web Developer") }}.</span>
+                            <span class="text-lg md:text-3xl block uppercase">Full Stack Web Developer</span>
+                            {{-- <span>-</span> --}}
+                            {{-- <span class="">{{ __("I'm a Full Stack Web Developer") }}.</span> --}}
                         </h1>
                     </div>
                 </div>
                 <!-- END:ME -->
 
-                <div class="space-y-4 max-w-5xl | x-text-base-color">
-                    <div class="space-y-2">
-                        <div>
-                            Soy un desarrollador web especializado en tecnologías como <x-tooltip-like.card item="laravel" label="Laravel PHP"/>, <x-tooltip-like.card item="livewire" label="Livewire"/>, <x-tooltip-like.card item="vue" label="Vue"/> y  <x-tooltip-like.card item="tailwind" label="Tailwind CSS"/>. Mi pasión radica en crear experiencias de usuario fluidas y funcionales a través de soluciones web innovadoras.
+                <x-containers.card class="col-span-full">
+                    <x-containers.card-section>
+                        <x-slot name="title">
+                            <x-title number="01." :title="__('About Me')"/>
+                        </x-slot>
+                        <div class="space-y-4 max-w-5xl | flex flex-wrap md:flex-nowrap md:space-x-4 md:space-y-0 | x-text-base-color text-sm">
+                            <div class="w-full md:w-6/12">
+                                Soy un desarrollador web especializado en tecnologías como <x-tooltip-like.card item="laravel" label="Laravel PHP"/>, <x-tooltip-like.card item="livewire" label="Livewire"/>, <x-tooltip-like.card item="vue" label="Vue"/> y  <x-tooltip-like.card item="tailwind" label="Tailwind CSS"/>. Mi pasión radica en crear experiencias de usuario fluidas y funcionales a través de soluciones web innovadoras. <br>
+        
+                                Desde que me crucé con Laravel en 2018, fue como encontrar el amor de mi vida en el desarrollo web. Desde entonces, hemos trabajado juntos en una variedad de proyectos, desde sistemas de gestión que interactuan con recursos de AWS hasta e-commerce.
+                            </div>
+                            <div class="w-full md:w-6/12">                                        
+                                <div class="p-2 bg-gray-100/50 dark:text-white dark:bg-gray-app rounded">
+                                    <p>Estas son algunas de las tecnologías con las que me peleo amablemente día a día:</p>
+                                    <ul class="dark:text-white/70 grid grid-cols-2 md:grid-cols-3 gap-2 my-2">
+                                        <x-tabs.li>PHP</x-tabs.li>
+                                        <x-tabs.li>Laravel</x-tabs.li>
+                                        <x-tabs.li>Livewire</x-tabs.li>
+                                        <x-tabs.li>VUE</x-tabs.li>
+                                        <x-tabs.li>Tailwind</x-tabs.li>
+                                        <x-tabs.li>Javascript</x-tabs.li>
+                                    </ul>
+                                    <span>Además, últimamente estoy ampliando mis horizontes explorando tecnologías como <x-tooltip-like.card item="electron" label="Electron JS"/> y React. Porque, ya sabes, PHP está muriendo <i>(sarcasmo)</i></span>
+                                </div>
+                            </div>
                         </div>
-
-                        <div>
-                            Desde que me crucé con Laravel en 2018, fue como encontrar el amor de mi vida en el desarrollo web. Desde entonces, hemos trabajado juntos en una variedad de proyectos, desde sistemas de gestión que interactuan con recursos de AWS hasta e-commerce.
-                        </div>
-
-                        <div>
-                            Además, actualmente estoy ampliando mis horizontes explorando tecnologías como <x-tooltip-like.card item="electron" label="Electron JS"/> y React, porque, ya sabes, uno nunca sabe cuándo podría necesitar construir una aplicación de escritorio.
-                        </div>
-
-                        <div>
-                            Cuando no estoy programando, puedes encontrarme explorando cafés locales, practicando fotografía profesional o tomandome una rica coca-cola.
-                        </div>
-                    </div>
-                </div>
+                    </x-containers.card-section>
+                </x-containers.card>
             </div>
 
             <div class="space-y-4">
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 space-y-12">
                     <!-- My projects -->
                     <x-containers.card class="col-span-full">
-                        <x-containers.card-section :title="__('Developments')">
+                        <x-containers.card-section>
+                            <x-slot name="title">
+                                <x-title number="02." :title="__('Where I’ve Worked')"/>
+                            </x-slot>
+
+                            <x-tabs.default activeTab="Infinety">
+                                <x-slot name="buttons"> 
+                                    <x-tabs.button title="Infinety" activeTab="Infinety"/>
+                                    <x-tabs.button title="Kudos" activeTab="Kudos"/>
+                                    <x-tabs.button title="Imagina Colombia" activeTab="Imagina Colombia"/>
+                                    <x-tabs.button title="Oenergy" activeTab="Oenergy"/>
+                                    <x-tabs.button title="Ocean DevGroup" activeTab="Ocean DevGroup"/>
+                                </x-slot>
+                                <x-slot name="contents"> 
+                                    <x-tabs.content activeTab="Infinety">
+                                        <x-tabs.title title="Dev. Full-Stack" href="https://infinety.es/"  date="Ene. 2020 – Nov. 2024" company="@Infinety"/>
+                                        <ul class="space-y-2 text-gray-800 dark:text-white/70 text-xs">
+                                            <x-tabs.li>Implementé nuevas funcionalidades e integré plataformas de pago y servicios como Stripe, Signaturit, Lemonway y ThirdWeb.</x-tabs.li>
+                                            <x-tabs.li>Lideré el desarrollo y mantenimiento de aplicaciones web en Laravel (versiones 5 a 10), incluyendo la migración a AWS - EC2.</x-tabs.li>
+                                            <x-tabs.li>Modernicé sitios como brickstarter.com, peronda.com, harmonyinspire.com y museumsurfaces.com a versiones recientes de Laravel.</x-tabs.li>
+                                            <x-tabs.li>Implementé nuevas funcionalidades con integración de pagos (Lemonway, Stripe) y gestioné incidencias, colaborando con equipos multidisciplinarios para garantizar la estabilidad y rendimiento.</x-tabs.li>
+                                            <x-tabs.li>Realicé diseño y maquetación con Tailwind CSS.</x-tabs.li>
+                                        </ul>
+                                    </x-tabs.content>
+                                    <x-tabs.content activeTab="Kudos">
+                                        <x-tabs.title title="Dev. Back-End" href="https://www.kudoscommerce.com/"  date="Ago. 2019 - Ene. 2020" company="@Kudos"/>
+                                        <ul class="space-y-2 text-gray-800 dark:text-white/70 text-xs">
+                                            <x-tabs.li>Participé en el desarrollo de múltiples e-commerces utilizando tecnologías como Vue, Magento y VTEX IO.</x-tabs.li>
+                                            <x-tabs.li>Colaboré estrechamente con el equipo siguiendo la metodología Scrum y gestionando tareas de forma remota a través de Jira.</x-tabs.li>
+                                        </ul>
+                                    </x-tabs.content>
+                                    <x-tabs.content activeTab="Imagina Colombia">
+                                        <x-tabs.title title="Dev. Back-End" href="https://www.imaginacolombia.com/"  date="Dic. 2018 - Jul. 2019" company="@Imagina Colombia"/>
+                                        <ul class="space-y-2 text-gray-800 dark:text-white/70 text-xs">
+                                            <x-tabs.li>Participé en el desarrollo de múltiples e-commerces utilizando Laravel, contribuyendo a la creación de plataformas robustas y escalables.</x-tabs.li>
+                                            <x-tabs.li>Desarrollé una aplicación multiplataforma utilizando el framework Vue.js con Quasar, garantizando una experiencia de usuario optimizada y consistente en diferentes dispositivos.</x-tabs.li>
+                                        </ul>
+                                    </x-tabs.content>
+                                    <x-tabs.content activeTab="Oenergy">
+                                        <x-tabs.title title="Dev. Full-Stack" href="https://oenergy.cl/"  date="Ene. 2017 - Dic. 2018" company="@Oenergy"/>
+                                        <ul class="space-y-2 text-gray-800 dark:text-white/70 text-xs">
+                                            <x-tabs.li>Desarrollé sistemas de gestión de datos en Laravel para la recopilación, almacenamiento y análisis de datos de sensores de energía fotovoltaica en diversos Data Centers en Chile.</x-tabs.li>
+                                            <x-tabs.li>Integré servicios y API de terceros, incluyendo Defontana, un software de gestión empresarial (ERP) para optimizar la administración y sincronización de datos.</x-tabs.li>
+                                        </ul>
+                                    </x-tabs.content>
+                                    <x-tabs.content activeTab="Ocean DevGroup">
+                                        <x-tabs.title title="Dev. Front-End" href="https://oceandg.com/"  date="Ene. 2016 - Nov. 2017" company="@Ocean DevGroup"/>
+                                        <ul class="space-y-2 text-gray-800 dark:text-white/70 text-xs">
+                                            <x-tabs.li>Desarrollé sitios web estáticos y dinámicos utilizando Angular 2, siendo uno de mis primeros proyectos en el ámbito del desarrollo web.</x-tabs.li>
+                                            <x-tabs.li>Experiencia me permitió adquirir conocimientos fundamentales y sentar una base sólida en desarrollo web.</x-tabs.li>
+                                        </ul>
+                                    </x-tabs.content>
+                                </x-slot>
+                            </x-tabs.default>
+                        </x-containers.card-section>
+                    </x-containers.card>
+
+                    <!-- My projects -->
+                    <x-containers.card class="col-span-full">
+                        <x-containers.card-section>
+                            <x-slot name="title">
+                                <x-title number="03." :title="__('Developments')"/>
+                            </x-slot>
                             <div class="expanding-cards | grid grid-cols-1 md:grid-cols-2 gap-2">
                                 @php
                                     $projects = [

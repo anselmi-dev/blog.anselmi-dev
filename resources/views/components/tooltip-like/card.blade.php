@@ -2,7 +2,7 @@
     $view = 'components.tooltip-like.items.' . $item;
 @endphp
 
-<div
+<span
     class="[&:has(~.active)]:opacity-25 [&.active~*]:opacity-25 transition-opacity duration-200 relative inline-flex justify-center"
     x-data="{ open: false }"
     :class="{ 'active z-1': open }"
@@ -11,10 +11,8 @@
 >
     <span type="button" class="cursor-default font-bold underline dark:text-app-default" :class="{ 'rotate-0': open }" @mouseover="open = true" @focus="open = true">
         <span class="relative pr-1">
-            <span>
-                {{ $label }}
-            </span>
-            <x-hugeicons-help-square class="absolute top-0 -right-3 h-2.5"/>
+            {{ $label }}
+            {{-- <x-hugeicons-help-square class="absolute top-0 h-2.5 w-auto opacity-60 left-auto right-0"/> --}}
         </span>
     </span>
 
@@ -36,7 +34,7 @@
             x-transition:leave-end="opacity-0"
         >
             <div
-                class="relative bg-gray-app dark:bg-gray-900 p-5 rounded-lg shadow-xl text-left text-sm text-white font-medium space-y-3"
+                class="relative bg-gray-app dark:bg-gray-900 p-2 lg:p-5 rounded shadow-xl text-left text-xs text-white font-medium space-y-2"
                 x-init="$watch('open', value => { $nextTick(() => {
                     $refs.tooltip.getBoundingClientRect().left < 0 ? $el.style.left = Math.abs($refs.tooltip.getBoundingClientRect().left) + $root.getBoundingClientRect().left - 4 + 'px' : $el.style.left = null;
                     $refs.tooltip.getBoundingClientRect().right > document.documentElement.offsetWidth ? $el.style.right = Math.abs($refs.tooltip.getBoundingClientRect().right) - $root.getBoundingClientRect().right - 4 + 'px' : $el.style.right = null;
@@ -50,4 +48,4 @@
             </div>
         </div>
     </div>
-</div>
+</span>

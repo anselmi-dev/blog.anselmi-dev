@@ -5,7 +5,7 @@
     <nav class="w-full flex items-center justify-between pl-6 pr-2 py-2 lg:py-4 lg:px-8 | x-text-base-color" aria-label="Global">
         <div class="flex lg:flex-1">
             <a :class="openPanel ? 'opacity-0 pointer-events-none' : null" href="{{ route('home') }}" wire:navigate class="-m-1.5 p-1.5">
-                <span class="dark:text-app-default text-black">
+                <span class="dark:text-app-default hover:text-app-default text-black dark:hover:text-white">
                     <x-application-logo class='h-8 w-auto fill-current' />
                 </span>
             </a>

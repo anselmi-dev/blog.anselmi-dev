@@ -28,6 +28,15 @@ return [
         'tags' => [
             'label' => 'Tags'
         ],
+        'type' => [
+            'label' => 'Tipo'
+        ],
+        'view' => [
+            'label' => 'Vista'
+        ],
+        'content' => [
+            'label' => 'Contenido'
+        ],
     ],
 
 ];

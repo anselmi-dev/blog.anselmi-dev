@@ -56,35 +56,24 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 col-span-full">
-                    <!-- Large item -->
-                    <div class="md:col-span-2 md:row-span-2 relative overflow-hidden rounded-2xl shadow-lg group">
-                        <img src="{{ asset('images/projects/peronda/peronda-screenshot-1.png') }}" alt="Nature" class="w-full h-full object-cover">
-                        {{--
-                        <div class="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <div class="absolute bottom-0 left-0 right-0 p-4">
-                                <h3 class="text-2xl font-bold text-white">Explore Nature</h3>
-                                <p class="text-white">Discover the beauty of the natural world</p>
-                            </div>
-                        </div>
-                        --}}
+                    <div class="md:col-span-2 md:row-span-2 relative overflow-hidden rounded shadow-lg group">
+                        <img src="{{ asset('images/projects/peronda/peronda-screenshot-1.png') }}" class="w-full h-full object-cover">
                     </div>
         
-                    <!-- Two small items -->
-                    <div class="relative overflow-hidden rounded-2xl shadow-lg group">
-                        <img src="{{ asset('images/projects/peronda/peronda-screenshot-2.png') }}" alt="Nature" class="w-full h-full object-cover">
+                    <div class="relative overflow-hidden rounded shadow-lg group md:-top-11 md:-left-11">
+                        <img src="{{ asset('images/projects/peronda/peronda-screenshot-2.png') }}" class="w-full h-full object-cover shadow-lg">
                     </div>
 
-                    <div class="relative overflow-hidden rounded-2xl shadow-lg group">
-                        <img src="{{ asset('images/projects/peronda/peronda-screenshot-3.png') }}" alt="Nature" class="w-full h-full object-cover">
+                    <div class="relative overflow-hidden rounded shadow-lg group md:-top-14 md:-left-11">
+                        <img src="{{ asset('images/projects/peronda/peronda-screenshot-3.png') }}" class="w-full h-full object-cover shadow-lg">
                     </div>
         
-                    <!-- Three medium items -->
-                    <div class="relative overflow-hidden rounded-2xl shadow-lg group">
-                        <img src="{{ asset('images/projects/peronda/peronda-screenshot-4.png') }}" alt="Nature" class="w-full h-full object-cover">
+                    <div class="relative overflow-hidden rounded shadow-lg group md:-top-11 md:-left-11">
+                        <img src="{{ asset('images/projects/peronda/peronda-screenshot-4.png') }}" class="w-full h-full object-cover shadow-lg">
                     </div>
-
-                    <div class="relative overflow-hidden rounded-2xl shadow-lg group">
-                        <<img src="{{ asset('images/projects/peronda/peronda-screenshot-5.png') }}" alt="Nature" class="w-full h-full object-cover">
+                    
+                    <div class="relative overflow-hidden rounded shadow-lg group md:-top-14 md:-left-11">
+                        <img src="{{ asset('images/projects/peronda/peronda-screenshot-5.png') }}" class="w-full h-full object-cover shadow-lg">
                     </div>
                 </div>
             </div>

@@ -42,7 +42,8 @@ class Post extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $casts = [
-        "published_at" => 'datetime'
+        "published_at" => 'datetime',
+        "content" => 'array',
     ];
 
     /**

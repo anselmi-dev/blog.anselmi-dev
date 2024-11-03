@@ -1,6 +1,6 @@
 <article {{ $attributes->whereDoesntStartWith('post') }}>
     <div class="relative isolate flex flex-col gap-8 lg:flex-row">
-        <div class="space-y-5 xl:col-span-5">
+        <div class="space-y-3 xl:col-span-5">
             <div class="space-y-3">
                 <div>
                     <dl>
@@ -15,7 +15,7 @@
                     </dl>
 
                     <h2 class="text-2xl font-oswald leading-8 tracking-tight relative">
-                        <span class="font-oswald text-black dark:text-gray-100" href="{{ $post->url}}" title="{{ $post->title }}">
+                        <span class="font-oswald text-gray-app dark:text-gray-100" href="{{ $post->url}}" title="{{ $post->title }}">
                             {{ $post->title }}
                         </span>
                         <svg class="rough-annotation" style="position: absolute; top: 0px; left: 0px; overflow: visible; pointer-events: none; width: 100px; height: 100px;"><path d="M46.11182293627588 70.29058579788959 C150.8009830699937 68.66634866807362, 255.37189445493735 70.89342766560216, 377.4085646215642 69.00228292681018" fill="none" stroke="currentColor" stroke-width="2" style="stroke-dashoffset: 331.304; stroke-dasharray: 331.304; animation: 500ms ease-out 0ms 1 normal forwards running rough-notation-dash;"></path></svg>
@@ -23,7 +23,7 @@
 
                     <x-tag.list class="mt-1" :tags="$post->tags"/>
                 </div>
-                <div class="font-roboto prose max-w-none text-black dark:text-gray-400" title="{{ $post->title }}">
+                <div class="font-roboto prose max-w-none text-gray-app dark:text-gray-200">
                     {{ $post->description }}
                 </div>
             </div>
