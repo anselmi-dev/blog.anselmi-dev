@@ -1,13 +1,7 @@
-import './bootstrap';
+// Using require
+import hljs from 'highlight.js';
+import php from 'highlight.js/lib/languages/php';
 
-import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
-import Clipboard from "@ryangjchandler/alpine-clipboard"
-import Splide from 'alpine-splide'
+hljs.registerLanguage('php', php);
 
-Alpine.plugin(Clipboard)
-
-Alpine.data('Splide', Splide)
-
-// window.Alpine = Alpine
-// window.Alpine.start()
-Livewire.start()
+window.hljs = hljs;

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->enum("status", ["draft", "published"])->default("draft");
             $table->string("slug")->unique();
             $table->string("description")->nullable();
-            // $table->text("content");
             $table->json("content");
             $table->dateTime("published_at");
 

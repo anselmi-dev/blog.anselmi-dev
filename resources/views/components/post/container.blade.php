@@ -1,10 +1,6 @@
-<div class="relative px-4 md:px-8 py-8 bg-white rounded shadow dark:bg-zinc-800">
-    <div class="xl:relative">
-        <div class="mx-auto w-full">
-            <article class="flex flex-row space-x-3">
-                {{ $slot }}
-            </article>
-        </div>
-    </div>
+<div class="relative _px-4 _md:px-8 _py-8 _bg-white _shadow _rounded _dark:bg-zinc-800 w-full">
+    <article class="flex flex-col space-y-3 w-full">
+        {{ $slot }}
+    </article>
 </div>
 

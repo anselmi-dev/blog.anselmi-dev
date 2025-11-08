@@ -1,0 +1,95 @@
+.expanding-cards .expanding-cards--card {
+    text-align: left;
+    opacity: 0.99;
+    overflow: hidden;
+    position: relative;
+    border-radius: 3px;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .expanding-cards .expanding-cards--card:before {
+    content: '';
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 2;
+    transition-property: top, opacity;
+    transition-duration: 0.3s;
+  }
+
+  .expanding-cards .expanding-cards--card img {
+    display: block;
+    max-width: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .expanding-cards .expanding-cards--card .details {
+    font-size: 16px;
+    padding: 20px;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+  }
+
+  .expanding-cards .expanding-cards--card .details span {
+    display: block;
+    opacity: 0;
+    position: relative;
+    top: 100px;
+    transition-property: top, opacity;
+    transition-duration: 0.3s;
+    transition-delay: 0s;
+  }
+
+  .expanding-cards .expanding-cards--card .details .title {
+    line-height: 1;
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  .expanding-cards .expanding-cards--card .details .info {
+    line-height: 1.2;
+    margin-top: 5px;
+    font-size: 12px;
+  }
+
+  .expanding-cards .expanding-cards--card.active:before,
+  .expanding-cards .expanding-cards--card:focus:before,
+  .expanding-cards .expanding-cards--card:hover:before,
+  .expanding-cards .expanding-cards--card.active span,
+  .expanding-cards .expanding-cards--card:focus span,
+  .expanding-cards .expanding-cards--card:hover span {
+    opacity: 1;
+  }
+
+  .expanding-cards .expanding-cards--card.active:before,
+  .expanding-cards .expanding-cards--card:focus:before,
+  .expanding-cards .expanding-cards--card:hover:before {
+    top: 0%;
+  }
+
+  .expanding-cards .expanding-cards--card.active span,
+  .expanding-cards .expanding-cards--card:focus span,
+  .expanding-cards .expanding-cards--card:hover span {
+    top: 0;
+  }
+
+  .expanding-cards .expanding-cards--card.active .title,
+  .expanding-cards .expanding-cards--card:focus .title,
+  .expanding-cards .expanding-cards--card:hover .title {
+    transition-delay: 0.15s;
+  }
+
+  .expanding-cards .expanding-cards--card.active .info,
+  .expanding-cards .expanding-cards--card:focus .info,
+  .expanding-cards .expanding-cards--card:hover .info {
+    transition-delay: 0.25s;
+  }

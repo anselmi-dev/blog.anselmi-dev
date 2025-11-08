@@ -23,7 +23,7 @@
 
     <!-- Tab content -->
     {{-- <div class="w-3/4 px-4" :style="{ height: maxHeight + 'px' }"> --}}
-    <div class="w-3/4 lg:w-3/5 pl-4 h-full relative overflow-hidden">
+    <div class="w-3/4 lg:w-4/5 pl-4 h-full relative overflow-hidden">
         {{ $contents }}
     </div>
 </div>

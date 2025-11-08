@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+
+@source '../views';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@import './parts/general.css';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --breakpoint-xs: 440px;
+
+    --color-primary-50: #f4faf3;
+    --color-primary-100: #e4f5e3;
+    --color-primary-200: #caeac8;
+    --color-primary-300: #86cd82;
+    --color-primary-400: #6fbd6b;
+    --color-primary-500: #4ba146;
+    --color-primary-600: #398435;
+    --color-primary-700: #2f682d;
+    --color-primary-800: #295427;
+    --color-primary-900: #234522;
+    --color-primary-950: #0e250e;
+
+    --color-secondary-dark: #333333;
+    --color-secondary-hover: #dcd9cc;
+    --color-secondary-default: #f2f1ec;
+
+    --color-secondary-50: #f8f7f4;
+    --color-secondary-100: #f2f1ec;
+    --color-secondary-200: #dcd9cc;
+    --color-secondary-300: #c5c0ac;
+    --color-secondary-400: #ada38a;
+    --color-secondary-500: #9d8f72;
+    --color-secondary-600: #907f66;
+    --color-secondary-700: #786956;
+    --color-secondary-800: #635749;
+    --color-secondary-900: #51473d;
+    --color-secondary-950: #2b251f;
+
+    --color-app-50: #f4faf3;
+    --color-app-100: #e4f5e3;
+    --color-app-200: #caeac8;
+    --color-app-300: #86cd82;
+    --color-app-400: #6fbd6b;
+    --color-app-500: #4ba146;
+    --color-app-600: #398435;
+    --color-app-700: #2f682d;
+    --color-app-800: #295427;
+    --color-app-900: #234522;
+    --color-app-950: #0e250e;
+    --color-app-primary: #398435;
+    --color-app-hover: #398435;
+    --color-app-default: #398435;
+
+    --color-gray-50: #f6f6f6;
+    --color-gray-100: #e7e7e7;
+    --color-gray-200: #d1d1d1;
+    --color-gray-300: #b0b0b0;
+    --color-gray-400: #888888;
+    --color-gray-500: #6d6d6d;
+    --color-gray-600: #5d5d5d;
+    --color-gray-700: #4f4f4f;
+    --color-gray-800: #454545;
+    --color-gray-900: #3d3d3d;
+    --color-gray-950: #272727;
+    --color-gray-app: #272727;
+
+    --font-xxs: 0.6rem;
+    --font-oswald: "Oswald", sans-serif;
+    --font-secondary: "Roboto", sans-serif;
+    --font-primary: "Montserrat", sans-serif;
+
+    --animate-infinite-scroll: infinite-scroll 25s linear infinite;
+
+    @keyframes infinite-scroll {
+      from { transform: translateX(0) }
+      to { transform: translateX(-100%) }
+    }
+
+    --z-0: 0;
+    --z-1: 1;
+    --z-2: 2;
+    --z-3: 3;
+    --z-4: 4;
+    --z-5: 5;
+    --z-100: 100;
+
+    --flex-2: 2 2 0%;
+    --flex-3: 3 3 0%;
+    --flex-4: 4 4 0%;
+    --flex-9: 9 9 0%;
+}
+
+@import '@splidejs/splide/css';
+@import './parts/nprogresss.css';
+@import './parts/buttons.css';
+@import './parts/container.css';
+@import './parts/ripple-wrap.css';
+@import './parts/scrollbar.css';
+@import './parts/expanding-cards.css';
+@import './parts/general.css';
+@import './parts/an-old-hope.css';

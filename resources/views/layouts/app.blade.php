@@ -16,11 +16,12 @@
         <!-- Scripts -->
         @section('vite')
             @vite([
-                'resources/css/app.scss'
+                'resources/css/app.scss',
+                'resources/js/app.js'
             ])
         @show
 
-        <wireui:scripts />
+        @livewireStyles
 
         @stack('styles')
     </head>

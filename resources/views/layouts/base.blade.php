@@ -3,58 +3,74 @@
     class="h-full"
     lang="{{ str_replace('_', '-', app()->getLocale()) }}"
     x-data="{
-        darkMode: localStorage.getItem('darkMode') || localStorage.setItem('darkMode', 'system'),
+        open: false,
+        darkMode: localStorage.getItem('darkMode') || 'system',
+
         toggleDarkMode () {
-            if (this.darkMode == 'dark') {
+            if (this.darkMode === 'dark') {
                 this.darkMode = 'light';
-            } else if (this.darkMode == 'light') {
+                document.documentElement.classList.remove('dark');
+            } else if (this.darkMode === 'light') {
                 this.darkMode = 'dark';
+                document.documentElement.classList.add('dark');
             } else {
                 this.darkMode = 'dark';
+                document.documentElement.classList.add('dark');
             }
+
+            localStorage.setItem('darkMode', this.darkMode)
         },
+
         openPanel: false,
-        togglePanel() {
+        togglePanel () {
             this.openPanel = !this.openPanel
-            
             if (this.openPanel) {
                 return this.close()
             }
-
             this.$refs.button.focus()
         },
-        closePanel(focusAfter) {
+        closePanel (focusAfter) {
             if (!this.openPanel) return
-
             this.openPanel = false
-
             focusAfter && focusAfter.focus()
         },
-        open: false,
-        toggle() {
+
+        toggle () {
             if (this.open) {
                 return this.close()
             }
-
             this.$refs.button.focus()
-
             this.open = true
         },
-        close(focusAfter) {
+        close (focusAfter) {
             if (!this.open) return
-
             this.open = false
-
             focusAfter && focusAfter.focus()
         },
+
         handlePageChange () {
             this.openPanel = false
+        },
+
+        init () {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (this.darkMode === 'system') {
+                    this.$el.classList.toggle('dark', e.matches)
+                }
+            })
+
+            document.addEventListener('livewire:navigated', () => {
+                this.darkMode = localStorage.getItem('darkMode') || 'system'
+
+                if (this.darkMode === 'dark') {
+                    this.$el.classList.add('dark')
+                } else {
+                    this.$el.classList.remove('dark')
+                }
+            })
         }
     }"
-    x-init="
-        $watch('darkMode', val => localStorage.setItem('darkMode', val))
-    "
-    x-bind:class="{'dark': darkMode === 'dark' || (darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)}"
+    class="darkMode"
 >
 
 <head>
@@ -74,16 +90,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const darkMode = localStorage.getItem('darkMode') || 'system';
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-    <style>
-        [x-cloak] {
-            display: none
-        }
-    </style>
+            if (darkMode === 'dark' || (darkMode === 'system' && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
 
     @section('vite')
         @vite([
-            'resources/css/app.scss',
+            'resources/css/app.css',
             'resources/js/app.js'
         ])
     @show
@@ -97,14 +119,14 @@
             document.body.classList.remove('in');
             document.body.classList.add('out');
         })
-        
+
         document.addEventListener('livewire:navigating', () => {
             // Triggered when new HTML is about to swapped onto the page...
-        
+
             // This is a good place to mutate any HTML before the page
             // is nagivated away from...
         })
-        
+
         document.addEventListener('livewire:navigated', () => {
             document.body.classList.remove('out');
             document.body.classList.add('in');
@@ -118,7 +140,7 @@
     <![endif]-->
 
     @section('body')
-        <div x-cloak class="flex flex-row w-full min-h-screen _space-x-5 font-primary">
+        <div x-cloak class="flex flex-row w-full min-h-screen space-x-1 font-primary">
             @section('navigation')
                 @include('layouts.parts.navigation')
             @show
@@ -152,8 +174,7 @@
         </div>
     @show
 
-    {{-- @livewireScripts --}}
-    @livewireScriptConfig
+    @livewireScripts
 
     @stack('scripts')
 
