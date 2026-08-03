@@ -35,12 +35,21 @@
                 <a
                     href="{{ route('about') }}"
                     wire:navigate
-                    class="inline-flex w-fit items-center gap-[10px] rounded-full bg-brand-lime-500 px-5 py-[11px] text-[0.85rem] font-semibold text-brand-lime-50 no-underline hover:bg-[#2a2a2a]"
+                    class="group inline-flex w-fit items-center gap-[10px] rounded-full bg-brand-lime-500 px-5 py-[11px] text-[0.85rem] font-semibold text-brand-lime-50 no-underline transition-[background-color,transform] duration-300 hover:scale-[1.03] hover:bg-[#2a2a2a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                 >
                     Conocé más
-                    <span class="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-brand-lime">
-                        <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                            <path d="M2 10L10 2M10 2H4M10 2V8" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <span
+                        class="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-brand-lime text-zinc-900 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-105"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            class="transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                            width="11"
+                            height="11"
+                            viewBox="0 0 12 12"
+                            fill="none"
+                        >
+                            <path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
                 </a>
@@ -135,7 +144,7 @@
         <x-section-head
             kicker="02. proyectos"
             title="Estos son algunos de mis proyectos"
-            actionTitle="Ver proyectos →"
+            actionTitle="Ver proyectos"
             actionHref="{{ route('projects') }}"
         />
         <div

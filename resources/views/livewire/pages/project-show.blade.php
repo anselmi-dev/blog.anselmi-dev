@@ -234,11 +234,11 @@
                                         />
 
                                         {{-- Base border --}}
-                                        <span class="pointer-events-none absolute inset-0 rounded-[inherit] border-2 border-white/85"></span>
+                                        <span class="pointer-events-none absolute inset-0 rounded-[inherit] border-2 border-brand-lime"></span>
 
                                         {{-- Progress border on next slide --}}
                                         <template x-if="nextIndex === {{ $index }}">
-                                            <span class="pointer-events-none absolute inset-0">
+                                            <span class="pointer-events-none absolute inset-0 text-brand-lime">
                                                 <template x-for="k in [progressKey]" :key="k">
                                                     <svg
                                                         class="absolute inset-0 size-full overflow-visible"
@@ -257,7 +257,7 @@
                                                             ry="14"
                                                             pathLength="100"
                                                             fill="none"
-                                                            stroke="white"
+                                                            stroke="currentColor"
                                                             stroke-width="3.5"
                                                             stroke-linecap="round"
                                                             vector-effect="non-scaling-stroke"

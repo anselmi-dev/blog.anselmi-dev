@@ -25,9 +25,9 @@ class ContactModal extends Component
     public function updatedShow(bool $value): void
     {
         if ($value) {
-            $this->js('document.body.classList.add("overflow-hidden")');
+            $this->js('window.dispatchEvent(new CustomEvent("contact-modal-open"))');
         } else {
-            $this->js('document.body.classList.remove("overflow-hidden")');
+            $this->js('window.dispatchEvent(new CustomEvent("contact-modal-close"))');
         }
     }
 

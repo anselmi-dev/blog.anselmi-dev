@@ -6,6 +6,10 @@
 </head>
 <body
     class="min-h-screen bg-white font-sans text-zinc-900 antialiased"
+    x-data="{ contactModalOpen: false }"
+    x-on:contact-modal-open.window="contactModalOpen = true"
+    x-on:contact-modal-close.window="contactModalOpen = false"
+    x-bind:class="{ 'overflow-hidden': contactModalOpen }"
     @if (! empty($themeColor ?? null))
         style="--color-brand-lime: {{ $themeColor }}; --color-brand-lime-50: color-mix(in srgb, {{ $themeColor }} 35%, white); --color-brand-lime-100: color-mix(in srgb, {{ $themeColor }} 65%, white); --color-brand-lime-200: color-mix(in srgb, {{ $themeColor }} 80%, white);"
     @endif

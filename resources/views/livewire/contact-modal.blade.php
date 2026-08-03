@@ -6,7 +6,7 @@
 <div class="contents">
     @if ($show)
         <div
-            class="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-6"
+            class="fixed inset-0 z-[200] overflow-y-auto overscroll-contain"
             role="dialog"
             aria-modal="true"
             aria-labelledby="contact-modal-title"
@@ -14,7 +14,7 @@
         >
             <div
                 @class([
-                    'absolute inset-0 cursor-pointer bg-zinc-900/50 backdrop-blur-md',
+                    'fixed inset-0 cursor-pointer bg-zinc-900/50 backdrop-blur-md',
                     'motion-safe:animate-contact-backdrop-in' => ! $leaving,
                     'motion-safe:animate-contact-backdrop-out' => $leaving,
                 ])
@@ -22,14 +22,16 @@
                 aria-hidden="true"
             ></div>
 
-            <div
-                @class([
-                    'relative z-10 grid max-h-[min(92vh,52rem)] w-full max-w-5xl grid-cols-1 overflow-hidden rounded-3xl bg-white shadow-[0_25px_80px_-20px_rgba(15,23,42,0.35)] lg:max-h-[min(90vh,44rem)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]',
-                    'motion-safe:animate-contact-modal-in' => ! $leaving,
-                    'motion-safe:animate-contact-modal-out' => $leaving,
-                ])
-                wire:click.stop
-            >
+            <div class="relative flex min-h-full items-end justify-center p-0 sm:items-center sm:p-6">
+                <div
+                    @class([
+                        'relative z-10 grid w-full max-w-5xl grid-cols-1 rounded-t-3xl bg-white shadow-[0_25px_80px_-20px_rgba(15,23,42,0.35)] sm:my-6 sm:rounded-3xl',
+                        'lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]',
+                        'motion-safe:animate-contact-modal-in' => ! $leaving,
+                        'motion-safe:animate-contact-modal-out' => $leaving,
+                    ])
+                    wire:click.stop
+                >
                 <button
                     type="button"
                     class="absolute right-3 top-3 z-20 inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/90 text-zinc-600 transition hover:border-zinc-300 hover:bg-white hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
@@ -42,7 +44,7 @@
                 </button>
 
                 {{-- Columna info --}}
-                <div class="flex flex-col gap-8 overflow-y-auto border-b border-zinc-200/80 p-8 pb-10 lg:border-b-0 lg:border-r lg:pb-8">
+                <div class="flex flex-col gap-6 border-b border-zinc-200/80 p-6 pb-8 sm:gap-8 sm:p-8 sm:pb-10 lg:border-b-0 lg:border-r lg:pb-8">
                     <div class="flex items-center gap-2.5 pr-10">
                         <span
                             class="inline-flex size-9 items-center justify-center rounded-lg border border-zinc-900 bg-white"
@@ -128,7 +130,7 @@
                 </div>
 
                 {{-- Formulario --}}
-                <div class="flex flex-col overflow-y-auto bg-brand-lime p-8 pt-12 lg:pt-10">
+                <div class="flex flex-col bg-brand-lime p-6 pt-10 sm:p-8 sm:pt-12 lg:pt-10">
                     @if ($success)
                         <div class="m-auto flex max-w-md flex-col items-center gap-5 py-8 text-center">
                             <span
@@ -224,6 +226,7 @@
                         </form>
                     @endif
                 </div>
+                </div>
             </div>
         </div>
     @endif
@@ -235,7 +238,7 @@
         $wire.$set('leaving', false, false);
         $wire.$set('show', false, false);
         $wire.$set('success', false, false);
-        document.body.classList.remove('overflow-hidden');
+        window.dispatchEvent(new CustomEvent('contact-modal-close'));
     });
 </script>
 @endscript

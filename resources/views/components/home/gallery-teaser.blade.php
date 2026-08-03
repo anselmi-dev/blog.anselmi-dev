@@ -17,7 +17,7 @@
         <x-section-head
             kicker="{{ $kicker }}"
             title="{{ $titleLine1 }}"
-            actionTitle="Ver galería →"
+            actionTitle="Ver galería"
             actionHref="{{ $galleryHref }}"
         />
 
@@ -41,6 +41,14 @@
                 gradient="from-brand-lime-100 to-brand-lime-300"
             />
 
+
+            <x-home.gallery-tile
+                data-reveal-item
+                :href="$galleryUrl"
+                grid-class="aspect-square"
+                gradient="from-brand-lime-100 to-brand-lime-300"
+            />
+
             <x-home.gallery-tile
                 data-reveal-item
                 :href="$galleryUrl"
@@ -51,7 +59,7 @@
             <x-home.gallery-tile
                 data-reveal-item
                 :href="$galleryUrl"
-                grid-class="col-span-2 aspect-[2/1]"
+                grid-class="col-span-1 md:col-span-2 md:aspect-[2/1]"
                 gradient="from-brand-lime to-brand-lime-300"
             />
 

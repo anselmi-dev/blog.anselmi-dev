@@ -19,7 +19,7 @@
 
 <div class="pb-16 pt-4 sm:pb-20 sm:pt-6 lg:pb-24">
     <div
-        class="mx-auto max-w-3xl px-0 sm:px-0"
+        class="mx-auto max-w-8xl px-0 sm:px-0 space-y-5"
         data-reveal="fade-up"
         data-reveal-stagger="0.1"
         data-reveal-duration="0.85"
@@ -28,7 +28,7 @@
             href="{{ route('blog') }}"
             wire:navigate
             data-reveal-item
-            class="mb-10 inline-flex items-center gap-2 text-sm font-medium text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            class="inline-flex items-center gap-2 text-base font-medium text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
         >
             <x-icon name="arrow-left" class="size-4 shrink-0" />
             Volver al blog
@@ -65,7 +65,7 @@
         @if (! empty($entry['body']))
             <div
                 data-reveal-item
-                class="mt-10 space-y-5 text-base leading-relaxed text-zinc-600 dark:text-zinc-400"
+                class="space-y-5 text-base leading-relaxed text-zinc-600 dark:text-zinc-400"
             >
                 @foreach ($entry['body'] as $paragraph)
                     <p>{{ $paragraph }}</p>

@@ -15,20 +15,39 @@
         'style' => '--card-accent: '.$color,
     ]) }}
     >
-    <svg class="size-12" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8 8h14v14H8zM26 8h14v14H26z" fill="#111" />
-        <path d="M8 26h14v14H8z" fill="#111" opacity="0.4" />
-        <path d="M26 26h14v14H26z" fill="#111" />
-        <circle cx="15" cy="33" r="5" fill="var(--card-accent)" />
-        <circle cx="33" cy="15" r="5" fill="var(--card-accent)" />
+    <svg
+        class="project-card-mark size-12 origin-center transition-transform duration-500 ease-out will-change-transform group-hover:rotate-[12deg]"
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+    >
+        <rect class="project-card-mark-piece" style="--i: 0" x="8" y="8" width="14" height="14" fill="#111" />
+        <rect class="project-card-mark-piece" style="--i: 1" x="26" y="8" width="14" height="14" fill="#111" />
+        <rect class="project-card-mark-piece" style="--i: 2" x="8" y="26" width="14" height="14" fill="rgba(17,17,17,0.4)" />
+        <rect class="project-card-mark-piece" style="--i: 3" x="26" y="26" width="14" height="14" fill="#111" />
+        <circle class="project-card-mark-piece project-card-mark-dot" style="--i: 4" cx="15" cy="33" r="5" fill="var(--card-accent)" />
+        <circle class="project-card-mark-piece project-card-mark-dot" style="--i: 5" cx="33" cy="15" r="5" fill="var(--card-accent)" />
     </svg>
 
     <div class="mt-auto">
         <p class="mb-1.5 text-[13px] font-bold tracking-[0.02em] text-zinc-900">{{ $index }}.</p>
         <div class="flex items-end justify-between gap-2">
             <p class="text-[26px] font-extrabold leading-[1.15] text-zinc-900">{{ $title }}</p>
-            <span class="mt-2 flex size-10 shrink-0 items-center justify-center rounded-full border border-zinc-900 bg-transparent" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round">
+            <span
+                class="mt-2 flex size-10 shrink-0 items-center justify-center rounded-full border border-zinc-900 bg-transparent text-zinc-900 transition-[transform,background-color,color] duration-300 ease-out group-hover:translate-x-0.5 group-hover:bg-zinc-900 group-hover:text-white"
+                aria-hidden="true"
+            >
+                <svg
+                    class="transition-transform duration-300 ease-out group-hover:translate-x-0.5"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                >
                     <line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/>
                 </svg>
             </span>

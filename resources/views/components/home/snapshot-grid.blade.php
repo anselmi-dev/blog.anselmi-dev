@@ -25,6 +25,9 @@
     $mapsUrl = $mapsUrl ?? $snapshot->maps_url;
     $mapLabel = $mapLabel ?? ($snapshot->map_label ?: 'MONTEVIDEO · URUGUAY');
     $spotifyEmbedUrl = $spotifyEmbedUrl ?? $snapshot->spotify_embed_url;
+    $spotifyUrl = filled($spotifyEmbedUrl)
+        ? preg_replace('#/embed/#', '/', explode('?', $spotifyEmbedUrl, 2)[0], 1)
+        : null;
     $carouselInterval = $carouselInterval ?? ($snapshot->carousel_interval ?: 4500);
 
     $showBooks = count($bookList) > 0;
@@ -60,7 +63,7 @@
                                     <button
                                         type="button"
                                         data-book-prev
-                                        class="inline-flex size-8 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-zinc-400 hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                                        class="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                                         aria-label="Libro anterior"
                                     >
                                         <x-icon name="chevron-left" class="size-4" />
@@ -68,7 +71,7 @@
                                     <button
                                         type="button"
                                         data-book-next
-                                        class="inline-flex size-8 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-zinc-400 hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                                        class="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                                         aria-label="Libro siguiente"
                                     >
                                         <x-icon name="chevron-right" class="size-4" />
@@ -136,10 +139,21 @@
                 {{-- Dónde vivo --}}
                 <div class="col-span-2 sm:col-span-1 lg:col-span-1" data-reveal-item>
                     <div class="flex flex-col gap-2">
-                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <p class="order-2 flex w-full items-center gap-2 text-lg font-normal uppercase leading-none tracking-tight text-zinc-500 sm:order-1 lg:text-xl">
+                        <div class="flex items-center justify-between gap-3">
+                            <p class="text-lg font-normal uppercase leading-none tracking-tight text-zinc-500 lg:text-xl">
                                 ¿Dónde vivo?
                             </p>
+                            @if (filled($mapsUrl))
+                                <a
+                                    href="{{ $mapsUrl }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex size-8 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                                    aria-label="Abrir mapa en Google Maps"
+                                >
+                                    <x-icon name="external-link" class="size-4" />
+                                </a>
+                            @endif
                         </div>
                         <a
                             href="{{ $mapsUrl ?: '#' }}"
@@ -157,14 +171,6 @@
                                     decoding="async"
                                 />
                             @endif
-                            <div
-                                class="absolute right-2 top-2 rounded-md bg-white p-1.5 text-zinc-900 shadow-sm ring-1 ring-black/5"
-                                aria-hidden="true"
-                            >
-                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                                </svg>
-                            </div>
                             <div class="absolute bottom-3 left-3 flex max-w-[85%] items-center gap-2 text-[0.65rem] font-semibold uppercase leading-tight tracking-wide text-white drop-shadow-md">
                                 <svg class="size-4 shrink-0 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
@@ -180,10 +186,21 @@
                 {{-- Qué escucho --}}
                 <div class="col-span-2 sm:col-span-2 lg:col-span-2" data-reveal-item>
                     <div class="flex flex-col gap-2">
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center justify-between gap-3">
                             <p class="text-lg font-normal uppercase leading-none tracking-tight text-zinc-500 lg:text-xl">
                                 ¿Qué escucho?
                             </p>
+                            @if (filled($spotifyUrl))
+                                <a
+                                    href="{{ $spotifyUrl }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex size-8 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                                    aria-label="Abrir en Spotify"
+                                >
+                                    <x-icon name="external-link" class="size-4" />
+                                </a>
+                            @endif
                         </div>
                         <div class="overflow-hidden rounded-xl bg-zinc-900/80 ring-1 ring-white/10">
                             <iframe

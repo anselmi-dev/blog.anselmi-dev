@@ -30,9 +30,18 @@
             href="{{ $actionHref }}"
             wire:navigate
             @if ($animate) data-reveal-item @endif
-            class="hidden text-sm text-folio-muted-dark transition-colors hover:text-folio-fg dark:text-folio-muted md:inline dark:hover:text-zinc-100"
+            class="group hidden shrink-0 items-center gap-2.5 text-sm font-semibold text-zinc-900 transition-colors md:inline-flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
         >
-            {{ $actionTitle }}
+            <span>{{ $actionTitle }}</span>
+            <span
+                class="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-zinc-900 text-zinc-900 transition-[transform,background-color,color] duration-300 ease-out group-hover:translate-x-0.5 group-hover:bg-zinc-900 group-hover:text-white"
+                aria-hidden="true"
+            >
+                <x-icon
+                    name="arrow-right"
+                    class="size-3.5 transition-transform duration-300 ease-out group-hover:translate-x-0.5"
+                />
+            </span>
         </a>
     @endif
 </div>
