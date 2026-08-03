@@ -101,7 +101,7 @@
         {{-- Mobile: carrusel + lead side by side · Desktop: carrusel full, texto debajo --}}
         <div
             data-reveal-item
-            class="grid grid-cols-2 items-start gap-3 sm:gap-4 lg:grid-cols-1 lg:gap-0"
+            class="grid grid-cols-1 items-start gap-3 sm:gap-4 lg:grid-cols-2 lg:gap-0"
         >
             @if (count($projectImages) > 0)
                 <div

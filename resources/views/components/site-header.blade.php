@@ -30,7 +30,7 @@
     data-reveal-stagger="0.07"
     data-reveal-duration="0.85"
 >
-    <header class="relative">
+    <header class="relative z-1">
         <div
             class="relative z-0 flex min-h-[4.5rem] items-center justify-between gap-3 px-4 pt-3 sm:min-h-[5.25rem] sm:px-6 lg:min-h-[5.5rem] lg:px-8 lg:pt-4"
         >
@@ -44,7 +44,7 @@
             </a>
 
             <nav
-                class="items-center gap-7 text-sm font-medium text-zinc-900 md:flex lg:gap-10"
+                class="items-center gap-7 text-sm font-medium text-zinc-900 md:flex lg:gap-10 hidden lg:block"
                 aria-label="Navegación principal"
             >
                 <div data-reveal-item>
@@ -71,7 +71,7 @@
                         <x-icon name="menu" class="size-6" />
                     </summary>
                     <div
-                        class="absolute right-0 top-full z-30 mt-2 w-[min(100vw-2rem,18rem)] rounded-2xl border border-zinc-200 bg-white py-3 shadow-xl"
+                        class="fixed left-1/2 top-[4.75rem] z-30 w-[min(100vw-2rem,18rem)] -translate-x-1/2 rounded-2xl border border-zinc-200 bg-white py-3 shadow-xl sm:top-[5.5rem]"
                     >
                         @foreach ($mobileLinks as $item)
                             <x-header.nav-link

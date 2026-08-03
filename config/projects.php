@@ -88,27 +88,26 @@ return [
         ],
         'apadrina-un-olivo' => [
             'title' => 'Apadrina un Olivo',
-            'excerpt' => 'Apadrina un Olivo es una plataforma creada para conectar a personas con el proyecto de revitalización de olivos centenarios en Oliete, un pequeño pueblo de Teruel, España.',
+            'excerpt' => 'Plataforma para conectar personas con la revitalización de olivos centenarios en Oliete (Teruel): apadriná un olivo, seguí su conservación y apoyá el desarrollo sostenible de la región.',
             'index' => '03',
             'color' => '#ffe1a1',
-            'tags' => ['Laravel', 'Tailwind CSS', 'Alpine.js', 'Livewire', 'MySQL'],
+            'tags' => ['PHP', 'Laravel', 'Livewire', 'Alpine', 'Javascript', 'GIT', 'AWS'],
             'role' => 'Full-stack',
             'year' => '2023',
             'client' => 'Apadrina un Olivo',
             'url' => null,
             'sections' => [
                 [
-                    'title' => 'El desafío',
+                    'title' => 'La plataforma',
                     'body' => [
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada.',
-                        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.',
+                        'Apadrina un Olivo es una plataforma creada para conectar a personas con el proyecto de revitalización de olivos centenarios en Oliete, un pequeño pueblo de Teruel, España.',
+                        'El sitio permite a los usuarios patrocinar un olivo, ayudar a su conservación y contribuir al desarrollo sostenible de la región, promoviendo la recuperación de la biodiversidad y apoyando la economía local.',
                     ],
                 ],
                 [
-                    'title' => 'La solución',
+                    'title' => 'Qué ofrece',
                     'body' => [
-                        'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.',
-                        'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.',
+                        'A través de la plataforma, los patrocinadores pueden recibir actualizaciones de sus olivos, fotos y detalles sobre el progreso de su apadrinamiento y el impacto en la comunidad.',
                     ],
                 ],
             ],

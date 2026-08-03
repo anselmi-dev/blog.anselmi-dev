@@ -139,7 +139,7 @@
             actionHref="{{ route('projects') }}"
         />
         <div
-            class="grid grid-cols-2 gap-3 lg:grid-cols-4"
+            class="grid grid-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-4"
             data-reveal="fade-up"
             data-reveal-scroll
             data-reveal-stagger="0.08"
