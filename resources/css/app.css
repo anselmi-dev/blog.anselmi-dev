@@ -1,105 +1,236 @@
 @import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
 
 @source '../views';
-
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@import './parts/general.css';
-
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    --breakpoint-xs: 440px;
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-folio-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
 
-    --color-primary-50: #f4faf3;
-    --color-primary-100: #e4f5e3;
-    --color-primary-200: #caeac8;
-    --color-primary-300: #86cd82;
-    --color-primary-400: #6fbd6b;
-    --color-primary-500: #4ba146;
-    --color-primary-600: #398435;
-    --color-primary-700: #2f682d;
-    --color-primary-800: #295427;
-    --color-primary-900: #234522;
-    --color-primary-950: #0e250e;
+    /* Aligns with site header wrapper (Tailwind stops at 7xl by default) */
+    --container-8xl: 88rem;
 
-    --color-secondary-dark: #333333;
-    --color-secondary-hover: #dcd9cc;
-    --color-secondary-default: #f2f1ec;
+    /* Bloque galería home (bosque / portfolio) */
+    --color-folio-forest: #2d4a3e;
+    --color-folio-deep: #1e2b24;
+    --color-folio-muted: #7a8f80;
+    --color-folio-muted-dark: #556b5e;
+    --color-folio-moss: #5f7d6a;
+    --color-folio-moss-dark: #3d5246;
+    --color-folio-fg: #1a211c;
+    --color-folio-fg-dark: #0f1411;
+    --color-folio-surface-dark: #252d28;
+    --color-folio-card-dark: #2a332e;
+    --color-folio-bg-dark: #161b18;
 
-    --color-secondary-50: #f8f7f4;
-    --color-secondary-100: #f2f1ec;
-    --color-secondary-200: #dcd9cc;
-    --color-secondary-300: #c5c0ac;
-    --color-secondary-400: #ada38a;
-    --color-secondary-500: #9d8f72;
-    --color-secondary-600: #907f66;
-    --color-secondary-700: #786956;
-    --color-secondary-800: #635749;
-    --color-secondary-900: #51473d;
-    --color-secondary-950: #2b251f;
+    /* --color-brand-lime: #e8f38c; */
+    --color-brand-lime: #eeeadd;
+    --color-brand-lime-50: #f6f4ee;
+    --color-brand-lime-100: #eeeadd;
+    --color-brand-lime-200: #ddd5bb;
+    --color-brand-lime-300: #ccc099;
+    --color-brand-lime-400: #bbab77;
+    --color-brand-lime-500: #aa9655;
+    --color-brand-lime-600: #887844;
+    --color-brand-lime-700: #665a33;
+    --color-brand-lime-800: #443c22;
+    --color-brand-lime-900: #221e11;
+    --color-brand-lime-950: #18150c;
 
-    --color-app-50: #f4faf3;
-    --color-app-100: #e4f5e3;
-    --color-app-200: #caeac8;
-    --color-app-300: #86cd82;
-    --color-app-400: #6fbd6b;
-    --color-app-500: #4ba146;
-    --color-app-600: #398435;
-    --color-app-700: #2f682d;
-    --color-app-800: #295427;
-    --color-app-900: #234522;
-    --color-app-950: #0e250e;
-    --color-app-primary: #398435;
-    --color-app-hover: #398435;
-    --color-app-default: #398435;
+    --color-brand-lime-500: #464646;
+    --color-brand-lime-800: #464646;
+    --color-brand-A1: #F2EFE5;
+    --color-brand-A2: #F2EFE5;
+    --color-brand-A3: #ffe1a1;
+    --color-brand-A4: #e8f38c;
+    --color-brand-A4: #e3f7fa;
 
-    --color-gray-50: #f6f6f6;
-    --color-gray-100: #e7e7e7;
-    --color-gray-200: #d1d1d1;
-    --color-gray-300: #b0b0b0;
-    --color-gray-400: #888888;
-    --color-gray-500: #6d6d6d;
-    --color-gray-600: #5d5d5d;
-    --color-gray-700: #4f4f4f;
-    --color-gray-800: #454545;
-    --color-gray-900: #3d3d3d;
-    --color-gray-950: #272727;
-    --color-gray-app: #272727;
+    --color-footer-mist: #f4f7ed;
+    --color-footer-olive: #8ca17a;
+    /* Barra inferior: píldora tipo “command palette” */
+    --color-footer-pine: #1e2a22;
+    --color-footer-pine-key: #2f4034;
 
-    --font-xxs: 0.6rem;
-    --font-oswald: "Oswald", sans-serif;
-    --font-secondary: "Roboto", sans-serif;
-    --font-primary: "Montserrat", sans-serif;
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
 
-    --animate-infinite-scroll: infinite-scroll 25s linear infinite;
+    --color-accent: var(--color-neutral-800);
+    --color-accent-content: var(--color-neutral-800);
+    --color-accent-foreground: var(--color-white);
 
-    @keyframes infinite-scroll {
-      from { transform: translateX(0) }
-      to { transform: translateX(-100%) }
+    --animate-contact-backdrop-in: contact-backdrop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    --animate-contact-backdrop-out: contact-backdrop-out 0.35s cubic-bezier(0.4, 0, 1, 1) both;
+    --animate-contact-modal-in: contact-modal-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+    --animate-contact-modal-out: contact-modal-out 0.38s cubic-bezier(0.4, 0, 1, 1) both;
+
+    /* Visor galería (misma curva que contacto, nombres propios por si querés divergir) */
+    --animate-gallery-lightbox-backdrop-in: contact-backdrop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    --animate-gallery-lightbox-backdrop-out: contact-backdrop-out 0.35s cubic-bezier(0.4, 0, 1, 1) both;
+    --animate-gallery-lightbox-panel-in: contact-modal-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    --animate-gallery-lightbox-panel-out: contact-modal-out 0.36s cubic-bezier(0.4, 0, 1, 1) both;
+
+    @keyframes contact-backdrop-in {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
     }
 
-    --z-0: 0;
-    --z-1: 1;
-    --z-2: 2;
-    --z-3: 3;
-    --z-4: 4;
-    --z-5: 5;
-    --z-100: 100;
+    @keyframes contact-backdrop-out {
+        from {
+            opacity: 1;
+        }
 
-    --flex-2: 2 2 0%;
-    --flex-3: 3 3 0%;
-    --flex-4: 4 4 0%;
-    --flex-9: 9 9 0%;
+        to {
+            opacity: 0;
+        }
+    }
+
+    @keyframes contact-modal-in {
+        from {
+            opacity: 0;
+            filter: blur(2px);
+            transform: scale(0.94) translateY(1.25rem);
+        }
+
+        to {
+            opacity: 1;
+            filter: blur(0);
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    @keyframes contact-modal-out {
+        from {
+            opacity: 1;
+            filter: blur(0);
+            transform: scale(1) translateY(0);
+        }
+
+        to {
+            opacity: 0;
+            filter: blur(2px);
+            transform: scale(0.94) translateY(1.25rem);
+        }
+    }
 }
 
-@import '@splidejs/splide/css';
-@import './parts/nprogresss.css';
-@import './parts/buttons.css';
-@import './parts/container.css';
-@import './parts/ripple-wrap.css';
-@import './parts/scrollbar.css';
-@import './parts/expanding-cards.css';
-@import './parts/general.css';
-@import './parts/an-old-hope.css';
+@layer theme {
+    .dark {
+        --color-accent: var(--color-white);
+        --color-accent-content: var(--color-white);
+        --color-accent-foreground: var(--color-neutral-800);
+    }
+}
+
+@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    .project-carousel-progress {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        animation-name: project-carousel-progress;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
+    }
+
+    .project-carousel-progress.is-paused {
+        animation-play-state: paused;
+    }
+
+    @keyframes project-carousel-progress {
+        from {
+            stroke-dashoffset: 100;
+        }
+
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    /* GSAP reveals: evita flash antes de animar (sin reduced-motion) */
+    @media (prefers-reduced-motion: no-preference) {
+        [data-reveal]:not([data-reveal-ready]) {
+            opacity: 0;
+        }
+    }
+
+    /* Lucide (createIcons): tamaño por defecto si no pasás size-* en el <x-icon> */
+    svg.lucide-icon {
+        @apply inline-block shrink-0;
+    }
+
+    svg.lucide-icon:not([class*='size-']):not([class*='w-']):not([class*='h-']) {
+        @apply size-[1.15em];
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply  !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+
+/* \[:where(&)\]:size-4 {
+    @apply size-4;
+} */
+
+@keyframes tictactoe-mark-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.35) rotate(-10deg);
+    }
+    70% {
+        transform: scale(1.08) rotate(2deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.tictactoe-mark {
+    animation: tictactoe-mark-in 0.34s cubic-bezier(0.34, 1.25, 0.64, 1) both;
+}
+
+/* Tres en raya: mismo peso visual para rejilla y símbolos (userSpaceOnUse) */
+.tictactoe-board {
+    --tt-stroke: 3.15;
+}

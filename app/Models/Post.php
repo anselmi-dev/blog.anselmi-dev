@@ -2,116 +2,89 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-
-class Post extends Model implements HasMedia
+class Post extends Model
 {
-    use InteractsWithMedia;
-
-    use HasFactory;
-
-    use HasSlug;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        "title",
-        "status",
-        "slug",
-        "description",
-        "content",
-        "published_at",
+        'slug',
+        'kind',
+        'kicker',
+        'title',
+        'excerpt',
+        'body',
+        'caption',
+        'image_path',
+        'alt',
+        'show_in_bento',
+        'bento_type',
+        'bento_grid_class',
+        'bento_sort',
+        'sort_order',
+        'is_published',
+        'published_at',
     ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $casts = [
-        "published_at" => 'datetime',
-        "content" => 'array',
-    ];
-
-    /**
-     * Get the options for generating the slug.
-     */
-    public function getSlugOptions() : SlugOptions
+    protected function casts(): array
     {
-        return SlugOptions::create()
-                ->generateSlugsFrom('title')
-                ->saveSlugsTo('slug');
+        return [
+            'body' => 'array',
+            'show_in_bento' => 'boolean',
+            'is_published' => 'boolean',
+            'published_at' => 'datetime',
+            'bento_sort' => 'integer',
+            'sort_order' => 'integer',
+        ];
     }
 
-    public function tags()
+    public function scopePublished(Builder $query): Builder
     {
-        return $this->morphToMany(Tag::class, 'model', 'tags_models');
+        return $query->where('is_published', true);
     }
 
-    public function likes()
+    public function scopeInBento(Builder $query): Builder
     {
-        return $this->morphMany(Like::class, 'model');
+        return $query->where('show_in_bento', true)->orderBy('bento_sort');
     }
 
-    /**
-     * Get the Category that wrote the Post
-     *
-     * @return BelongsTo
-     */
-    public function category () : BelongsTo
+    public function imageUrl(?int $w = 900, ?int $h = 1100): ?string
     {
-        return $this->belongsTo(Category::class);
-    }
+        if ($this->image_path) {
+            return Storage::disk('public')->url($this->image_path);
+        }
 
-    /**
-     * Get URL the Post
-     *
-     * @return string
-     */
-    public function getUrlAttribute () : string
-    {
-        return route('post.show', $this->slug);
-    }
-
-    public function getCoverattribute() : Media|null
-    {
-        if ($images = $this->getFirstMedia("cover")) {
-            return $images;
+        if ($this->kind === 'image') {
+            return sprintf(
+                'https://picsum.photos/seed/post-%s/%d/%d',
+                $this->slug ?: ($this->id ?: 'blog'),
+                $w ?? 900,
+                $h ?? 1100
+            );
         }
 
         return null;
     }
 
-    public function getPublishedAtForHumansAttribute() : string
+    /**
+     * Array shape compatible with the previous config/blog entries.
+     *
+     * @return array<string, mixed>
+     */
+    public function toEntryArray(): array
     {
-        try {
-            $published_at = Carbon::parse($this->published_at);
-
-            return $published_at->isoFormat('LL');
-
-        } catch (\Throwable $th) {
-            return $this->published_at;
-        }
-    }
-
-    public function registerMediaConversions (Media $media = null): void
-    {
-        $this->addMediaConversion('thumb')
-              ->width(368)
-              ->height(232)
-              ->sharpen(10);
+        return [
+            'kind' => $this->kind,
+            'kicker' => $this->kicker,
+            'title' => $this->title,
+            'excerpt' => $this->excerpt,
+            'body' => $this->body ?? [],
+            'caption' => $this->caption,
+            'alt' => $this->alt,
+            'slug' => $this->slug,
+            'image_path' => $this->image_path,
+            'image_url' => $this->imageUrl(),
+        ];
     }
 }
