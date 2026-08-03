@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\LivewireFileUploadController;
 use App\Models\Faq;
 use App\Models\GalleryItem;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -28,6 +30,27 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->shareSiteNavAvailability();
+        $this->useWindowsSafeLivewireUploads();
+    }
+
+    /**
+     * On Windows/Laragon, Livewire temp uploads can hit "Path must not be empty"
+     * because getRealPath() returns false while the temp file still exists.
+     */
+    protected function useWindowsSafeLivewireUploads(): void
+    {
+        $this->app->booted(function (): void {
+            $route = Route::getRoutes()->getByName('livewire.upload-file');
+
+            if (! $route) {
+                return;
+            }
+
+            $route->setAction(array_merge($route->getAction(), [
+                'uses' => LivewireFileUploadController::class.'@handle',
+                'controller' => LivewireFileUploadController::class.'@handle',
+            ]));
+        });
     }
 
     /**
