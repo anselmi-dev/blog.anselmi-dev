@@ -8,10 +8,10 @@ use App\Models\GalleryItem;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Livewire\Features\SupportFileUploads\FileUploadController as LivewireUploadController;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,7 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Windows/Laragon: getRealPath() can be false for valid upload temps.
+        $this->app->bind(LivewireUploadController::class, LivewireFileUploadController::class);
     }
 
     /**
@@ -30,27 +31,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->shareSiteNavAvailability();
-        $this->useWindowsSafeLivewireUploads();
-    }
-
-    /**
-     * On Windows/Laragon, Livewire temp uploads can hit "Path must not be empty"
-     * because getRealPath() returns false while the temp file still exists.
-     */
-    protected function useWindowsSafeLivewireUploads(): void
-    {
-        $this->app->booted(function (): void {
-            $route = Route::getRoutes()->getByName('livewire.upload-file');
-
-            if (! $route) {
-                return;
-            }
-
-            $route->setAction(array_merge($route->getAction(), [
-                'uses' => LivewireFileUploadController::class.'@handle',
-                'controller' => LivewireFileUploadController::class.'@handle',
-            ]));
-        });
     }
 
     /**
