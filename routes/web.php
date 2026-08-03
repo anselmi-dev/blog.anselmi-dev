@@ -32,7 +32,7 @@ Route::livewire('/servicios/colores', Colors::class)->name('services.colors');
 Route::livewire('/servicios/herramientas', Tools::class)->name('services.tools');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::redirect('dashboard', '/admin')->name('dashboard');
 });
 
 require __DIR__.'/settings.php';
