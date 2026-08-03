@@ -44,7 +44,7 @@
             </a>
 
             <nav
-                class="items-center gap-7 text-sm font-medium text-zinc-900 md:flex lg:gap-10 hidden lg:block"
+                class="items-center gap-7 text-sm font-medium text-zinc-900 md:flex lg:gap-10 hidden"
                 aria-label="Navegación principal"
             >
                 <div data-reveal-item>
@@ -63,7 +63,12 @@
             </nav>
 
             <div class="flex items-center gap-2 sm:gap-3" data-reveal-item>
-                <details class="relative md:hidden">
+                <details
+                    class="relative md:hidden"
+                    x-data
+                    x-on:click.outside="$el.removeAttribute('open')"
+                    x-on:scroll.window="$el.removeAttribute('open')"
+                >
                     <summary
                         class="flex cursor-pointer list-none items-center justify-center rounded-full border border-zinc-900 p-2.5 marker:hidden [&::-webkit-details-marker]:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                         aria-label="Abrir menú"
@@ -71,7 +76,7 @@
                         <x-icon name="menu" class="size-6" />
                     </summary>
                     <div
-                        class="fixed left-1/2 top-[4.75rem] z-30 w-[min(100vw-2rem,18rem)] -translate-x-1/2 rounded-2xl border border-zinc-200 bg-white py-3 shadow-xl sm:top-[5.5rem]"
+                        class="fixed left-1/2 top-[100px] z-30 w-[min(100vw-2rem,18rem)] -translate-x-1/2 rounded-2xl border border-zinc-200 bg-white py-3 shadow-xl sm:top-[5.5rem]"
                     >
                         @foreach ($mobileLinks as $item)
                             <x-header.nav-link
