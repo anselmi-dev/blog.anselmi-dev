@@ -155,6 +155,67 @@
         display: none !important;
     }
 
+    /* Custom cursor — solo desktop / puntero fino */
+    @media (pointer: fine) {
+        html.has-custom-cursor,
+        html.has-custom-cursor * {
+            cursor: none !important;
+        }
+
+        html.has-custom-cursor input,
+        html.has-custom-cursor textarea,
+        html.has-custom-cursor select,
+        html.has-custom-cursor [contenteditable='true'] {
+            cursor: text !important;
+        }
+    }
+
+    .site-cursor {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        pointer-events: none;
+        mix-blend-mode: difference;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    .site-cursor.is-visible {
+        opacity: 1;
+    }
+
+    .site-cursor.is-hidden {
+        opacity: 0;
+    }
+
+    .site-cursor__dot,
+    .site-cursor__ring {
+        position: fixed;
+        top: 0;
+        left: 0;
+        border-radius: 9999px;
+        will-change: transform;
+        pointer-events: none;
+    }
+
+    .site-cursor__dot {
+        width: 6px;
+        height: 6px;
+        background: #fff;
+    }
+
+    .site-cursor__ring {
+        width: 34px;
+        height: 34px;
+        border: 1.5px solid #fff;
+    }
+
+    @media (pointer: coarse), (prefers-reduced-motion: reduce) {
+        .site-cursor {
+            display: none !important;
+        }
+    }
+
     .project-carousel-progress {
         stroke-dasharray: 100;
         stroke-dashoffset: 100;

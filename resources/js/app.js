@@ -1,5 +1,6 @@
 import { createIcons, icons } from 'lucide';
 import { initBookCarousels } from './book-carousel';
+import { initCustomCursor } from './custom-cursor';
 import { initMotion } from './motion';
 
 /**
@@ -21,6 +22,7 @@ function boot(root = document) {
     initLucideIcons(root);
     initMotion(root);
     initBookCarousels(root);
+    initCustomCursor(root);
 }
 
 document.addEventListener('DOMContentLoaded', () => boot());
