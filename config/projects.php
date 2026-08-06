@@ -23,13 +23,7 @@ return [
                     'title' => 'La plataforma',
                     'body' => [
                         'Brickstarter es una plataforma de inversión en propiedades inmobiliarias que permite a los usuarios invertir en proyectos seleccionados y diversificar su portafolio de bienes raíces sin necesidad de adquirir una propiedad completa.',
-                        'La plataforma facilita la inversión colectiva, donde múltiples usuarios pueden aportar capital para financiar distintos proyectos inmobiliarios y obtener retornos según el rendimiento de cada propiedad.',
-                    ],
-                ],
-                [
-                    'title' => 'Qué ofrece',
-                    'body' => [
-                        'Los usuarios tienen acceso a información detallada de cada proyecto, incluyendo estimaciones de rentabilidad, plazos de inversión y opciones de seguimiento de su capital invertido.',
+                        'La plataforma facilita la inversión colectiva, donde múltiples usuarios pueden aportar capital para financiar distintos proyectos inmobiliarios y obtener retornos según el rendimiento de cada propiedad. Los usuarios tienen acceso a información detallada de cada proyecto, incluyendo estimaciones de rentabilidad, plazos de inversión, y opciones de seguimiento de su capital invertido.',
                     ],
                 ],
             ],
@@ -55,7 +49,7 @@ return [
         ],
         'peronda' => [
             'title' => 'Peronda',
-            'excerpt' => 'Peronda es una plataforma web para una empresa especializada en el diseño y fabricación de cerámicas de alta calidad.',
+            'excerpt' => 'Plataforma web para explorar catálogos de cerámicas, colecciones exclusivas y recursos para profesionales del diseño y la construcción.',
             'index' => '02',
             'color' => '#e8f38c',
             'tags' => ['PHP', 'Laravel', 'Livewire', 'Javascript', 'BITBUCKET', 'AWS'],
@@ -65,25 +59,39 @@ return [
             'url' => null,
             'sections' => [
                 [
-                    'title' => 'El desafío',
+                    'title' => 'La plataforma',
                     'body' => [
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.',
-                        'Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.',
-                    ],
-                ],
-                [
-                    'title' => 'La solución',
-                    'body' => [
-                        'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.',
-                        'Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.',
+                        'Peronda es una plataforma web para una empresa especializada en el diseño y fabricación de cerámicas de alta calidad. El sitio permite a los usuarios explorar catálogos de productos detallados, consultar colecciones exclusivas, y acceder a recursos para profesionales del diseño y la construcción.',
+                        'En el proyecto se buscó ofrecer una experiencia visualmente atractiva, fluida y funcional, optimizada para resaltar la estética y calidad de los productos.',
                     ],
                 ],
             ],
             'images' => [
-                ['seed' => 'peronda-hero', 'alt' => 'Vista principal de Peronda', 'hero' => true],
-                ['seed' => 'peronda-1', 'alt' => 'Catálogo de cerámicas Peronda'],
-                ['seed' => 'peronda-2', 'alt' => 'Detalle de producto Peronda'],
-                ['seed' => 'peronda-3', 'alt' => 'Experiencia de navegación Peronda'],
+                [
+                    'src' => '/images/proyectos/peronda/peronda-screenshot.jpg',
+                    'alt' => 'Vista principal de Peronda',
+                    'hero' => true,
+                ],
+                [
+                    'src' => '/images/proyectos/peronda/peronda-screenshot-1.png',
+                    'alt' => 'Captura de Peronda',
+                ],
+                [
+                    'src' => '/images/proyectos/peronda/peronda-screenshot-2.png',
+                    'alt' => 'Detalle de producto Peronda',
+                ],
+                [
+                    'src' => '/images/proyectos/peronda/peronda-screenshot-3.png',
+                    'alt' => 'Catálogo de cerámicas Peronda',
+                ],
+                [
+                    'src' => '/images/proyectos/peronda/peronda-screenshot-4.png',
+                    'alt' => 'Experiencia de navegación Peronda',
+                ],
+                [
+                    'src' => '/images/proyectos/peronda/peronda-screenshot-5.png',
+                    'alt' => 'Interfaz de Peronda',
+                ],
             ],
         ],
         'apadrina-un-olivo' => [
@@ -100,55 +108,64 @@ return [
                 [
                     'title' => 'La plataforma',
                     'body' => [
-                        'Apadrina un Olivo es una plataforma creada para conectar a personas con el proyecto de revitalización de olivos centenarios en Oliete, un pequeño pueblo de Teruel, España.',
-                        'El sitio permite a los usuarios patrocinar un olivo, ayudar a su conservación y contribuir al desarrollo sostenible de la región, promoviendo la recuperación de la biodiversidad y apoyando la economía local.',
-                    ],
-                ],
-                [
-                    'title' => 'Qué ofrece',
-                    'body' => [
-                        'A través de la plataforma, los patrocinadores pueden recibir actualizaciones de sus olivos, fotos y detalles sobre el progreso de su apadrinamiento y el impacto en la comunidad.',
+                        'Apadrina un Olivo es una plataforma creada para conectar a personas con el proyecto de revitalización de olivos centenarios en Oliete, un pequeño pueblo de Teruel, España. El sitio permite a los usuarios patrocinar un olivo, ayudar a su conservación, y contribuir al desarrollo sostenible de la región, promoviendo la recuperación de la biodiversidad y apoyando la economía local.',
+                        'Además, a través de la plataforma, los patrocinadores pueden recibir actualizaciones de sus olivos, fotos, y detalles sobre el progreso de su apadrinamiento y el impacto en la comunidad.',
                     ],
                 ],
             ],
             'images' => [
-                ['seed' => 'olivo-hero', 'alt' => 'Vista principal de Apadrina un Olivo', 'hero' => true],
-                ['seed' => 'olivo-1', 'alt' => 'Olivos centenarios en Oliete'],
-                ['seed' => 'olivo-2', 'alt' => 'Proceso de apadrinamiento'],
-                ['seed' => 'olivo-3', 'alt' => 'Comunidad y seguimiento'],
+                [
+                    'src' => '/images/proyectos/apadrinaunolivo/apadrinaunolivo-screen.png',
+                    'alt' => 'Vista principal de Apadrina un Olivo',
+                    'hero' => true,
+                ],
+                [
+                    'src' => '/images/proyectos/apadrinaunolivo/apadrinaunolivo-screen-2.png',
+                    'alt' => 'Proceso de apadrinamiento',
+                ],
+                [
+                    'src' => '/images/proyectos/apadrinaunolivo/apadrinaunolivo-screen-3.png',
+                    'alt' => 'Seguimiento del olivo apadrinado',
+                ],
+                [
+                    'src' => '/images/proyectos/apadrinaunolivo/apadrinaunolivo-screen-4.png',
+                    'alt' => 'Comunidad y impacto en Oliete',
+                ],
             ],
         ],
         'tiles-in-mind' => [
             'title' => 'Tiles in Mind',
-            'excerpt' => 'Tiles in Mind es una plataforma web diseñada para que los usuarios puedan explorar, personalizar y obtener inspiración para la decoración de espacios con azulejos.',
+            'excerpt' => 'Explorá, personalizá y obtené inspiración para decorar espacios con azulejos: creá y guardá diseños únicos para visualizar combinaciones de colores, patrones y estilos.',
             'index' => '04',
             'color' => '#F2EFE5',
-            'tags' => ['PHP', 'Laravel', 'Livewire', 'Alpine', 'Javascript', 'AWS'],
+            'tags' => ['PHP', 'Laravel', 'Livewire', 'Javascript', 'BITBUCKET', 'AWS'],
             'role' => 'Full-stack',
             'year' => '2022',
             'client' => 'Tiles in Mind',
             'url' => null,
             'sections' => [
                 [
-                    'title' => 'El desafío',
+                    'title' => 'La plataforma',
                     'body' => [
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Donec sollicitudin molestie malesuada.',
-                        'Curabitur aliquet quam id dui posuere blandit. Nulla quis lorem ut libero malesuada feugiat. Proin eget tortor risus.',
-                    ],
-                ],
-                [
-                    'title' => 'La solución',
-                    'body' => [
-                        'Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.',
-                        'Pellentesque in ipsum id orci porta dapibus. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus.',
+                        'Tiles in Mind es una plataforma web diseñada para que los usuarios puedan explorar, personalizar y obtener inspiración para la decoración de espacios con azulejos. Este sitio permite a los usuarios crear y guardar diseños únicos, lo que facilita visualizar cómo lucirán diferentes combinaciones de colores, patrones y estilos en diversos entornos.',
+                        'Al combinar tecnología y creatividad, la plataforma ofrece una experiencia interactiva, intuitiva y visualmente atractiva para quienes buscan renovar o embellecer espacios mediante el uso de azulejos.',
                     ],
                 ],
             ],
             'images' => [
-                ['seed' => 'tiles-hero', 'alt' => 'Vista principal de Tiles in Mind', 'hero' => true],
-                ['seed' => 'tiles-1', 'alt' => 'Explorador de azulejos'],
-                ['seed' => 'tiles-2', 'alt' => 'Personalización de espacios'],
-                ['seed' => 'tiles-3', 'alt' => 'Inspiración y moodboards'],
+                [
+                    'src' => '/images/proyectos/tilesinmind/tilesinmindscreenshot.png',
+                    'alt' => 'Vista principal de Tiles in Mind',
+                    'hero' => true,
+                ],
+                [
+                    'src' => '/images/proyectos/tilesinmind/tilesinmindscreenshot-2.png',
+                    'alt' => 'Explorador de azulejos',
+                ],
+                [
+                    'src' => '/images/proyectos/tilesinmind/tilesinmindscreenshot-3.png',
+                    'alt' => 'Personalización de espacios',
+                ],
             ],
         ],
     ],

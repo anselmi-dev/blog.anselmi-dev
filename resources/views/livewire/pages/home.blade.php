@@ -74,13 +74,14 @@
                     Entre hobbies: estoy “tomando” fotografía.
                     O sea, estoy aprendiendo. Acá una de mis favoritas
                     (decilo con cara seria).
+                    @php($hasPublishedGalleryPhotos = \App\Models\GalleryItem::query()->published()->exists())
                     @if ($hasPublishedGalleryPhotos ?? false)
                         <a href="{{ route('gallery') }}" wire:navigate class="text-brand-lime-700 underline decoration-brand-lime-700/50 underline-offset-2 transition-colors hover:text-brand-lime-900 hover:decoration-brand-lime-900">Podés ver más acá</a>.
                     @endif
                 </p>
                 <div class="relative min-h-[170px] flex-1 overflow-hidden rounded-2xl max-[600px]:min-h-[150px]">
-                    <img class="block min-h-[170px] w-full object-cover max-[600px]:min-h-[150px]" src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=600&h=400&fit=crop&crop=center" alt="Cyclist group" />
-                    <div class="absolute bottom-[14px] left-[14px] flex flex-col gap-2">
+                    <img class="block min-h-[170px] w-full object-cover max-[600px]:min-h-[150px]" src="{{ asset('images/001-UCU.webp') }}" alt="Cyclist group" />
+                    {{-- <div class="absolute bottom-[14px] left-[14px] flex flex-col gap-2">
                         <div class="flex gap-2">
                             <span class="w-fit rounded-full border border-white/80 bg-black/15 px-[14px] py-1 text-[0.75rem] font-medium text-white backdrop-blur-sm">Código</span>
                         </div>
@@ -90,7 +91,7 @@
                         <div class="flex gap-2">
                             <span class="w-fit rounded-full border border-white/80 bg-black/15 px-[14px] py-1 text-[0.75rem] font-medium text-white backdrop-blur-sm">Producto</span>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
