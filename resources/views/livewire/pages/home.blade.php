@@ -60,9 +60,9 @@
                 <div class="h-[270px] flex-1 overflow-hidden rounded-2xl max-[600px]:h-[190px] max-[420px]:h-[160px]">
                     <img class="block size-full object-cover" src="{{ asset('images/DSC_0307.jpg') }}" alt="Cyclist racing" />
                 </div>
-                <div class="mt-11 h-[220px] flex-1 overflow-hidden rounded-2xl max-[600px]:mt-7 max-[600px]:h-[160px] max-[420px]:mt-6 max-[420px]:h-[130px]">
+                {{-- <div class="mt-11 h-[220px] flex-1 overflow-hidden rounded-2xl max-[600px]:mt-7 max-[600px]:h-[160px] max-[420px]:mt-6 max-[420px]:h-[130px]">
                     <img class="block size-full object-cover" src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=400&h=500&fit=crop&crop=top" alt="Cyclist with bike" />
-                </div>
+                </div> --}}
             </div>
         </section>
 
