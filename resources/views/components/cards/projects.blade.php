@@ -7,12 +7,14 @@
     'tags' => [],
 ])
 
+@php($safeColor = \App\Support\CssColor::hexOrNull($color) ?? '#E87FBF')
+
 <a
     href="{{ $href }}"
     {{ $attributes->class([
         'group flex min-h-[380px] cursor-pointer flex-col justify-between rounded-[20px] bg-brand-lime px-4 py-4 transition-[transform,background-color] duration-200 hover:scale-[1.02] hover:bg-[var(--card-accent)]',
     ])->merge([
-        'style' => '--card-accent: '.$color,
+        'style' => '--card-accent: '.$safeColor,
     ]) }}
     >
     <svg

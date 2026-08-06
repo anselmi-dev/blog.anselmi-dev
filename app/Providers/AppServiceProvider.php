@@ -3,12 +3,13 @@
 namespace App\Providers;
 
 use App\Http\Controllers\LivewireFileUploadController;
-use App\Models\Faq;
-use App\Models\GalleryItem;
-use App\Models\Post;
+use App\Support\SiteNavAvailability;
 use Carbon\CarbonImmutable;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureRateLimiting();
         $this->shareSiteNavAvailability();
     }
 
@@ -39,15 +41,18 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function shareSiteNavAvailability(): void
     {
-        View::composer(['components.site-header', 'livewire.pages.home', 'components.home.intro-columns'], function ($view): void {
-            $view->with([
-                'hasPublishedFaqs' => Faq::query()->published()->exists(),
-                'hasPublishedGalleryPhotos' => GalleryItem::query()
-                    ->published()
-                    ->where('kind', 'photo')
-                    ->exists(),
-                'hasPublishedPosts' => Post::query()->published()->exists(),
-            ]);
+        View::composer(
+            ['components.site-header', 'livewire.pages.home', 'components.home.intro-columns'],
+            function ($view): void {
+                $view->with(SiteNavAvailability::flags());
+            },
+        );
+    }
+
+    protected function configureRateLimiting(): void
+    {
+        RateLimiter::for('contact', function (Request $request) {
+            return Limit::perMinute(5)->by($request->ip());
         });
     }
 

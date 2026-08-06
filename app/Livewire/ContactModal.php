@@ -2,8 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Models\ContactMessage;
+use App\Actions\Contact\SubmitContactMessage;
 use App\Models\Setting;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -82,15 +84,26 @@ class ContactModal extends Component
         ];
     }
 
-    public function submit(): void
+    public function submit(SubmitContactMessage $action): void
     {
         $this->validate();
 
-        ContactMessage::query()->create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'message' => $this->message,
-        ]);
+        $key = 'contact:'.request()->ip();
+
+        $executed = RateLimiter::attempt(
+            $key,
+            5,
+            fn () => $action->handle($this->name, $this->email, $this->message),
+            decaySeconds: 60,
+        );
+
+        if (! $executed) {
+            $seconds = RateLimiter::availableIn($key);
+
+            throw ValidationException::withMessages([
+                'email' => "Demasiados mensajes. Probá de nuevo en {$seconds} segundos.",
+            ]);
+        }
 
         $this->reset(['name', 'email', 'message']);
         $this->resetValidation();

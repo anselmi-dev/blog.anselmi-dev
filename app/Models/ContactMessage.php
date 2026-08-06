@@ -10,7 +10,6 @@ class ContactMessage extends Model
         'name',
         'email',
         'message',
-        'read_at',
     ];
 
     protected function casts(): array
@@ -23,7 +22,7 @@ class ContactMessage extends Model
     public function markAsRead(): void
     {
         if ($this->read_at === null) {
-            $this->update(['read_at' => now()]);
+            $this->forceFill(['read_at' => now()])->save();
         }
     }
 

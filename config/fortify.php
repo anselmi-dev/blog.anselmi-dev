@@ -144,7 +144,7 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Admins se crean por seeder/artisan; no hay signup público.
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::twoFactorAuthentication([

@@ -11,6 +11,7 @@
 @php
     use App\Models\HomeSnapshot;
     use App\Models\ReadingBook;
+    use App\Support\SpotifyEmbed;
 
     $snapshot = HomeSnapshot::current();
     $bookList = $books ?? ReadingBook::query()
@@ -24,7 +25,7 @@
     $mapImage = $mapImage ?? $snapshot->mapImageUrl();
     $mapsUrl = $mapsUrl ?? $snapshot->maps_url;
     $mapLabel = $mapLabel ?? ($snapshot->map_label ?: 'MONTEVIDEO · URUGUAY');
-    $spotifyEmbedUrl = $spotifyEmbedUrl ?? $snapshot->spotify_embed_url;
+    $spotifyEmbedUrl = SpotifyEmbed::sanitize($spotifyEmbedUrl ?? $snapshot->spotify_embed_url);
     $spotifyUrl = filled($spotifyEmbedUrl)
         ? preg_replace('#/embed/#', '/', explode('?', $spotifyEmbedUrl, 2)[0], 1)
         : null;
@@ -210,7 +211,9 @@
                                 width="100%"
                                 height="152"
                                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
                                 loading="lazy"
+                                referrerpolicy="strict-origin-when-cross-origin"
                                 title="Spotify — canción actual"
                             ></iframe>
                         </div>

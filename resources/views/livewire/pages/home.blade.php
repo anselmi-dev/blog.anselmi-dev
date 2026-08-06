@@ -72,7 +72,6 @@
             <div class="flex min-w-[240px] flex-[2_1_280px] flex-col gap-4 rounded-3xl bg-brand-lime p-7 max-[600px]:min-w-0">
                 <p class="m-0 text-base font-semibold leading-snug text-brand-lime-500">
                     Entre mis hobbies está la fotografía. Sí, "estoy tomando fotografía"... todavía aprendiendo, así que cualquier parecido con un profesional es pura coincidencia.
-                    @php($hasPublishedGalleryPhotos = \App\Models\GalleryItem::query()->published()->exists())
                     @if ($hasPublishedGalleryPhotos ?? false)
                         <a href="{{ route('gallery') }}" wire:navigate class="text-brand-lime-700 underline decoration-brand-lime-700/50 underline-offset-2 transition-colors hover:text-brand-lime-900 hover:decoration-brand-lime-900">Podés ver más acá</a>.
                     @endif

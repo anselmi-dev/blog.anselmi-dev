@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\HomeSnapshot;
+use App\Support\SpotifyEmbed;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
@@ -73,8 +74,13 @@ class ManageHomeSnapshot extends Page
                             TextInput::make('spotify_embed_url')
                                 ->label('URL embed de Spotify')
                                 ->url()
-                                ->helperText('Pegá el link de “Incorporar episodio/canción” de Spotify.')
+                                ->helperText('Pegá el link de “Incorporar episodio/canción” de Spotify (open.spotify.com).')
                                 ->maxLength(500)
+                                ->rule(fn (): \Closure => function (string $attribute, mixed $value, \Closure $fail): void {
+                                    if (filled($value) && ! SpotifyEmbed::isAllowed((string) $value)) {
+                                        $fail('Solo se permiten embeds de open.spotify.com.');
+                                    }
+                                })
                                 ->columnSpanFull(),
                         ]),
                     Section::make('Carrusel de libros')

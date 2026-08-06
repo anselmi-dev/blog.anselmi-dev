@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Schema;
 
 class Setting extends Model
 {
@@ -63,10 +62,6 @@ class Setting extends Model
      */
     public static function group(string $group, array $defaults = []): array
     {
-        if (! Schema::hasTable('settings')) {
-            return $defaults;
-        }
-
         return Cache::remember("settings.group.{$group}", 3600, function () use ($group, $defaults): array {
             $stored = static::query()
                 ->where('group', $group)
