@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\Controllers\LivewireFileUploadController;
 use App\Models\Faq;
 use App\Models\GalleryItem;
+use App\Models\Post;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -38,13 +39,14 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function shareSiteNavAvailability(): void
     {
-        View::composer(['components.site-header', 'livewire.pages.home'], function ($view): void {
+        View::composer(['components.site-header', 'livewire.pages.home', 'components.home.intro-columns'], function ($view): void {
             $view->with([
                 'hasPublishedFaqs' => Faq::query()->published()->exists(),
                 'hasPublishedGalleryPhotos' => GalleryItem::query()
                     ->published()
                     ->where('kind', 'photo')
                     ->exists(),
+                'hasPublishedPosts' => Post::query()->published()->exists(),
             ]);
         });
     }

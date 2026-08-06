@@ -13,19 +13,17 @@
 
     $navLinks = [];
 
-    $hasPublishedPosts = \App\Models\Post::query()->published()->count() > 0;
-
     if ($hasPublishedPosts ?? false) {
         $navLinks[] = ['label' => 'Blog', 'href' => route('blog'), 'navigate' => true];
     }
 
     if ($hasPublishedFaqs ?? false) {
         $navLinks[] = ['label' => 'FAQ', 'href' => route('faq'), 'navigate' => true];
-        $mobileLinks[] = ['label' => 'FAQ', 'href' => route('faq'), 'navigate' => true];
     }
 
     $navLinks[] = ['label' => 'Sobre mí', 'href' => route('about'), 'navigate' => true];
-    $mobileLinks[] = ['label' => 'Sobre mí', 'href' => route('about'), 'navigate' => true];
+
+    $mobileLinks = [...$dropdownLinks, ...$navLinks];
 @endphp
 
 <x-site-frame

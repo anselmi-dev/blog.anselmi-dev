@@ -1,18 +1,3 @@
-@php
-    $chevron = <<<'SVG'
-<svg class="size-4 shrink-0 text-zinc-900 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-    <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h9.546l-3.195-3.195a.75.75 0 011.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 11-1.06-1.06l3.195-3.195H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
-</svg>
-SVG;
-
-    $arrowPair = <<<'SVG'
-<span class="inline-flex gap-0.5 text-zinc-400" aria-hidden="true">
-    <svg class="size-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-    <svg class="size-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
-</span>
-SVG;
-@endphp
-
 <section
     id="sobre"
     aria-labelledby="intro-hola"
@@ -55,7 +40,7 @@ SVG;
                     class="group mt-auto flex w-full cursor-pointer items-center justify-between gap-4 border-t border-zinc-200 bg-transparent pt-6 text-left text-sm text-zinc-600 transition hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-900 lg:mt-14 lg:pt-8"
                 >
                     <span class="leading-snug">Disponible para proyectos remotos · escribime cuando quieras</span>
-                    {!! $chevron !!}
+                    <x-icon name="arrow-right" class="size-4 shrink-0 text-zinc-900 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </button>
             </div>
 
@@ -74,13 +59,37 @@ SVG;
                     </p>
                 </div>
 
-                <a
-                    href="#"
-                    class="group mt-auto flex w-full items-center justify-between gap-4 border-t border-zinc-200 pt-6 font-semibold text-black transition hover:text-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-900 lg:mt-14 lg:pt-8"
-                >
-                    <span>LinkedIn</span>
-                    {!! $chevron !!}
-                </a>
+                <div class="mt-auto border-t border-zinc-200 pt-6 lg:mt-14 lg:pt-8">
+                    <div class="flex flex-col gap-3">
+                        <a
+                            href="https://www.linkedin.com/in/anselmidev/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="group flex w-full items-center justify-between gap-4 font-semibold text-black transition hover:text-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-900"
+                        >
+                            <span>LinkedIn</span>
+                            <x-icon name="arrow-right" class="size-4 shrink-0 text-zinc-900 transition-transform duration-200 group-hover:translate-x-0.5" />
+                        </a>
+                        <a
+                            href="https://x.com/AnselmiDev"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="group flex w-full items-center justify-between gap-4 font-semibold text-black transition hover:text-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-900"
+                        >
+                            <span>X / Twitter</span>
+                            <x-icon name="arrow-right" class="size-4 shrink-0 text-zinc-900 transition-transform duration-200 group-hover:translate-x-0.5" />
+                        </a>
+                        <a
+                            href="https://www.instagram.com/anselmi.dev/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="group flex w-full items-center justify-between gap-4 font-semibold text-black transition hover:text-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-900"
+                        >
+                            <span>Instagram</span>
+                            <x-icon name="arrow-right" class="size-4 shrink-0 text-zinc-900 transition-transform duration-200 group-hover:translate-x-0.5" />
+                        </a>
+                    </div>
+                </div>
             </div>
 
             {{-- Columna 3: curiosidades + herramientas --}}
@@ -99,7 +108,10 @@ SVG;
                     <span class="mb-4 block text-xs font-medium tabular-nums tracking-widest text-zinc-400">03</span>
                     <div class="flex items-center justify-between gap-4">
                         <h3 class="text-lg font-bold text-black">Herramientas</h3>
-                        {!! $arrowPair !!}
+                        <span class="inline-flex gap-0.5 text-zinc-400" aria-hidden="true">
+                            <x-icon name="chevron-left" class="size-4" />
+                            <x-icon name="chevron-right" class="size-4" />
+                        </span>
                     </div>
 
                     <dl class="mt-6 border-t-2 border-zinc-900">
@@ -130,14 +142,16 @@ SVG;
                     </dl>
                 </div>
 
-                <a
-                    href="{{ route('blog') }}"
-                    wire:navigate
-                    class="group mt-auto flex w-full items-center justify-between gap-4 border-t border-zinc-200 pt-6 font-semibold text-black transition hover:text-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-900 lg:pt-8"
-                >
-                    <span>Blog</span>
-                    {!! $chevron !!}
-                </a>
+                @if ($hasPublishedPosts ?? false)
+                    <a
+                        href="{{ route('blog') }}"
+                        wire:navigate
+                        class="group mt-auto flex w-full items-center justify-between gap-4 border-t border-zinc-200 pt-6 font-semibold text-black transition hover:text-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-900 lg:pt-8"
+                    >
+                        <span>Blog</span>
+                        <x-icon name="arrow-right" class="size-4 shrink-0 text-zinc-900 transition-transform duration-200 group-hover:translate-x-0.5" />
+                    </a>
+                @endif
             </div>
         </div>
     </div>
