@@ -58,7 +58,7 @@
             <!-- RIGHT: two photos -->
             <div class="flex flex-[2_1_240px] items-start gap-[10px] max-[600px]:w-full max-[600px]:flex-none max-[420px]:gap-2">
                 <div class="h-[270px] flex-1 overflow-hidden rounded-2xl max-[600px]:h-[190px] max-[420px]:h-[160px]">
-                    <img class="block size-full object-cover" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=600&fit=crop&crop=center" alt="Cyclist racing" />
+                    <img class="block size-full object-cover" src="{{ asset('images/DSC_0307.jpg') }}" alt="Cyclist racing" />
                 </div>
                 <div class="mt-11 h-[220px] flex-1 overflow-hidden rounded-2xl max-[600px]:mt-7 max-[600px]:h-[160px] max-[420px]:mt-6 max-[420px]:h-[130px]">
                     <img class="block size-full object-cover" src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=400&h=500&fit=crop&crop=top" alt="Cyclist with bike" />
@@ -71,9 +71,7 @@
             <!-- Photo / craft card -->
             <div class="flex min-w-[240px] flex-[2_1_280px] flex-col gap-4 rounded-3xl bg-brand-lime p-7 max-[600px]:min-w-0">
                 <p class="m-0 text-base font-semibold leading-snug text-brand-lime-500">
-                    Entre hobbies: estoy “tomando” fotografía.
-                    O sea, estoy aprendiendo. Acá una de mis favoritas
-                    (decilo con cara seria).
+                    Entre mis hobbies está la fotografía. Sí, "estoy tomando fotografía"... todavía aprendiendo, así que cualquier parecido con un profesional es pura coincidencia.
                     @php($hasPublishedGalleryPhotos = \App\Models\GalleryItem::query()->published()->exists())
                     @if ($hasPublishedGalleryPhotos ?? false)
                         <a href="{{ route('gallery') }}" wire:navigate class="text-brand-lime-700 underline decoration-brand-lime-700/50 underline-offset-2 transition-colors hover:text-brand-lime-900 hover:decoration-brand-lime-900">Podés ver más acá</a>.
