@@ -7,7 +7,7 @@
             Mis colores
         </h1>
         <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-            Paleta del layout (brand lime) y una guía de color de referencia. Tocá un color para copiar clases Tailwind.
+            Paleta del layout (brand lime) y una guía de color de referencia. Tocá un color para exportarlo a Tailwind v2 o v3.
         </p>
     </x-hero-content>
 @endsection
@@ -23,43 +23,7 @@
 
 <div
     class="pb-16 pt-4 sm:pb-20 sm:pt-6 lg:pb-24"
-    x-data="{
-        open: false,
-        leaving: false,
-        active: null,
-        gradientTo: '#171717',
-        columns: @js($columns),
-        show(column, index) {
-            const swatch = this.columns?.[column]?.[index] ?? null;
-            if (! swatch) return;
-            const next = this.columns[column][index + 1] ?? this.columns[column][index - 1] ?? null;
-            this.active = swatch;
-            this.gradientTo = next?.hex ?? '#171717';
-            this.leaving = false;
-            this.open = true;
-            document.body.classList.add('overflow-hidden');
-        },
-        close() {
-            if (! this.open || this.leaving) return;
-            this.leaving = true;
-            setTimeout(() => {
-                this.open = false;
-                this.leaving = false;
-                this.active = null;
-                document.body.classList.remove('overflow-hidden');
-            }, 380);
-        },
-        get solidTw() {
-            if (! this.active) return '';
-            const text = this.active.ink === 'light' ? 'text-white' : 'text-zinc-900';
-            return `bg-[${this.active.hex}] ${text} rounded-2xl p-6`;
-        },
-        get gradTw() {
-            if (! this.active) return '';
-            const text = this.active.ink === 'light' ? 'text-white' : 'text-zinc-900';
-            return `bg-gradient-to-br from-[${this.active.hex}] to-[${this.gradientTo}] ${text} rounded-2xl p-6`;
-        }
-    }"
+    x-data="colorExportModal(@js($columns))"
     x-on:keydown.escape.window="open && close()"
 >
     <div
@@ -121,7 +85,7 @@
         ></div>
 
         <div
-            class="relative z-10 max-h-[min(92vh,42rem)] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-6 shadow-[0_25px_80px_-20px_rgba(15,23,42,0.35)] sm:p-8"
+            class="relative z-10 max-h-[min(92vh,48rem)] w-full max-w-4xl overflow-y-auto rounded-3xl bg-white p-6 shadow-[0_25px_80px_-20px_rgba(15,23,42,0.35)] sm:p-8"
             x-bind:class="leaving ? 'motion-safe:animate-contact-modal-out' : 'motion-safe:animate-contact-modal-in'"
             x-on:click.stop
         >
@@ -141,7 +105,7 @@
             ></h2>
 
             <div
-                class="mt-6 flex min-h-[10rem] items-end rounded-2xl p-5"
+                class="mt-6 flex min-h-[8rem] items-end rounded-2xl p-5"
                 x-bind:class="active?.ink === 'light' ? 'text-white' : 'text-zinc-900'"
                 x-bind:style="active ? `background: linear-gradient(135deg, ${active.hex} 0%, ${gradientTo} 100%)` : ''"
             >
@@ -163,16 +127,249 @@
                 </div>
             </dl>
 
-            <div class="mt-6 space-y-4" x-show="active">
+            <div class="mt-6" x-show="active">
+                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Escala generada</p>
+                <div class="mt-2 flex overflow-hidden rounded-xl ring-1 ring-zinc-200">
+                    <template x-for="shade in shadeEntries" :key="shade.step">
+                        <div
+                            class="h-10 min-w-0 flex-1"
+                            x-bind:style="`background-color: ${shade.value}`"
+                            x-bind:title="`${shade.step}: ${shade.value}`"
+                        ></div>
+                    </template>
+                </div>
+            </div>
+
+            <div
+                class="mt-6 grid grid-cols-1 gap-4 border-t border-zinc-100 pt-6 sm:grid-cols-[9rem_9rem_minmax(0,1fr)] sm:gap-0 sm:divide-x sm:divide-zinc-100"
+                x-show="active"
+            >
+                <div class="sm:pr-4">
+                    <p class="mb-3 text-[0.65rem] font-semibold uppercase tracking-wider text-zinc-400">Framework</p>
+                    <ul class="space-y-1">
+                        <li>
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-sm transition"
+                                x-bind:class="twVersion === 'v2' ? 'bg-zinc-100 font-medium text-zinc-900' : 'text-zinc-400 hover:text-zinc-700'"
+                                x-on:click="twVersion = 'v2'"
+                            >
+                                <span>Tailwind 2</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-sm transition"
+                                x-bind:class="twVersion === 'v3' ? 'bg-zinc-100 font-medium text-zinc-900' : 'text-zinc-400 hover:text-zinc-700'"
+                                x-on:click="twVersion = 'v3'"
+                            >
+                                <span>Tailwind 3</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sm:px-4">
+                    <p class="mb-3 text-[0.65rem] font-semibold uppercase tracking-wider text-zinc-400">Formato</p>
+                    <ul class="space-y-1">
+                        <li>
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-sm transition"
+                                x-bind:class="exportFormat === 'hex' ? 'bg-zinc-100 font-medium text-zinc-900' : 'text-zinc-400 hover:text-zinc-700'"
+                                x-on:click="exportFormat = 'hex'"
+                            >
+                                <span>Hex code</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-sm transition"
+                                x-bind:class="exportFormat === 'rgb' ? 'bg-zinc-100 font-medium text-zinc-900' : 'text-zinc-400 hover:text-zinc-700'"
+                                x-on:click="exportFormat = 'rgb'"
+                            >
+                                <span>RGB</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="relative min-h-[14rem] overflow-hidden rounded-2xl bg-zinc-950 sm:ml-4">
+                    <button
+                        type="button"
+                        class="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 transition hover:bg-zinc-700"
+                        x-on:click="copyExport()"
+                    >
+                        <x-icon name="clipboard" class="size-3.5" />
+                        <span x-text="copied ? 'Copiado' : 'Copy to clipboard'"></span>
+                    </button>
+                    <pre class="max-h-[18rem] overflow-auto p-4 pt-12 font-mono text-[0.72rem] leading-relaxed text-zinc-300"><code x-html="exportCodeHtml"></code></pre>
+                </div>
+            </div>
+
+            <div class="mt-6 space-y-4 border-t border-zinc-100 pt-6" x-show="active">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Tailwind — sólido</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Uso rápido — sólido</p>
                     <pre class="mt-2 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-4 font-mono text-xs leading-relaxed text-zinc-800"><code x-text="active ? `<div class=&quot;${solidTw}&quot;>\n  ${active.name}\n</div>` : ''"></code></pre>
                 </div>
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Tailwind — degradado</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Uso rápido — degradado</p>
                     <pre class="mt-2 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-4 font-mono text-xs leading-relaxed text-zinc-800"><code x-text="active ? `<div class=&quot;${gradTw}&quot;>\n  ${active.name}\n</div>` : ''"></code></pre>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@script
+<script>
+Alpine.data('colorExportModal', (columns) => ({
+    open: false,
+    leaving: false,
+    active: null,
+    gradientTo: '#171717',
+    columns,
+    twVersion: 'v3',
+    exportFormat: 'hex',
+    copied: false,
+    _copyTimer: null,
+
+    show(column, index) {
+        const swatch = this.columns?.[column]?.[index] ?? null;
+        if (! swatch) return;
+        const next = this.columns[column][index + 1] ?? this.columns[column][index - 1] ?? null;
+        this.active = swatch;
+        this.gradientTo = next?.hex ?? '#171717';
+        this.copied = false;
+        this.leaving = false;
+        this.open = true;
+        document.body.classList.add('overflow-hidden');
+    },
+
+    close() {
+        if (! this.open || this.leaving) return;
+        this.leaving = true;
+        setTimeout(() => {
+            this.open = false;
+            this.leaving = false;
+            this.active = null;
+            document.body.classList.remove('overflow-hidden');
+        }, 380);
+    },
+
+    get solidTw() {
+        if (! this.active) return '';
+        const text = this.active.ink === 'light' ? 'text-white' : 'text-zinc-900';
+        return `bg-[${this.active.hex}] ${text} rounded-2xl p-6`;
+    },
+
+    get gradTw() {
+        if (! this.active) return '';
+        const text = this.active.ink === 'light' ? 'text-white' : 'text-zinc-900';
+        return `bg-gradient-to-br from-[${this.active.hex}] to-[${this.gradientTo}] ${text} rounded-2xl p-6`;
+    },
+
+    slugify(name) {
+        return String(name || 'color')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '') || 'color';
+    },
+
+    parseHex(hex) {
+        const raw = String(hex || '').replace('#', '');
+        if (raw.length !== 6) return [0, 0, 0];
+        return [
+            parseInt(raw.slice(0, 2), 16),
+            parseInt(raw.slice(2, 4), 16),
+            parseInt(raw.slice(4, 6), 16),
+        ];
+    },
+
+    toHex(r, g, b) {
+        const h = (n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+        return `#${h(r)}${h(g)}${h(b)}`;
+    },
+
+    mix(hex, towardRgb, amount) {
+        const [r, g, b] = this.parseHex(hex);
+        const [tr, tg, tb] = towardRgb;
+        return this.toHex(
+            r + (tr - r) * amount,
+            g + (tg - g) * amount,
+            b + (tb - b) * amount,
+        );
+    },
+
+    shadeMap(hex) {
+        const light = { 50: 0.95, 100: 0.9, 200: 0.75, 300: 0.55, 400: 0.3 };
+        const dark = { 600: 0.12, 700: 0.3, 800: 0.48, 900: 0.64, 950: 0.8 };
+        const map = { 500: this.toHex(...this.parseHex(hex)) };
+
+        for (const [step, amount] of Object.entries(light)) {
+            map[step] = this.mix(hex, [255, 255, 255], amount);
+        }
+        for (const [step, amount] of Object.entries(dark)) {
+            map[step] = this.mix(hex, [0, 0, 0], amount);
+        }
+
+        return map;
+    },
+
+    get shadeSteps() {
+        return this.twVersion === 'v2'
+            ? ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900']
+            : ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
+    },
+
+    get shadeEntries() {
+        if (! this.active) return [];
+        const map = this.shadeMap(this.active.hex);
+        return this.shadeSteps.map((step) => ({ step, value: map[step] }));
+    },
+
+    formatValue(hex) {
+        if (this.exportFormat === 'rgb') {
+            const [r, g, b] = this.parseHex(hex);
+            return `rgb(${r} ${g} ${b})`;
+        }
+        return hex.toLowerCase();
+    },
+
+    get exportCode() {
+        if (! this.active) return '';
+        const key = this.slugify(this.active.name);
+        const lines = this.shadeEntries.map(
+            ({ step, value }) => `    '${step}': '${this.formatValue(value)}',`,
+        );
+        return `'${key}': {\n${lines.join('\n')}\n  },`;
+    },
+
+    get exportCodeHtml() {
+        if (! this.active) return '';
+        const key = this.slugify(this.active.name);
+        const rows = this.shadeEntries.map(({ step, value }) => {
+            const formatted = this.formatValue(value);
+            return `  <span class="text-zinc-100">'${step}'</span>: <span class="text-sky-300">'${formatted}'</span>,`;
+        });
+        return `<span class="text-zinc-100">'${key}'</span>: {\n${rows.join('\n')}\n},`;
+    },
+
+    async copyExport() {
+        if (! this.exportCode) return;
+        try {
+            await navigator.clipboard.writeText(this.exportCode);
+            this.copied = true;
+            clearTimeout(this._copyTimer);
+            this._copyTimer = setTimeout(() => { this.copied = false; }, 1600);
+        } catch (_) {
+            // ignore clipboard failures (permissions / insecure context)
+        }
+    },
+}));
+</script>
+@endscript
