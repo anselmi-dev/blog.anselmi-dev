@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\ContactMessage;
+use App\Models\Setting;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -98,6 +99,14 @@ class ContactModal extends Component
 
     public function render()
     {
-        return view('livewire.contact-modal');
+        $contact = Setting::contact();
+        $site = Setting::site();
+
+        return view('livewire.contact-modal', [
+            'contact' => $contact,
+            'contactEmail' => $contact['email'] ?: config('mail.from.address', 'hola@ejemplo.com'),
+            'socialLinks' => $contact['social_links'],
+            'siteName' => $site['author_name'] ?: config('app.name', 'Sitio'),
+        ]);
     }
 }

@@ -1,7 +1,10 @@
 @php
-    $appName = config('app.name', 'Laravel');
+    use App\Models\Setting;
+
+    $site = Setting::site();
+    $appName = $site['author_name'] ?: config('app.name', 'Laravel');
     $pageTitle = filled($title ?? null) ? $title.' — '.$appName : $appName;
-    $pageDescription = $description ?? 'Desarrollador web: diseño y construyo productos digitales con foco en claridad, performance y experiencia de uso.';
+    $pageDescription = $description ?? ($site['meta_description'] ?: 'Desarrollador web: diseño y construyo productos digitales con foco en claridad, performance y experiencia de uso.');
     $canonicalUrl = $canonical ?? url()->current();
     $shareImage = $ogImage ?? asset('android-chrome-512x512.png');
     $locale = str_replace('_', '-', app()->getLocale());

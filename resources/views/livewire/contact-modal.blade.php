@@ -1,8 +1,3 @@
-@php
-    $contactEmail = config('mail.from.address', 'hola@ejemplo.com');
-    $siteName = config('app.name', 'Sitio');
-@endphp
-
 <div class="contents">
     @if ($show)
         <div
@@ -71,8 +66,10 @@
                                     </svg>
                                 </span>
                                 <div>
-                                    <p class="font-bold text-zinc-900">Escribinos</p>
-                                    <p class="mt-1 leading-relaxed">Respuesta humana, sin vueltas.</p>
+                                    <p class="font-bold text-zinc-900">{{ $contact['email_label'] ?: 'Escribinos' }}</p>
+                                    @if (filled($contact['email_description']))
+                                        <p class="mt-1 leading-relaxed">{{ $contact['email_description'] }}</p>
+                                    @endif
                                     <a
                                         class="mt-2 inline-block font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900"
                                         href="mailto:{{ $contactEmail }}"
@@ -83,50 +80,76 @@
                             </div>
                         </div>
 
-                        <div>
-                            <div class="flex gap-3">
-                                <span class="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-900" aria-hidden="true">
-                                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-                                        <path d="M12 21s-6-4.35-6-10a6 6 0 1112 0c0 5.65-6 10-6 10z" stroke-linecap="round" stroke-linejoin="round" />
-                                        <circle cx="12" cy="11" r="2.5" />
-                                    </svg>
-                                </span>
-                                <div>
-                                    <p class="font-bold text-zinc-900">Ubicación</p>
-                                    <p class="mt-1 leading-relaxed">Trabajo en remoto; podemos coordinar videollamada cuando haga falta.</p>
+                        @if (filled($contact['location_label']) || filled($contact['location_description']))
+                            <div>
+                                <div class="flex gap-3">
+                                    <span class="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-900" aria-hidden="true">
+                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                                            <path d="M12 21s-6-4.35-6-10a6 6 0 1112 0c0 5.65-6 10-6 10z" stroke-linecap="round" stroke-linejoin="round" />
+                                            <circle cx="12" cy="11" r="2.5" />
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        @if (filled($contact['location_label']))
+                                            <p class="font-bold text-zinc-900">{{ $contact['location_label'] }}</p>
+                                        @endif
+                                        @if (filled($contact['location_description']))
+                                            <p class="mt-1 leading-relaxed">{{ $contact['location_description'] }}</p>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
-                        <div>
-                            <div class="flex gap-3">
-                                <span class="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-900" aria-hidden="true">
-                                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-                                        <path
-                                            d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-                                </span>
-                                <div>
-                                    <p class="font-bold text-zinc-900">Horario</p>
-                                    <p class="mt-1 leading-relaxed">Lun a vie, horario flexible (UTC−3).</p>
+                        @if (filled($contact['schedule_label']) || filled($contact['schedule_description']))
+                            <div>
+                                <div class="flex gap-3">
+                                    <span class="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-900" aria-hidden="true">
+                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        @if (filled($contact['schedule_label']))
+                                            <p class="font-bold text-zinc-900">{{ $contact['schedule_label'] }}</p>
+                                        @endif
+                                        @if (filled($contact['schedule_description']))
+                                            <p class="mt-1 leading-relaxed">{{ $contact['schedule_description'] }}</p>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
 
-                    <div class="mt-auto flex flex-wrap gap-2 border-t border-zinc-100 pt-6" aria-label="Redes sociales">
-                        @foreach (['Facebook', 'X', 'LinkedIn', 'YouTube', 'Web'] as $net)
-                            <span
-                                class="inline-flex size-9 items-center justify-center rounded-md border border-dashed border-zinc-200 bg-zinc-50 text-[0.65rem] font-bold tracking-tighter text-zinc-400"
-                                title="Próximamente"
-                            >
-                                {{ mb_substr($net, 0, 1) }}
-                            </span>
-                        @endforeach
-                    </div>
+                    @if (count($socialLinks) > 0)
+                        <div class="mt-auto flex flex-wrap gap-2 border-t border-zinc-100 pt-6" aria-label="Redes sociales">
+                            @foreach ($socialLinks as $net)
+                                @if (filled($net['url']))
+                                    <a
+                                        href="{{ $net['url'] }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-flex size-9 items-center justify-center rounded-md border border-zinc-200 bg-zinc-50 text-[0.65rem] font-bold tracking-tighter text-zinc-700 transition hover:border-zinc-400 hover:text-zinc-900"
+                                        title="{{ $net['label'] }}"
+                                    >
+                                        {{ mb_substr($net['label'], 0, 1) }}
+                                    </a>
+                                @else
+                                    <span
+                                        class="inline-flex size-9 items-center justify-center rounded-md border border-dashed border-zinc-200 bg-zinc-50 text-[0.65rem] font-bold tracking-tighter text-zinc-400"
+                                        title="Próximamente"
+                                    >
+                                        {{ mb_substr($net['label'], 0, 1) }}
+                                    </span>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
 
                 {{-- Formulario --}}
@@ -142,9 +165,9 @@
                                 </svg>
                             </span>
                             <div>
-                                <p class="text-xl font-bold tracking-tight text-zinc-900">¡Recibido!</p>
+                                <p class="text-xl font-bold tracking-tight text-zinc-900">{{ $contact['success_title'] ?: '¡Recibido!' }}</p>
                                 <p class="mt-2 text-sm leading-relaxed text-zinc-800">
-                                    Gracias por escribir. Te respondo a la brevedad.
+                                    {{ $contact['success_description'] ?: 'Gracias por escribir. Te respondo a la brevedad.' }}
                                 </p>
                             </div>
                             <button
@@ -157,11 +180,13 @@
                         </div>
                     @else
                         <h2 id="contact-modal-title" class="text-2xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-3xl">
-                            ¿Ideas en mente? Sumemos.
+                            {{ $contact['form_title'] ?: '¿Ideas en mente? Sumemos.' }}
                         </h2>
-                        <p class="mt-2 text-sm leading-relaxed text-zinc-800 sm:text-base">
-                            Contame sobre vos y qué tenés en mente.
-                        </p>
+                        @if (filled($contact['form_description']))
+                            <p class="mt-2 text-sm leading-relaxed text-zinc-800 sm:text-base">
+                                {{ $contact['form_description'] }}
+                            </p>
+                        @endif
 
                         <form class="mt-8 flex flex-col gap-6" wire:submit.prevent="submit">
                             <div class="relative">
@@ -220,7 +245,7 @@
                                 wire:loading.attr="disabled"
                                 wire:target="submit"
                             >
-                                <span wire:loading.remove wire:target="submit">¡Arranquemos!</span>
+                                <span wire:loading.remove wire:target="submit">{{ $contact['submit_label'] ?: '¡Arranquemos!' }}</span>
                                 <span wire:loading wire:target="submit">Enviando…</span>
                             </button>
                         </form>

@@ -20,19 +20,12 @@ class Posts extends Component
 
     public function mount(): void
     {
-        $intro = [
-            'type' => 'intro',
-            'title' => 'Notas y borradores',
-            'body' => 'Textos cortos sobre cómo trabajo, qué uso en el stack y por qué a veces conviene decir que no. Nada de manifiestos: contexto útil para futuro yo y para quien toque el mismo código.',
-            'gridClass' => 'sm:col-span-2 xl:col-span-6',
-        ];
-
         $posts = Post::query()
             ->published()
             ->inBento()
             ->get();
 
-        $cells = [$intro];
+        $cells = [];
 
         foreach ($posts as $post) {
             $cells[] = [
