@@ -1,0 +1,30 @@
+---
+description: Multi-dominio — registrar sitios en domains/ vía config/domains.php
+alwaysApply: true
+---
+
+# Dominios (multi-host)
+
+Al crear o modificar un **sitio por subdominio/dominio**, seguí `.cursor/docs/domains.md`.
+
+## Reglas
+
+1. **No mover el portfolio** (`app/`, `routes/web.php`, `resources/views` del sitio principal) a un dominio salvo pedido explícito.
+2. Lógica del sitio nuevo → `domains/{Studly}/` con namespace `Domains\{Studly}\`.
+3. **Registrar** en `config/domains.php` → `sites.{key}.provider` (+ `hosts`, `connection`).
+4. El provider extiende `App\Support\Domain\DomainServiceProvider` y carga rutas/vistas/migraciones/Livewire.
+5. Preferí `php artisan domain:make {Name}` antes de crear a mano.
+6. Tailwind del dominio: `@import` de `resources/css/shared.css`; no duplicar el CSS completo del portfolio.
+7. Componentes compartidos: reutilizar `<x-*>` de `resources/views/components`.
+8. DB propia solo con `connection` en config + `domain:migrate`; si no, compartir DB global.
+
+## Ejemplo mínimo
+
+```php
+// config/domains.php
+'test' => [
+    'provider' => \Domains\Test\TestServiceProvider::class,
+    'hosts' => ['test.anselmidev.test'],
+    'connection' => null,
+],
+```

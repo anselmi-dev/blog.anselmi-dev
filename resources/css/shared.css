@@ -1,0 +1,24 @@
+/*
+ | Tokens compartidos para dominios (domains/*).
+ | El portfolio sigue usando resources/css/app.css sin cambios.
+ | Cada dominio importa este archivo y puede overridear @theme.
+ */
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@theme {
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-folio-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+
+    --container-8xl: 88rem;
+
+    --color-brand-lime: #eeeadd;
+    --color-brand-lime-50: #f6f4ee;
+    --color-brand-lime-100: #eeeadd;
+    --color-brand-lime-200: #ddd5bb;
+    --color-brand-lime-500: #aa9655;
+    --color-brand-lime-700: #665a33;
+    --color-brand-lime-900: #221e11;
+}

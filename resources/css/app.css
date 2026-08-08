@@ -249,7 +249,8 @@
             animation-delay: calc(var(--i, 0) * 70ms);
         }
 
-        .group:hover .project-card-mark-dot {
+        .group:hover .project-card-mark-dot,
+        .group:hover .project-card-mark-accent {
             fill: #111;
         }
     }

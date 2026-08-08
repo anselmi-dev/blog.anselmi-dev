@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Domains\{{Studly}};
+
+use App\Support\Domain\DomainServiceProvider;
+
+class {{Studly}}ServiceProvider extends DomainServiceProvider
+{
+    public static function key(): string
+    {
+        return '{{key}}';
+    }
+
+    public static function name(): string
+    {
+        return '{{name}}';
+    }
+}

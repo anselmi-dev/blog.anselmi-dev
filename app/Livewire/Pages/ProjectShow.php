@@ -13,10 +13,10 @@ class ProjectShow extends Component
     /** @var array<string, mixed> */
     public array $project = [];
 
-    /** @var array{slug: string, title: string}|null */
+    /** @var array{slug: string, title: string, excerpt: string|null, color: string|null, tags: list<string>}|null */
     public ?array $previous = null;
 
-    /** @var array{slug: string, title: string}|null */
+    /** @var array{slug: string, title: string, excerpt: string|null, color: string|null, tags: list<string>}|null */
     public ?array $next = null;
 
     public function mount(string $slug): void
@@ -35,19 +35,31 @@ class ProjectShow extends Component
 
         if ($index !== false && $index > 0) {
             $prevSlug = $slugs[$index - 1];
-            $this->previous = [
-                'slug' => $prevSlug,
-                'title' => $entries[$prevSlug]['title'],
-            ];
+            $this->previous = $this->neighborPayload($prevSlug, $entries[$prevSlug]);
         }
 
         if ($index !== false && $index < count($slugs) - 1) {
             $nextSlug = $slugs[$index + 1];
-            $this->next = [
-                'slug' => $nextSlug,
-                'title' => $entries[$nextSlug]['title'],
-            ];
+            $this->next = $this->neighborPayload($nextSlug, $entries[$nextSlug]);
         }
+    }
+
+    /**
+     * @param  array<string, mixed>  $entry
+     * @return array{slug: string, title: string, excerpt: string|null, color: string|null, tags: list<string>}
+     */
+    private function neighborPayload(string $slug, array $entry): array
+    {
+        /** @var list<string> $tags */
+        $tags = array_values(array_slice($entry['tags'] ?? [], 0, 4));
+
+        return [
+            'slug' => $slug,
+            'title' => $entry['title'],
+            'excerpt' => $entry['excerpt'] ?? null,
+            'color' => $entry['color'] ?? null,
+            'tags' => $tags,
+        ];
     }
 
     public function render()

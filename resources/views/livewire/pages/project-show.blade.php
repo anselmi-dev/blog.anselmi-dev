@@ -322,38 +322,82 @@
         data-reveal-stagger="0.1"
     >
         @if ($previous)
+            @php($prevColor = \App\Support\CssColor::hexOrNull($previous['color'] ?? null) ?? '#e8f38c')
             <a
                 href="{{ route('projects.show', $previous['slug']) }}"
                 wire:navigate
                 data-reveal-item
-                class="group flex flex-col rounded-2xl border border-zinc-200 bg-brand-lime-50 px-5 py-5 transition hover:border-zinc-900/30 hover:bg-brand-lime-100 sm:px-6 sm:py-6"
+                style="--nav-accent-soft: color-mix(in srgb, {{ $prevColor }} 35%, white); --nav-accent-hover: color-mix(in srgb, {{ $prevColor }} 65%, white);"
+                class="group flex flex-col rounded-2xl border border-zinc-100 bg-[var(--nav-accent-soft)] px-5 py-5 transition hover:border-zinc-900/30 hover:bg-[var(--nav-accent-hover)] sm:px-6 sm:py-6"
             >
                 <span class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">Anterior</span>
                 <span class="mt-2 flex items-center gap-3 text-lg font-bold text-zinc-900">
-                    <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-zinc-900 bg-transparent transition group-hover:-translate-x-0.5">
-                        <x-icon name="arrow-left" class="size-4 shrink-0" />
+                    <span
+                        class="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-zinc-900 bg-transparent text-zinc-900 transition-[transform,background-color,color] duration-300 ease-out group-hover:-translate-x-0.5 group-hover:bg-zinc-900 group-hover:text-white"
+                        aria-hidden="true"
+                    >
+                        <x-icon
+                            name="arrow-left"
+                            class="size-4 shrink-0 transition-transform duration-300 ease-out group-hover:-translate-x-0.5"
+                        />
                     </span>
                     {{ $previous['title'] }}
                 </span>
+                @if (! empty($previous['excerpt']))
+                    <p class="mt-3 line-clamp-2 text-left text-sm leading-relaxed text-zinc-600">
+                        {{ $previous['excerpt'] }}
+                    </p>
+                @endif
+                @if (! empty($previous['tags']))
+                    <ul class="mt-3 flex flex-wrap gap-1.5">
+                        @foreach ($previous['tags'] as $tag)
+                            <li class="rounded-full border border-zinc-900/10 bg-white/50 px-2.5 py-0.5 text-[0.7rem] font-semibold tracking-wide text-zinc-800">
+                                {{ $tag }}
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </a>
         @else
             <div class="hidden sm:block" aria-hidden="true"></div>
         @endif
 
         @if ($next)
+            @php($nextColor = \App\Support\CssColor::hexOrNull($next['color'] ?? null) ?? '#e8f38c')
             <a
                 href="{{ route('projects.show', $next['slug']) }}"
                 wire:navigate
                 data-reveal-item
-                class="group flex flex-col rounded-2xl border border-zinc-200 bg-brand-lime-50 px-5 py-5 text-right transition hover:border-zinc-900/30 hover:bg-brand-lime-100 sm:items-end sm:px-6 sm:py-6"
+                style="--nav-accent-soft: color-mix(in srgb, {{ $nextColor }} 35%, white); --nav-accent-hover: color-mix(in srgb, {{ $nextColor }} 65%, white);"
+                class="group flex flex-col rounded-2xl border border-zinc-100 bg-[var(--nav-accent-soft)] px-5 py-5 text-right transition hover:border-zinc-900/30 hover:bg-[var(--nav-accent-hover)] sm:items-end sm:px-6 sm:py-6"
             >
                 <span class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">Siguiente</span>
                 <span class="mt-2 flex items-center gap-3 text-lg font-bold text-zinc-900">
                     {{ $next['title'] }}
-                    <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-zinc-900 bg-transparent transition group-hover:translate-x-0.5">
-                        <x-icon name="arrow-right" class="size-4 shrink-0" />
+                    <span
+                        class="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-zinc-900 bg-transparent text-zinc-900 transition-[transform,background-color,color] duration-300 ease-out group-hover:translate-x-0.5 group-hover:bg-zinc-900 group-hover:text-white"
+                        aria-hidden="true"
+                    >
+                        <x-icon
+                            name="arrow-right"
+                            class="size-4 shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-0.5"
+                        />
                     </span>
                 </span>
+                @if (! empty($next['excerpt']))
+                    <p class="mt-3 line-clamp-2 text-sm leading-relaxed text-zinc-600 sm:text-right">
+                        {{ $next['excerpt'] }}
+                    </p>
+                @endif
+                @if (! empty($next['tags']))
+                    <ul class="mt-3 flex flex-wrap gap-1.5 sm:justify-end">
+                        @foreach ($next['tags'] as $tag)
+                            <li class="rounded-full border border-zinc-900/10 bg-white/50 px-2.5 py-0.5 text-[0.7rem] font-semibold tracking-wide text-zinc-800">
+                                {{ $tag }}
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </a>
         @endif
     </nav>

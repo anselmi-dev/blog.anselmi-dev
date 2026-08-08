@@ -15,7 +15,7 @@
 <div class="pb-16 pt-4 sm:pb-20 sm:pt-6 lg:pb-24">
     <div class="mx-auto max-w-8xl">
         <div
-            class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"
+            class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 4xl:grid-cols-4"
             data-reveal="fade-up"
             data-reveal-scroll
             data-reveal-stagger="0.08"

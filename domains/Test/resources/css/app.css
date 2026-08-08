@@ -1,0 +1,11 @@
+/*
+ | Hereda tokens compartidos. Overrideá @theme acá sin tocar el CSS del portfolio.
+ */
+@import '../../../../resources/css/shared.css';
+
+@source '../views';
+@source '../../../../resources/views/components';
+
+@theme {
+    /* --color-brand-lime: #c4f542; */
+}

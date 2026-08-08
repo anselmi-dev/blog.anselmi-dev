@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Domains\{{Studly}}\Livewire;
+
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Component;
+
+#[Layout('{{key}}::layouts.domain')]
+#[Title('{{name}}')]
+class Home extends Component
+{
+    public function render()
+    {
+        return view('{{key}}::livewire.home');
+    }
+}

@@ -1,0 +1,8 @@
+@import '../../../../resources/css/shared.css';
+
+@source '../views';
+@source '../../../../resources/views/components';
+
+@theme {
+    /* Overrides del dominio */
+}
