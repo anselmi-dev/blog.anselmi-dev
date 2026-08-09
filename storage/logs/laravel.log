@@ -4267,3 +4267,120 @@ Did you mean one of these?
 #83 C:/laragon/www/anselmidev/public/index.php(20): Illuminate/Foundation/Application->handleRequest(Object(Illuminate/Http/Request))
 #84 {main}
 "} 
+[2026-08-09 23:14:18] local.ERROR: There are no commands defined in the "boost" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"boost\" namespace. at C:/laragon/www/anselmidev/vendor/symfony/console/Application.php:694)
+[stacktrace]
+#0 C:/laragon/www/anselmidev/vendor/symfony/console/Application.php(743): Symfony/Component/Console/Application->findNamespace('boost')
+#1 C:/laragon/www/anselmidev/vendor/symfony/console/Application.php(298): Symfony/Component/Console/Application->find('boost:add-skill')
+#2 C:/laragon/www/anselmidev/vendor/symfony/console/Application.php(195): Symfony/Component/Console/Application->doRun(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#3 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony/Component/Console/Application->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#4 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#5 C:/laragon/www/anselmidev/artisan(16): Illuminate/Foundation/Application->handleCommand(Object(Symfony/Component/Console/Input/ArgvInput))
+#6 {main}
+"} 
+[2026-08-09 23:14:20] local.ERROR: There are no commands defined in the "boost" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"boost\" namespace. at C:/laragon/www/anselmidev/vendor/symfony/console/Application.php:694)
+[stacktrace]
+#0 C:/laragon/www/anselmidev/vendor/symfony/console/Application.php(743): Symfony/Component/Console/Application->findNamespace('boost')
+#1 C:/laragon/www/anselmidev/vendor/symfony/console/Application.php(298): Symfony/Component/Console/Application->find('boost:add-skill')
+#2 C:/laragon/www/anselmidev/vendor/symfony/console/Application.php(195): Symfony/Component/Console/Application->doRun(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#3 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony/Component/Console/Application->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#4 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#5 C:/laragon/www/anselmidev/artisan(16): Illuminate/Foundation/Application->handleCommand(Object(Symfony/Component/Console/Input/ArgvInput))
+#6 {main}
+"} 
+[2026-08-09 23:39:01] testing.ERROR: View [livewire.auth.login] not found. {"exception":"[object] (InvalidArgumentException(code: 0): View [livewire.auth.login] not found. at C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/View/FileViewFinder.php:138)
+[stacktrace]
+#0 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/View/FileViewFinder.php(78): Illuminate/View/FileViewFinder->findInPaths('livewire.auth.l...', Array)
+#1 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/View/Factory.php(150): Illuminate/View/FileViewFinder->find('livewire.auth.l...')
+#2 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(1100): Illuminate/View/Factory->make('livewire.auth.l...', Array, Array)
+#3 C:/laragon/www/anselmidev/app/Providers/FortifyServiceProvider.php(48): view('livewire.auth.l...')
+#4 [internal function]: App/Providers/FortifyServiceProvider->{closure:App/Providers/FortifyServiceProvider::configureViews():48}(Object(Illuminate/Http/Request))
+#5 C:/laragon/www/anselmidev/vendor/laravel/fortify/src/Http/Responses/SimpleViewResponse.php(53): call_user_func(Object(Closure), Object(Illuminate/Http/Request))
+#6 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Routing/Router.php(921): Laravel/Fortify/Http/Responses/SimpleViewResponse->toResponse(Object(Illuminate/Http/Request))
+#7 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Routing/Router.php(906): Illuminate/Routing/Router::toResponse(Object(Illuminate/Http/Request), Object(Laravel/Fortify/Http/Responses/SimpleViewResponse))
+#8 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Routing/Router->prepareResponse(Object(Illuminate/Http/Request), Object(Laravel/Fortify/Http/Responses/SimpleViewResponse))
+#9 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->{closure:Illuminate/Routing/Router::runRouteWithinStack():821}(Object(Illuminate/Http/Request))
+#10 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Auth/Middleware/RedirectIfAuthenticated.php(47): Illuminate/Pipeline/Pipeline->{closure:Illuminate/Pipeline/Pipeline::prepareDestination():178}(Object(Illuminate/Http/Request))
+#11 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Auth/Middleware/RedirectIfAuthenticated->handle(Object(Illuminate/Http/Request), Object(Closure), 'web')
+#12 C:/laragon/www/anselmidev/app/Http/Middleware/IdentifyDomain.php(32): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#13 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/IdentifyDomain->handle(Object(Illuminate/Http/Request), Object(Closure))
+#14 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#15 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestForgery.php(104): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#17 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/PreventRequestForgery->handle(Object(Illuminate/Http/Request), Object(Closure))
+#18 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#19 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/View/Middleware/ShareErrorsFromSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#20 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#21 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate/Session/Middleware/StartSession->handleStatefulRequest(Object(Illuminate/Http/Request), Object(Illuminate/Session/Store), Object(Closure))
+#22 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Session/Middleware/StartSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#23 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#24 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse->handle(Object(Illuminate/Http/Request), Object(Closure))
+#25 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#26 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Cookie/Middleware/EncryptCookies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#27 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#28 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#29 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#30 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#31 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#32 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#33 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->{closure:Illuminate/Foundation/Http/Kernel::dispatchToRouter():197}(Object(Illuminate/Http/Request))
+#34 C:/laragon/www/anselmidev/vendor/livewire/livewire/src/Features/SupportDisablingBackButtonCache/DisableBackButtonCacheMiddleware.php(19): Illuminate/Pipeline/Pipeline->{closure:Illuminate/Pipeline/Pipeline::prepareDestination():178}(Object(Illuminate/Http/Request))
+#35 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Livewire/Features/SupportDisablingBackButtonCache/DisableBackButtonCacheMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#36 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#37 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#38 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#39 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#40 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#41 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#42 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#43 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#44 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#45 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#46 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#47 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#48 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#49 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#50 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#51 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks->handle(Object(Illuminate/Http/Request), Object(Closure))
+#52 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#53 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePathEncoding->handle(Object(Illuminate/Http/Request), Object(Closure))
+#54 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->{closure:{closure:Illuminate/Pipeline/Pipeline::carry():194}:195}(Object(Illuminate/Http/Request))
+#55 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#56 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#57 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(607): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#58 C:/laragon/www/anselmidev/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(368): Illuminate/Foundation/Testing/TestCase->call('GET', 'https://anselmi...', Array, Array, Array, Array)
+#59 C:/laragon/www/anselmidev/tests/Feature/Auth/AuthenticationTest.php(7): Illuminate/Foundation/Testing/TestCase->get('https://anselmi...')
+#60 C:/laragon/www/anselmidev/vendor/pestphp/pest/src/Factories/TestCaseMethodFactory.php(172): P/Tests/Feature/Auth/AuthenticationTest->{closure:C:/laragon/www/anselmidev/tests/Feature/Auth/AuthenticationTest.php:6}()
+#61 [internal function]: P/Tests/Feature/Auth/AuthenticationTest->{closure:Pest/Factories/TestCaseMethodFactory::getClosure():162}()
+#62 C:/laragon/www/anselmidev/vendor/pestphp/pest/src/Concerns/Testable.php(429): call_user_func_array(Object(Closure), Array)
+#63 C:/laragon/www/anselmidev/vendor/pestphp/pest/src/Support/ExceptionTrace.php(26): P/Tests/Feature/Auth/AuthenticationTest->{closure:Pest/Concerns/Testable::__callClosure():429}()
+#64 C:/laragon/www/anselmidev/vendor/pestphp/pest/src/Concerns/Testable.php(429): Pest/Support/ExceptionTrace::ensure(Object(Closure))
+#65 C:/laragon/www/anselmidev/vendor/pestphp/pest/src/Concerns/Testable.php(331): P/Tests/Feature/Auth/AuthenticationTest->__callClosure(Object(Closure), Array)
+#66 C:/laragon/www/anselmidev/vendor/pestphp/pest/src/Factories/TestCaseFactory.php(175) : eval()'d code(17): P/Tests/Feature/Auth/AuthenticationTest->__runTest(Object(Closure))
+#67 C:/laragon/www/anselmidev/vendor/phpunit/phpunit/src/Framework/TestCase.php(1332): P/Tests/Feature/Auth/AuthenticationTest->__pest_evaluable_login_screen_can_be_rendered()
+#68 C:/laragon/www/anselmidev/vendor/phpunit/phpunit/src/Framework/TestCase.php(519): PHPUnit/Framework/TestCase->runTest()
+#69 C:/laragon/www/anselmidev/vendor/phpunit/phpunit/src/Framework/TestRunner/TestRunner.php(99): PHPUnit/Framework/TestCase->runBare()
+#70 C:/laragon/www/anselmidev/vendor/phpunit/phpunit/src/Framework/TestCase.php(359): PHPUnit/Framework/TestRunner->run(Object(P/Tests/Feature/Auth/AuthenticationTest))
+#71 C:/laragon/www/anselmidev/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit/Framework/TestCase->run()
+#72 C:/laragon/www/anselmidev/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(64): PHPUnit/Framework/TestSuite->run()
+#73 C:/laragon/www/anselmidev/vendor/phpunit/phpunit/src/TextUI/Application.php(229): PHPUnit/TextUI/TestRunner->run(Object(PHPUnit/TextUI/Configuration/Configuration), Object(PHPUnit/Runner/ResultCache/DefaultResultCache), Object(PHPUnit/Framework/TestSuite))
+#74 C:/laragon/www/anselmidev/vendor/pestphp/pest/src/Kernel.php(103): PHPUnit/TextUI/Application->run(Array)
+#75 C:/laragon/www/anselmidev/vendor/pestphp/pest/bin/pest(184): Pest/Kernel->handle(Array, Array)
+#76 C:/laragon/www/anselmidev/vendor/pestphp/pest/bin/pest(192): {closure:C:/laragon/www/anselmidev/vendor/pestphp/pest/bin/pest:18}()
+#77 {main}
+"} 
+[2026-08-09 23:39:40] testing.ERROR: Declaration of App\Http\Controllers\LivewireFileUploadController::validateAndStore(array $files, $disk): Illuminate\Support\Collection must be compatible with Livewire\Features\SupportFileUploads\FileUploadController::validateAndStore($files, $disk) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Declaration of App\\Http\\Controllers\\LivewireFileUploadController::validateAndStore(array $files, $disk): Illuminate\\Support\\Collection must be compatible with Livewire\\Features\\SupportFileUploads\\FileUploadController::validateAndStore($files, $disk) at C:/laragon/www/anselmidev/app/Http/Controllers/LivewireFileUploadController.php:23)
+[stacktrace]
+#0 {main}
+"} 
+[2026-08-09 23:39:40] testing.ERROR: Declaration of App\Http\Controllers\LivewireFileUploadController::validateAndStore(array $files, $disk): Illuminate\Support\Collection must be compatible with Livewire\Features\SupportFileUploads\FileUploadController::validateAndStore($files, $disk) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Declaration of App\\Http\\Controllers\\LivewireFileUploadController::validateAndStore(array $files, $disk): Illuminate\\Support\\Collection must be compatible with Livewire\\Features\\SupportFileUploads\\FileUploadController::validateAndStore($files, $disk) at C:/laragon/www/anselmidev/app/Http/Controllers/LivewireFileUploadController.php:23)
+[stacktrace]
+#0 {main}
+"} 
+[2026-08-09 23:39:58] testing.ERROR: Declaration of App\Http\Controllers\LivewireFileUploadController::validateAndStore(array $files, string $disk) must be compatible with Livewire\Features\SupportFileUploads\FileUploadController::validateAndStore($files, $disk) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Declaration of App\\Http\\Controllers\\LivewireFileUploadController::validateAndStore(array $files, string $disk) must be compatible with Livewire\\Features\\SupportFileUploads\\FileUploadController::validateAndStore($files, $disk) at C:/laragon/www/anselmidev/app/Http/Controllers/LivewireFileUploadController.php:23)
+[stacktrace]
+#0 {main}
+"} 
+[2026-08-09 23:39:58] testing.ERROR: Declaration of App\Http\Controllers\LivewireFileUploadController::validateAndStore(array $files, string $disk) must be compatible with Livewire\Features\SupportFileUploads\FileUploadController::validateAndStore($files, $disk) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Declaration of App\\Http\\Controllers\\LivewireFileUploadController::validateAndStore(array $files, string $disk) must be compatible with Livewire\\Features\\SupportFileUploads\\FileUploadController::validateAndStore($files, $disk) at C:/laragon/www/anselmidev/app/Http/Controllers/LivewireFileUploadController.php:23)
+[stacktrace]
+#0 {main}
+"} 

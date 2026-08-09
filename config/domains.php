@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Domains\Calendar\CalendarServiceProvider;
 use Domains\Test\TestServiceProvider;
 
 return [
@@ -22,6 +23,15 @@ return [
     */
 
     'sites' => [
+
+        'calendar' => [
+            'provider' => CalendarServiceProvider::class,
+            'hosts' => array_values(array_filter(array_map(
+                static fn (string $h): string => strtolower(trim($h)),
+                explode(',', (string) env('DOMAIN_CALENDAR_HOSTS', 'calendar.anselmidev.test')),
+            ))),
+            'connection' => env('DOMAIN_CALENDAR_DB_CONNECTION'),
+        ],
 
         'test' => [
             'provider' => TestServiceProvider::class,

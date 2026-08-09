@@ -15,9 +15,9 @@
         </svg>
 
         <div class="mt-auto">
-            <p class="mb-1.5 text-[13px] font-bold tracking-[0.02em] text-zinc-900">{{ $index }}.</p>
+            <p class="mb-1.5 text-sm font-bold tracking-[0.02em] text-zinc-900">{{ $index }}.</p>
             <div class="flex items-end justify-between gap-2">
-                <p class="text-[26px] font-extrabold leading-[1.15] text-zinc-900">{{ $title }}</p>
+                <p class="text-md font-extrabold leading-[1.15] text-zinc-900">{{ $title }}</p>
                 <button class="mt-2 flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-zinc-900 bg-transparent">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round">
                         <line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/>
@@ -25,7 +25,7 @@
                 </button>
             </div>
             <hr class="my-3 border-t border-zinc-900/25"/>
-            <p class="text-[13px] leading-relaxed text-zinc-900 opacity-75">{{ $description }}</p>
+            <p class="text-sm leading-relaxed text-zinc-900 opacity-75">{{ $description }}</p>
         </div>
     </div>
 

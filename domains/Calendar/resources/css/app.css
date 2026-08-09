@@ -1,0 +1,20 @@
+/*
+ | Me Calendar — dark heat map
+ */
+@import '../../../../resources/css/shared.css';
+
+@source '../views';
+@source '../../../../resources/views/components';
+
+@theme {
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+    --color-cal-bg: #070708;
+    --color-cal-panel: #101012;
+    --color-cal-muted: #6b6b73;
+    --color-cal-cell-0: #1c1c1f;
+    --color-cal-cell-1: #3f4a2c;
+    --color-cal-cell-2: #6a7a3a;
+    --color-cal-cell-3: #d6f04a;
+}

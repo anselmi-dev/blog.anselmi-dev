@@ -38,9 +38,9 @@
     </svg>
 
     <div class="mt-auto">
-        <p class="mb-1.5 text-[13px] font-bold tracking-[0.02em] text-zinc-900">{{ $index }}.</p>
+        <p class="mb-1.5 text-sm font-bold tracking-[0.02em] text-zinc-900">{{ $index }}.</p>
         <div class="flex items-end justify-between gap-2">
-            <p class="text-[26px] font-extrabold leading-[1.15] text-zinc-900">{{ $title }}</p>
+            <p class="text-md font-extrabold leading-[1.15] text-zinc-900">{{ $title }}</p>
             <span
                 class="mt-2 flex size-10 shrink-0 items-center justify-center rounded-full border border-zinc-900 bg-transparent text-zinc-900 transition-[transform,background-color,color] duration-300 ease-out group-hover:translate-x-0.5 group-hover:bg-zinc-900 group-hover:text-white"
                 aria-hidden="true"
@@ -60,11 +60,11 @@
             </span>
         </div>
         <hr class="my-3 border-t border-zinc-900/25"/>
-        <p class="text-[13px] leading-relaxed text-zinc-900 opacity-75">{{ $description }}</p>
+        <p class="text-sm leading-relaxed text-zinc-900 opacity-75">{{ $description }}</p>
         @if (count($tags) > 0)
             <ul class="mt-1 flex max-h-[3.75rem] flex-wrap items-start gap-1 overflow-hidden">
                 @foreach ($tags as $tag)
-                    <li class="rounded-full bg-gray-500/10 px-2 py-1 text-center text-[13px] font-bold tracking-[0.02em] text-zinc-900">{{ $tag }}</li>
+                    <li class="rounded-full bg-gray-500/10 px-2 py-1 text-center text-sm font-bold tracking-[0.02em] text-zinc-900">{{ $tag }}</li>
                 @endforeach
             </ul>
         @endif
