@@ -23,13 +23,12 @@
                 <span class="inline-block w-fit rounded-full border border-[#111] px-4 py-[5px] text-[0.78rem] font-medium text-[#111]">Montevideo · Uruguay</span>
 
                 <h1 class="font-cond m-0 text-[clamp(1.9rem,3.8vw,2.75rem)] font-black leading-[1.1] text-[#111]">
-                    Hola.
+                    <span class="block">Hola</span>
+                    <span class="block">Soy Anselmi</span>
                 </h1>
 
                 <p class="m-0 max-w-[400px] text-base leading-[1.65] text-[#333]">
-                    Soy un desarrollador web especializado en Laravel, Livewire, Vue y Tailwind CSS.
-                    Mi pasión radica en crear experiencias de usuario fluidas y funcionales
-                    a través de soluciones web innovadoras.
+                    Ayudo a construir productos web rápidos y confiables con Laravel &amp; Livewire
                 </p>
 
                 <a

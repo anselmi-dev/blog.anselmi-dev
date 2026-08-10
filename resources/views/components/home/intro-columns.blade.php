@@ -17,20 +17,18 @@
                 </a>
 
                 <h2 id="intro-hola" class="text-4xl font-bold tracking-tight text-black sm:text-5xl lg:text-6xl lg:leading-[1.05]">
-                    Hola.
+                    Sobre mí
                 </h2>
 
                 <div class="mt-6 space-y-4 text-base leading-relaxed text-zinc-600 sm:text-lg">
                     <p>
-                        Soy un desarrollador web especializado en <strong class="font-semibold text-zinc-800">Laravel</strong>,
-                        <strong class="font-semibold text-zinc-800">Livewire</strong>,
-                        <strong class="font-semibold text-zinc-800">Vue</strong> y
-                        <strong class="font-semibold text-zinc-800">Tailwind CSS</strong>.
-                        Mi pasión radica en crear experiencias de usuario fluidas y funcionales a través de soluciones web innovadoras.
-                    </p>
-                    <p>
-                        Desde que descubrí Laravel en 2018 sentí que había encontrado mi herramienta ideal.
-                        Desde entonces he trabajado en proyectos que van desde sistemas de gestión integrados con AWS hasta e-commerce completos.
+                        Soy desarrollador fullstack especializado en
+                        <strong class="font-semibold text-zinc-800">Laravel</strong>,
+                        <strong class="font-semibold text-zinc-800">Livewire</strong> y
+                        <strong class="font-semibold text-zinc-800">Tailwind CSS</strong>,
+                        con experiencia construyendo desde e-commerce hasta plataformas de gestión financiera.
+                        Me interesa el detalle, la performance y que el equipo pueda seguir iterando sin fricción.
+                        Fuera del editor, me recargo con fotografía y casi siempre ando con una Coca-Cola a mano (el café a veces traiciona; ella, no).
                     </p>
                 </div>
 
@@ -97,11 +95,16 @@
                 <div>
                     <span class="mb-6 block text-xs font-medium tabular-nums tracking-widest text-zinc-400">02</span>
                     <h3 class="text-lg font-bold text-black">Curiosidades</h3>
-                    <p class="mt-5 text-sm leading-relaxed text-zinc-600 sm:text-[0.9375rem]">
-                        Aprendo mejor enseñando: suelo documentar lo que configuro y compartir atajos con el equipo.
-                        Fuera del teclado, me recargo con música, buena lectura y caminatas largas para ordenar ideas.
-                        Cuando tengo tiempo libre salgo a fotografiar — así que si ves algo raro en mi galería, fui yo.
-                    </p>
+                    <div class="mt-5 space-y-4 text-sm leading-relaxed text-zinc-600 sm:text-[0.9375rem]">
+                        <p>
+                            Fuera del teclado, me recargo con fotografía — mirar luz, encuadre y ritmo me ayuda tanto como un buen commit.
+                            Aprendo mejor enseñando: suelo documentar lo que configuro y compartir atajos con el equipo.
+                        </p>
+                        <p>
+                            También me acompañan la música, buena lectura y caminatas largas para ordenar ideas.
+                            Cuando tengo tiempo libre salgo a fotografiar — así que si ves algo raro en mi galería, fui yo.
+                        </p>
+                    </div>
                 </div>
 
                 <div>
@@ -121,15 +124,19 @@
                         </div>
                         <div class="flex items-baseline justify-between gap-4 border-b border-zinc-200 py-3 text-sm">
                             <dt class="text-zinc-500">Framework</dt>
-                            <dd class="text-right font-medium text-zinc-900">Laravel, Livewire <span class="text-zinc-400 font-normal">(sin reinventar la rueda)</span></dd>
+                            <dd class="text-right font-medium text-zinc-900">Laravel, Livewire, Filament, Flux <span class="text-zinc-400 font-normal">(sin reinventar la rueda)</span></dd>
                         </div>
                         <div class="flex items-baseline justify-between gap-4 border-b border-zinc-200 py-3 text-sm">
                             <dt class="text-zinc-500">Front</dt>
-                            <dd class="text-right font-medium text-zinc-900">Tailwind CSS, Vite <span class="text-zinc-400 font-normal">(sí, uso utility classes, no me arrepiento)</span></dd>
+                            <dd class="text-right font-medium text-zinc-900">Tailwind, Vite, Vue, Alpine <span class="text-zinc-400 font-normal">(sí, uso utility classes, no me arrepiento)</span></dd>
                         </div>
                         <div class="flex items-baseline justify-between gap-4 border-b border-zinc-200 py-3 text-sm">
                             <dt class="text-zinc-500">Entorno</dt>
-                            <dd class="text-right font-medium text-zinc-900">Git, Docker, CI <span class="text-zinc-400 font-normal">(porque "en mi máquina funciona" no escala)</span></dd>
+                            <dd class="text-right font-medium text-zinc-900">AWS, Redis, Docker, Git, CI <span class="text-zinc-400 font-normal">(porque "en mi máquina funciona" no escala)</span></dd>
+                        </div>
+                        <div class="flex items-baseline justify-between gap-4 border-b border-zinc-200 py-3 text-sm">
+                            <dt class="text-zinc-500">Integraciones</dt>
+                            <dd class="text-right font-medium text-zinc-900">Stripe, Sumsub, Mailchimp <span class="text-zinc-400 font-normal">(y lo que el negocio pida)</span></dd>
                         </div>
                         <div class="flex items-baseline justify-between gap-4 border-b border-zinc-200 py-3 text-sm">
                             <dt class="text-zinc-500">Música</dt>
