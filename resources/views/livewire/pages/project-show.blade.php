@@ -194,10 +194,15 @@
 
                     @if (count($projectImages) > 1)
                         {{-- Side arrows --}}
-                        <div class="pointer-events-none absolute inset-y-0 left-0 right-0 z-10 flex items-center justify-between px-2 sm:px-4">
+                        {{-- Side arrows --}}
+                        @php($projectAccent = \App\Support\CssColor::hexOrNull($project['color'] ?? null) ?? '#e8f38c')
+                        <div
+                            class="pointer-events-none absolute inset-y-0 left-0 right-0 z-10 flex items-center justify-between px-2 sm:px-4"
+                            style="--carousel-accent: {{ $projectAccent }}"
+                        >
                             <button
                                 type="button"
-                                class="pointer-events-auto inline-flex size-9 items-center justify-center rounded-full border border-zinc-900/80 bg-white/90 text-zinc-900 shadow-md backdrop-blur-sm transition hover:scale-105 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:size-11"
+                                class="pointer-events-auto inline-flex size-9 items-center justify-center rounded-full border-2 border-[var(--carousel-accent)] bg-white/55 text-zinc-900 opacity-55 shadow-md backdrop-blur-sm transition hover:scale-105 hover:bg-white/90 hover:opacity-100 focus-visible:bg-white/90 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:size-11"
                                 @click.stop="prev()"
                                 aria-label="Imagen anterior"
                             >
@@ -205,7 +210,7 @@
                             </button>
                             <button
                                 type="button"
-                                class="pointer-events-auto inline-flex size-9 items-center justify-center rounded-full border border-zinc-900/80 bg-white/90 text-zinc-900 shadow-md backdrop-blur-sm transition hover:scale-105 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:size-11"
+                                class="pointer-events-auto inline-flex size-9 items-center justify-center rounded-full border-2 border-[var(--carousel-accent)] bg-white/55 text-zinc-900 opacity-55 shadow-md backdrop-blur-sm transition hover:scale-105 hover:bg-white/90 hover:opacity-100 focus-visible:bg-white/90 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:size-11"
                                 @click.stop="next()"
                                 aria-label="Imagen siguiente"
                             >
@@ -213,16 +218,23 @@
                             </button>
                         </div>
 
-                        {{-- Thumbs --}}
-                        <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/40 to-transparent pt-10 sm:pt-24">
+                        {{-- Thumbs: todas visibles; activo = timer circular; entrada al scroll --}}
+                        <div
+                            class="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/40 to-transparent pt-10 sm:pt-24"
+                            data-reveal="fade-up"
+                            data-reveal-scroll
+                            data-reveal-stagger="0.07"
+                            data-reveal-duration="0.5"
+                            data-reveal-threshold="0.25"
+                        >
                             <div class="pointer-events-auto flex justify-end gap-1.5 p-2 sm:gap-3 sm:p-5">
                                 @foreach ($projectImages as $index => $image)
                                     <button
                                         type="button"
-                                        x-show="active !== {{ $index }}"
-                                        x-cloak
+                                        data-reveal-item
                                         @click.stop="go({{ $index }})"
                                         class="relative size-9 shrink-0 overflow-hidden rounded-lg bg-white/15 shadow-lg transition hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:size-14 sm:rounded-xl md:size-24"
+                                        :aria-current="active === {{ $index }} ? 'true' : 'false'"
                                         aria-label="Ver captura {{ $index + 1 }}"
                                     >
                                         <img
@@ -233,40 +245,46 @@
                                             decoding="async"
                                         />
 
-                                        {{-- Base border --}}
-                                        <span class="pointer-events-none absolute inset-0 rounded-[inherit] border-2 border-brand-lime"></span>
+                                        <span class="pointer-events-none absolute inset-0 rounded-[inherit] border-2 border-white/50"></span>
 
-                                        {{-- Progress border on next slide --}}
-                                        <template x-if="nextIndex === {{ $index }}">
-                                            <span class="pointer-events-none absolute inset-0 text-brand-lime">
+                                        <span
+                                            x-show="active === {{ $index }}"
+                                            x-cloak
+                                            class="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/40"
+                                        >
+                                            <span class="relative size-5 text-brand-lime sm:size-7 md:size-9">
                                                 <template x-for="k in [progressKey]" :key="k">
                                                     <svg
-                                                        class="absolute inset-0 size-full overflow-visible"
-                                                        viewBox="0 0 100 100"
-                                                        preserveAspectRatio="none"
+                                                        class="absolute inset-0 size-full -rotate-90 overflow-visible"
+                                                        viewBox="0 0 36 36"
                                                         aria-hidden="true"
                                                     >
-                                                        <rect
-                                                            class="project-carousel-progress"
-                                                            :class="{ 'is-paused': paused }"
-                                                            x="1.5"
-                                                            y="1.5"
-                                                            width="97"
-                                                            height="97"
-                                                            rx="14"
-                                                            ry="14"
-                                                            pathLength="100"
+                                                        <circle
+                                                            cx="18"
+                                                            cy="18"
+                                                            r="15.5"
                                                             fill="none"
                                                             stroke="currentColor"
-                                                            stroke-width="3.5"
+                                                            stroke-width="2.5"
+                                                            class="opacity-35"
+                                                        />
+                                                        <circle
+                                                            class="project-carousel-progress"
+                                                            :class="{ 'is-paused': paused }"
+                                                            cx="18"
+                                                            cy="18"
+                                                            r="15.5"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            stroke-width="2.5"
+                                                            pathLength="100"
                                                             stroke-linecap="round"
-                                                            vector-effect="non-scaling-stroke"
                                                             :style="'animation-duration:' + delay + 'ms'"
                                                         />
                                                     </svg>
                                                 </template>
                                             </span>
-                                        </template>
+                                        </span>
                                     </button>
                                 @endforeach
                             </div>

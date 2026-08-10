@@ -199,29 +199,17 @@ return [
             ],
             'images' => [
                 [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot.jpg',
-                    'alt' => 'Vista principal de Harmony Inspire (placeholder)',
+                    'src' => '/images/proyectos/harmonyinspire/harmonyinspire-1.png',
+                    'alt' => 'Vista principal de Harmony Inspire',
                     'hero' => true,
                 ],
                 [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot-1.png',
-                    'alt' => 'Captura de Harmony Inspire (placeholder)',
+                    'src' => '/images/proyectos/harmonyinspire/harmonyinspire-2.png',
+                    'alt' => 'Captura de Harmony Inspire',
                 ],
                 [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot-2.png',
-                    'alt' => 'Detalle Harmony Inspire (placeholder)',
-                ],
-                [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot-3.png',
-                    'alt' => 'Catálogo Harmony Inspire (placeholder)',
-                ],
-                [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot-4.png',
-                    'alt' => 'Navegación Harmony Inspire (placeholder)',
-                ],
-                [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot-5.png',
-                    'alt' => 'Interfaz Harmony Inspire (placeholder)',
+                    'src' => '/images/proyectos/harmonyinspire/harmonyinspire-3.png',
+                    'alt' => 'Detalle Harmony Inspire',
                 ],
             ],
         ],
@@ -274,29 +262,25 @@ return [
             ],
             'images' => [
                 [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot.jpg',
-                    'alt' => 'Vista principal de Museum Surfaces (placeholder)',
+                    'src' => '/images/proyectos/museumsurfaces/museum.png',
+                    'alt' => 'Vista principal de Museum Surfaces',
                     'hero' => true,
                 ],
                 [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot-1.png',
-                    'alt' => 'Captura de Museum Surfaces (placeholder)',
+                    'src' => '/images/proyectos/museumsurfaces/museum02.png',
+                    'alt' => 'Captura de Museum Surfaces',
                 ],
                 [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot-2.png',
-                    'alt' => 'Detalle Museum Surfaces (placeholder)',
+                    'src' => '/images/proyectos/museumsurfaces/museum03.png',
+                    'alt' => 'Detalle Museum Surfaces',
                 ],
                 [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot-3.png',
-                    'alt' => 'Catálogo Museum Surfaces (placeholder)',
+                    'src' => '/images/proyectos/museumsurfaces/museum04.png',
+                    'alt' => 'Catálogo Museum Surfaces',
                 ],
                 [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot-4.png',
-                    'alt' => 'Navegación Museum Surfaces (placeholder)',
-                ],
-                [
-                    'src' => '/images/proyectos/peronda/peronda-screenshot-5.png',
-                    'alt' => 'Interfaz Museum Surfaces (placeholder)',
+                    'src' => '/images/proyectos/museumsurfaces/museum05.png',
+                    'alt' => 'Interfaz Museum Surfaces',
                 ],
             ],
         ],
