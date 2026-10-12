@@ -114,6 +114,10 @@ class PostResource extends Resource
                     ->columns(2)
                     ->collapsed()
                     ->schema([
+                        Toggle::make('featured_in_menu')
+                            ->label('Destacar en el menú')
+                            ->helperText('Aparece en el menú del header (se muestran los 2 más recientes).')
+                            ->default(false),
                         Toggle::make('show_in_bento')
                             ->label('Mostrar en el bento del blog')
                             ->live()
@@ -198,6 +202,9 @@ class PostResource extends Resource
                 TextColumn::make('slug')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                IconColumn::make('featured_in_menu')
+                    ->label('Menú')
+                    ->boolean(),
                 IconColumn::make('show_in_bento')
                     ->label('Bento')
                     ->boolean(),

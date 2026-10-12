@@ -27,6 +27,7 @@ class Post extends Model
         'bento_type',
         'bento_grid_class',
         'bento_sort',
+        'featured_in_menu',
         'sort_order',
         'is_published',
         'published_at',
@@ -44,6 +45,7 @@ class Post extends Model
             'body_en' => 'array',
             'body' => 'array',
             'show_in_bento' => 'boolean',
+            'featured_in_menu' => 'boolean',
             'is_published' => 'boolean',
             'published_at' => 'datetime',
             'bento_sort' => 'integer',
@@ -59,6 +61,16 @@ class Post extends Model
     public function scopeInBento(Builder $query): Builder
     {
         return $query->where('show_in_bento', true)->orderBy('bento_sort');
+    }
+
+    /**
+     * Posts destacados en el menú del header, los más recientes primero.
+     */
+    public function scopeFeaturedInMenu(Builder $query): Builder
+    {
+        return $query->where('featured_in_menu', true)
+            ->orderByDesc('published_at')
+            ->orderByDesc('id');
     }
 
     public function imageUrl(?int $w = 900, ?int $h = 1100): ?string

@@ -1,40 +1,33 @@
 @php
-    $dropdownLinks = [
-        ['label' => __('Mis fuentes'), 'href' => localized_route('services.fonts'), 'navigate' => true],
-        ['label' => __('Mis colores'), 'href' => localized_route('services.colors'), 'navigate' => true],
-        ['label' => __('Mis herramientas'), 'href' => localized_route('services.tools'), 'navigate' => true],
-    ];
+    use App\Support\Localization;
+    use App\Support\SiteMenu;
 
-    if ($hasPublishedGalleryPhotos ?? false) {
-        $dropdownLinks[] = ['label' => __('Galería'), 'href' => localized_route('gallery'), 'navigate' => true];
-    }
-
-    $dropdownLinks[] = ['label' => __('Proyectos'), 'href' => localized_route('projects'), 'navigate' => true];
+    $menuGroups = SiteMenu::groups();
+    $featuredPosts = SiteMenu::featuredPosts();
 
     $navLinks = [];
 
     if ($hasPublishedPosts ?? false) {
-        $navLinks[] = ['label' => 'Blog', 'href' => localized_route('blog'), 'navigate' => true];
+        $navLinks[] = ['label' => __('Blog'), 'href' => localized_route('blog')];
     }
 
-    if ($hasPublishedFaqs ?? false) {
-        $navLinks[] = ['label' => 'FAQ', 'href' => localized_route('faq'), 'navigate' => true];
-    }
+    $navLinks[] = ['label' => __('Sobre mí'), 'href' => localized_route('about')];
 
-    $navLinks[] = ['label' => __('Sobre mí'), 'href' => localized_route('about'), 'navigate' => true];
-
-    $mobileLinks = [...$dropdownLinks, ...$navLinks];
-
-    $alternateLocale = \App\Support\Localization::isEnglish() ? 'es' : 'en';
+    $alternateLocale = Localization::isEnglish() ? 'es' : 'en';
 @endphp
 
 <x-site-frame
-    {{ $attributes->class(['bg-brand-lime transition-colors duration-300']) }}
+    {{ $attributes->class(['z-30 bg-brand-lime transition-colors duration-300']) }}
     data-reveal="fade-down"
     data-reveal-stagger="0.07"
     data-reveal-duration="0.85"
 >
-    <header class="relative z-1">
+    <header
+        class="relative z-30"
+        x-data="{ menuOpen: false }"
+        x-on:keydown.escape.window="if (menuOpen) { menuOpen = false; $refs.menuTrigger?.focus() }"
+        x-on:livewire:navigating.window="menuOpen = false"
+    >
         <div
             class="relative z-0 flex min-h-[4.5rem] items-center justify-between gap-3 px-4 pt-3 sm:min-h-[5.25rem] sm:px-6 lg:min-h-[5.5rem] lg:px-8 lg:pt-4"
         >
@@ -51,15 +44,30 @@
                 class="items-center gap-7 text-sm font-medium text-zinc-900 md:flex lg:gap-10 hidden"
                 aria-label="{{ __('Navegación principal') }}"
             >
-                <div data-reveal-item>
-                    <x-dropdown :label="__('Servicios')" :items="$dropdownLinks" />
-                </div>
+                <button
+                    type="button"
+                    data-reveal-item
+                    x-ref="menuTrigger"
+                    x-on:click.stop="menuOpen = ! menuOpen"
+                    x-bind:aria-expanded="menuOpen"
+                    aria-controls="site-menu"
+                    class="flex cursor-pointer items-center gap-2 rounded-md py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                >
+                    <span>{{ __('Explorar') }}</span>
+                    <span class="inline-flex size-7 items-center justify-center rounded-full border border-zinc-900" aria-hidden="true">
+                        <x-icon
+                            name="chevron-down"
+                            class="size-3.5 shrink-0 transition-transform duration-300 ease-out"
+                            x-bind:class="{ 'rotate-180': menuOpen }"
+                        />
+                    </span>
+                </button>
 
                 @foreach ($navLinks as $item)
                     <x-header.nav-link
                         data-reveal-item
                         :href="$item['href']"
-                        :navigate="! empty($item['navigate'])"
+                        navigate
                     >
                         {{ $item['label'] }}
                     </x-header.nav-link>
@@ -68,7 +76,7 @@
 
             <div class="flex items-center gap-2 sm:gap-3" data-reveal-item>
                 <a
-                    href="{{ \App\Support\Localization::switchUrl($alternateLocale) }}"
+                    href="{{ Localization::switchUrl($alternateLocale) }}"
                     hreflang="{{ $alternateLocale }}"
                     lang="{{ $alternateLocale }}"
                     class="inline-flex size-11 items-center justify-center rounded-full border border-zinc-900 text-xs font-semibold uppercase tracking-wide text-zinc-900 transition hover:bg-zinc-900/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 sm:size-12 sm:text-sm"
@@ -77,32 +85,17 @@
                     {{ $alternateLocale }}
                 </a>
 
-                <details
-                    class="relative md:hidden"
-                    x-data
-                    x-on:click.outside="$el.removeAttribute('open')"
-                    x-on:scroll.window="$el.removeAttribute('open')"
+                <button
+                    type="button"
+                    x-on:click.stop="menuOpen = ! menuOpen"
+                    x-bind:aria-expanded="menuOpen"
+                    aria-controls="site-menu"
+                    class="flex cursor-pointer items-center justify-center rounded-full border border-zinc-900 p-2.5 transition hover:bg-zinc-900/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 md:hidden"
+                    x-bind:aria-label="menuOpen ? @js(__('Cerrar menú')) : @js(__('Abrir menú'))"
                 >
-                    <summary
-                        class="flex cursor-pointer list-none items-center justify-center rounded-full border border-zinc-900 p-2.5 marker:hidden [&::-webkit-details-marker]:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
-                        aria-label="{{ __('Abrir menú') }}"
-                    >
-                        <x-icon name="menu" class="size-6" />
-                    </summary>
-                    <div
-                        class="fixed left-1/2 top-[100px] z-30 w-[min(100vw-2rem,18rem)] -translate-x-1/2 rounded-2xl border border-zinc-200 bg-white py-3 shadow-xl sm:top-[5.5rem]"
-                    >
-                        @foreach ($mobileLinks as $item)
-                            <x-header.nav-link
-                                variant="menu"
-                                :href="$item['href']"
-                                :navigate="! empty($item['navigate'])"
-                            >
-                                {{ $item['label'] }}
-                            </x-header.nav-link>
-                        @endforeach
-                    </div>
-                </details>
+                    <span x-show="! menuOpen"><x-icon name="menu" class="size-6" /></span>
+                    <span x-show="menuOpen" x-cloak><x-icon name="x" class="size-6" /></span>
+                </button>
 
                 <button
                     type="button"
@@ -134,6 +127,8 @@
                 </button>
             </div>
         </div>
+
+        <x-header.mega-menu :groups="$menuGroups" :featured-posts="$featuredPosts" />
     </header>
 
     <div data-reveal-item>
