@@ -5,6 +5,7 @@ use App\Models\Song;
 use App\Support\SpotifyEmbed;
 use Database\Seeders\SongSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
@@ -94,6 +95,8 @@ test('spotify links are converted to embed urls', function (?string $url, ?strin
 ]);
 
 test('song seeder loads the playlist once without duplicating songs', function () {
+    Storage::fake('public');
+
     $this->seed(SongSeeder::class);
     $this->seed(SongSeeder::class);
 
@@ -102,6 +105,25 @@ test('song seeder loads the playlist once without duplicating songs', function (
     $this->get(route('playlist'))
         ->assertOk()
         ->assertSeeInOrder(['Need You Tonight', 'Losing My Religion', 'Hotel California - 2013 Remaster']);
+
+    expect(Song::query()->whereNull('image_path')->exists())->toBeFalse();
+    Storage::disk('public')->assertExists('songs/hotel-california.jpg');
+});
+
+test('song seeder keeps a cover already set from filament', function () {
+    Storage::fake('public');
+
+    Song::create([
+        'title' => 'Dream On',
+        'artist' => 'Aerosmith',
+        'image_path' => 'songs/mi-portada.jpg',
+        'is_published' => true,
+    ]);
+
+    $this->seed(SongSeeder::class);
+
+    expect(Song::query()->where('title', 'Dream On')->value('image_path'))->toBe('songs/mi-portada.jpg');
+    Storage::disk('public')->assertMissing('songs/dream-on.jpg');
 });
 
 test('songs without a spotify link have no play button', function () {
