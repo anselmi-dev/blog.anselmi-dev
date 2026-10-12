@@ -52,3 +52,12 @@ test('tools page without tools does not render the wheel', function () {
         ->assertOk()
         ->assertDontSee('data-tools-wheel', false);
 });
+
+test('tools page content continues the header without a gap', function () {
+    makeTool();
+
+    $this->get(localized_route('services.tools'))
+        ->assertOk()
+        ->assertSee('data-site-header', false)
+        ->assertSee('data-joined-header', false);
+});

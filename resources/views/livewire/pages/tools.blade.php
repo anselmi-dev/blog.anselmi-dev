@@ -29,11 +29,11 @@
     ];
 @endphp
 
-<div class="pb-16 pt-4 sm:pb-20 sm:pt-6 lg:pb-24">
+<div class="pb-16 sm:pb-20 lg:pb-24">
     {{-- Pantalla de carga: barra central de 0 a 100 % --}}
     <div
         data-page-loader
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-[#fbf4ec]"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-brand-lime"
         role="progressbar"
         aria-busy="true"
         aria-label="{{ __('Cargando') }}"
@@ -53,6 +53,7 @@
     @if (count($tools) > 0)
         <section
             data-tools-wheel
+            data-joined-header
             class="relative mx-auto max-w-8xl"
             style="height: calc(100svh + {{ max(0, count($tools) - 1) }} * 38svh);"
             aria-label="{{ __('Mis herramientas') }}"
@@ -60,7 +61,7 @@
             <div
                 data-tools-wheel-stage
                 tabindex="0"
-                class="sticky top-0 h-svh cursor-grab touch-pan-y overflow-hidden rounded-2xl bg-[#fbf4ec] outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/30"
+                class="sticky top-0 h-svh cursor-grab touch-pan-y overflow-hidden rounded-b-xl bg-brand-lime transition-colors duration-300 sm:rounded-b-2xl outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/30"
                 role="region"
                 aria-roledescription="{{ __('carrusel') }}"
                 aria-label="{{ __('Frascos con las herramientas que uso') }}"

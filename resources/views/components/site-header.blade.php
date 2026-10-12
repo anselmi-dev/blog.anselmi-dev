@@ -18,6 +18,7 @@
 
 <x-site-frame
     {{ $attributes->class(['z-30 bg-brand-lime transition-colors duration-300']) }}
+    data-site-header
     data-reveal="fade-down"
     data-reveal-stagger="0.07"
     data-reveal-duration="0.85"

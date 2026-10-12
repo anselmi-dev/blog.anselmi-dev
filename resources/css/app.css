@@ -449,3 +449,9 @@ select:focus[data-flux-control] {
     margin-top: calc(var(--jar-h) / -2);
     transform-origin: 50% 50%;
 }
+
+/* Páginas cuyo contenido continúa el header sin corte (p. ej. herramientas). */
+body:has([data-joined-header]) [data-site-header] {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
