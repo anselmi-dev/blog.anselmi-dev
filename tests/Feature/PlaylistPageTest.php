@@ -103,3 +103,24 @@ test('song seeder loads the playlist once without duplicating songs', function (
         ->assertOk()
         ->assertSeeInOrder(['Need You Tonight', 'Losing My Religion', 'Hotel California - 2013 Remaster']);
 });
+
+test('songs without a spotify link have no play button', function () {
+    Song::create([
+        'title' => 'Sin enlace',
+        'artist' => 'Artista',
+        'is_published' => true,
+    ]);
+
+    Song::create([
+        'title' => 'Con enlace',
+        'artist' => 'Artista',
+        'spotify_url' => 'https://open.spotify.com/track/6MjfEIHOMW6MaDO3LpFcmW',
+        'is_published' => true,
+    ]);
+
+    $this->get(route('playlist'))
+        ->assertOk()
+        ->assertSee('Sin enlace')
+        ->assertDontSee('Reproducir Sin enlace')
+        ->assertSee('Reproducir Con enlace');
+});
