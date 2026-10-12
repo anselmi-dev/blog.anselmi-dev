@@ -331,12 +331,21 @@ function createJar(jar, index, materials, onLabelUpdate) {
         onLabelUpdate();
     };
 
+    // La etiqueta se redibuja cuando llegan la fuente (Fraunces) y el logo;
+    // "ready" avisa cuando ya está en su versión final.
+    let currentLogo = null;
     redraw();
-    loadLogo(jar.icon, String(inkColor).replace('#', '')).then((logo) => {
+
+    const fontsReady = (document.fonts?.load(`italic 500 40px ${FONT}`) ?? Promise.resolve())
+        .catch(() => {})
+        .then(() => redraw(currentLogo));
+    const logoReady = loadLogo(jar.icon, String(inkColor).replace('#', '')).then((logo) => {
         if (logo) {
+            currentLogo = logo;
             redraw(logo);
         }
     });
+    const ready = Promise.allSettled([fontsReady, logoReady]);
 
     const label = new THREE.Mesh(
         new THREE.CylinderGeometry(labelRadius, labelRadius, labelHeight, shape.segments ?? 96, 1, true, Math.PI + phiStart, Math.PI * 2),
@@ -360,7 +369,7 @@ function createJar(jar, index, materials, onLabelUpdate) {
         child.userData.jarIndex = index;
     });
 
-    return { group, texture };
+    return { group, texture, ready };
 }
 
 /**
@@ -419,15 +428,21 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
     scene.add(wheel);
 
     const items = jars.map((jar, index) => {
-        const { group, texture } = createJar(jar, index, materials, () => {
+        const { group, texture, ready } = createJar(jar, index, materials, () => {
             needsRender = true;
         });
         const pivot = new THREE.Group();
         pivot.add(group);
         wheel.add(pivot);
 
-        return { pivot, spin: group, texture };
+        return { pivot, spin: group, texture, ready };
     });
+
+    // Lista cuando todas las etiquetas tienen fuente y logo (o pasaron 4 s).
+    const ready = Promise.race([
+        Promise.allSettled(items.map((item) => item.ready)),
+        new Promise((resolve) => window.setTimeout(resolve, 4000)),
+    ]);
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
@@ -572,6 +587,7 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
     start();
 
     return {
+        ready,
         resize,
         /** Pide un frame (necesario con reduced motion, donde no hay loop continuo). */
         invalidate() {

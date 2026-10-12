@@ -53,6 +53,7 @@ export function initToolsWheels(root = document) {
         const count = items.length;
 
         if (! stage || ! ring || count === 0) {
+            section.dataset.wheelLoaded = 'true';
             announceReady();
 
             return;
@@ -106,6 +107,7 @@ export function initToolsWheels(root = document) {
             stage.style.setProperty('--jar-w', `${jarWidth}px`);
             stage.style.setProperty('--jar-h', `${jarWidth * 1.45}px`);
             ring.style.top = `${stageLayout.centerY}px`;
+            stage.style.setProperty('--jar-center', `${stageLayout.centerY}px`);
 
             scene3d?.resize();
         };
@@ -395,12 +397,69 @@ export function initToolsWheels(root = document) {
 
         // ---- Escena 3D (carga diferida) -----------------------------------
 
+        // Loader del bloque: barra de 0 a 100 % en la zona de los frascos mientras
+        // cargan three.js, la escena, la fuente y los logos. Los frascos aparecen
+        // recién al final, así no hay salto de la versión HTML a la 3D.
+        const loader = section.querySelector('[data-tools-wheel-loader]');
+        const loaderBar = loader?.querySelector('[data-tools-wheel-loader-bar]');
+        const loaderValue = loader?.querySelector('[data-tools-wheel-loader-value]');
+        let loaderTarget = 8;
+        let loaderShown = 0;
+        let loaderFrame = null;
+
+        const finishLoading = () => {
+            section.dataset.wheelLoaded = 'true';
+            loader?.setAttribute('aria-busy', 'false');
+            announceReady();
+        };
+
+        const tickLoader = () => {
+            loaderFrame = null;
+            loaderShown += (loaderTarget - loaderShown) * (reduced ? 1 : 0.14);
+
+            if (loaderTarget === 100 && loaderShown > 99.5) {
+                loaderShown = 100;
+            }
+
+            const value = Math.floor(loaderShown);
+
+            if (loaderBar) {
+                loaderBar.style.transform = `scaleX(${loaderShown / 100})`;
+            }
+
+            if (loaderValue) {
+                loaderValue.textContent = String(value);
+            }
+
+            loader?.setAttribute('aria-valuenow', String(value));
+
+            if (value >= 100) {
+                finishLoading();
+
+                return;
+            }
+
+            loaderFrame = requestAnimationFrame(tickLoader);
+        };
+
+        const setLoaderProgress = (value) => {
+            loaderTarget = Math.max(loaderTarget, value);
+
+            if (loaderFrame === null && section.dataset.wheelLoaded !== 'true') {
+                loaderFrame = requestAnimationFrame(tickLoader);
+            }
+        };
+
+        setLoaderProgress(15);
+
         if (canvasContainer && jars.length === count) {
             import('./tools-jars-3d')
                 .then(({ createJarScene }) => {
                     if (signal.aborted) {
-                        return;
+                        return null;
                     }
+
+                    setLoaderProgress(60);
 
                     scene3d = createJarScene(canvasContainer, jars, {
                         getState: () => ({ current, parallax }),
@@ -408,25 +467,34 @@ export function initToolsWheels(root = document) {
                         reducedMotion: reduced,
                     });
 
-                    if (scene3d) {
-                        section.dataset.wheel3d = 'true';
-                        section.querySelectorAll('[data-tools-wheel-open]').forEach((button) => {
-                            button.hidden = false;
-                        });
-                        // El botón "ver en detalle" cambia el alto del bloque de abajo.
-                        layout();
+                    if (! scene3d) {
+                        return null;
                     }
+
+                    section.dataset.wheel3d = 'true';
+                    section.querySelectorAll('[data-tools-wheel-open]').forEach((button) => {
+                        button.hidden = false;
+                    });
+                    // El botón "ver en detalle" cambia el alto del bloque de abajo.
+                    layout();
+                    setLoaderProgress(80);
+
+                    return scene3d.ready;
                 })
                 .catch(() => {})
-                .finally(announceReady);
+                .finally(() => setLoaderProgress(100));
         } else {
-            announceReady();
+            setLoaderProgress(100);
         }
 
         controllers.add(abort);
         signal.addEventListener('abort', () => {
             if (frame !== null) {
                 cancelAnimationFrame(frame);
+            }
+
+            if (loaderFrame !== null) {
+                cancelAnimationFrame(loaderFrame);
             }
 
             scene3d?.destroy();

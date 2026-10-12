@@ -1,5 +1,6 @@
 @push('meta')
     <link href="https://fonts.bunny.net/css?family=fraunces:400i,500i,600" rel="stylesheet" />
+    <noscript><style>[data-tools-wheel-jars-layer] { opacity: 1 !important; } [data-tools-wheel-loader] { display: none !important; }</style></noscript>
     @if ($showLoader)
         <noscript><style>[data-page-loader] { display: none !important; }</style></noscript>
     @endif
@@ -58,7 +59,25 @@
                 aria-label="{{ __('Frascos con las herramientas que uso') }}"
             >
                 {{-- Escena 3D (three.js), a todo el ancho de la pantalla para que los frascos entren y salgan por los bordes. Si WebGL no está disponible queda la versión HTML/CSS de abajo. --}}
-                <div class="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-hidden">
+                {{-- Loader del bloque: se ve mientras cargan los frascos 3D (ver tools-wheel.js) --}}
+                <div
+                    data-tools-wheel-loader
+                    class="tools-wheel__loader pointer-events-none absolute left-1/2 top-[var(--jar-center,50%)] z-[2] flex w-[min(60%,14rem)] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-3"
+                    role="progressbar"
+                    aria-busy="true"
+                    aria-label="{{ __('Cargando') }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                >
+                    <div class="h-px w-full overflow-hidden bg-zinc-900/15">
+                        <div data-tools-wheel-loader-bar class="h-full w-full origin-left bg-zinc-900" style="transform: scaleX(0)"></div>
+                    </div>
+                    <p class="font-folio-mono text-[0.7rem] tabular-nums tracking-widest text-zinc-600">
+                        <span data-tools-wheel-loader-value>0</span>%
+                    </p>
+                </div>
+
+                <div data-tools-wheel-jars-layer class="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-hidden">
                     <div data-tools-wheel-canvas class="absolute inset-0" aria-hidden="true"></div>
 
                     <div data-tools-wheel-ring class="tools-wheel__ring">

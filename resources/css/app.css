@@ -495,3 +495,22 @@ body:has([data-joined-header]) [data-site-header] {
 body:has([data-tools-wheel]) {
     overflow-x: clip;
 }
+
+/* Mientras cargan los frascos (3D o HTML) se ve solo el loader del bloque;
+ * después aparecen con un fundido, sin saltos. */
+[data-tools-wheel-jars-layer] {
+    transition: opacity 0.7s ease;
+}
+
+[data-tools-wheel]:not([data-wheel-loaded]) [data-tools-wheel-jars-layer] {
+    opacity: 0;
+}
+
+.tools-wheel__loader {
+    transition: opacity 0.4s ease, visibility 0.4s;
+}
+
+[data-wheel-loaded] .tools-wheel__loader {
+    opacity: 0;
+    visibility: hidden;
+}

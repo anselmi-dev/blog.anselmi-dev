@@ -191,3 +191,12 @@ test('admin can choose the jar shape of a tool', function () {
 
     expect($tool->refresh()->jar_shape)->toBe(JarShape::Round);
 });
+
+test('tools carousel has its own loader while the jars load', function () {
+    makeTool();
+
+    $this->get(localized_route('services.tools', [], 'es'))
+        ->assertOk()
+        ->assertSee('data-tools-wheel-loader', false)
+        ->assertSee('data-tools-wheel-jars-layer', false);
+});
