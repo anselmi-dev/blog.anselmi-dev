@@ -2,6 +2,8 @@ import { createIcons, icons } from 'lucide';
 import { initBookCarousels } from './book-carousel';
 import { initCustomCursor } from './custom-cursor';
 import { initMotion } from './motion';
+import { initPageLoaders } from './page-loader';
+import { initToolsWheels } from './tools-wheel';
 
 /**
  * Reemplaza nodos `<i data-lucide="nombre">` por SVG de Lucide.
@@ -23,6 +25,8 @@ function boot(root = document) {
     initMotion(root);
     initBookCarousels(root);
     initCustomCursor(root);
+    initPageLoaders(root);
+    initToolsWheels(root);
 }
 
 document.addEventListener('DOMContentLoaded', () => boot());
