@@ -1,8 +1,13 @@
 <?php
 
+use App\Filament\Resources\Tools\Pages\EditTool;
 use App\Models\Tool;
+use App\Models\User;
+use App\Support\JarPalette;
 use Database\Seeders\ToolDescriptionSeeder;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
@@ -103,4 +108,45 @@ test('tool description seeder fills only empty descriptions', function () {
         ->description_en->toStartWith('A PHP framework');
 
     expect(Tool::query()->where('name', 'Livewire')->value('description'))->toStartWith('Permite crear interfaces');
+});
+
+test('each jar uses the colors chosen in filament', function () {
+    makeTool(['label_color' => '#1e5876', 'fill_color' => '#e0a64a']);
+    makeTool(['name' => 'Alpine.js', 'label_color' => '#86bccb', 'sort_order' => 1]);
+    makeTool(['name' => 'Sin color', 'sort_order' => 2]);
+
+    $response = $this->get(localized_route('services.tools', [], 'es'))->assertOk();
+
+    preg_match('/data-tools-wheel-jars="([^"]+)"/', $response->getContent(), $matches);
+    $palettes = array_column(json_decode(html_entity_decode($matches[1]), true), 'palette');
+
+    expect($palettes[0])->toBe(['#1e5876', '#47768f', '#f5efe0', '#e0a64a'])
+        ->and($palettes[1][0])->toBe('#86bccb')
+        ->and($palettes[1][2])->toBe('#1f2a12')
+        ->and($palettes[1][3])->toBe(JarPalette::DEFAULT_FILL)
+        ->and($palettes[2])->toBe(JarPalette::fallback(2));
+});
+
+test('jar palette ignores invalid colors', function () {
+    expect(JarPalette::fromColors('rojo'))->toBeNull()
+        ->and(JarPalette::fromColors(null))->toBeNull()
+        ->and(JarPalette::fromColors('#FFF')[0])->toBe('#ffffff');
+});
+
+test('admin can set the jar colors of a tool', function () {
+    $user = User::factory()->create();
+    config(['app.admin_emails' => [strtolower($user->email)]]);
+    $this->actingAs($user);
+    Filament::setCurrentPanel('admin');
+
+    $tool = makeTool();
+
+    Livewire::test(EditTool::class, ['record' => $tool->getRouteKey()])
+        ->fillForm(['label_color' => '#6a4fae', 'fill_color' => '#e9c35b'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($tool->refresh())
+        ->label_color->toBe('#6a4fae')
+        ->fill_color->toBe('#e9c35b');
 });

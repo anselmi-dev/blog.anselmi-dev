@@ -4,16 +4,6 @@
 @endpush
 
 @php
-    /** Paletas de etiqueta: [fondo, manchas, texto, contenido del frasco]. Se repiten en orden. */
-    $palettes = [
-        ['#1f4d33', '#3f7a52', '#f5efe0', '#c99a4b'],
-        ['#7a8f2a', '#a9b84a', '#1f2a12', '#b4893e'],
-        ['#e3dccb', '#c9bfa6', '#2d3b2a', '#8f9b4b'],
-        ['#a8462f', '#c96a4c', '#f8ecdc', '#d29a54'],
-        ['#26405f', '#3f5f85', '#eef1f4', '#a8774a'],
-        ['#5e2f45', '#8a4a66', '#f6e8ef', '#c08a5a'],
-    ];
-
     $jarsData = collect($tools)->values()->map(fn (array $tool, int $index): array => [
         'name' => $tool['name'],
         'category' => $tool['category'],
@@ -21,7 +11,7 @@
         'description' => $tool['description'] ?? null,
         'url' => $tool['url'],
         'icon' => $tool['icon'] ?? null,
-        'palette' => $palettes[$index % count($palettes)],
+        'palette' => $tool['palette'] ?? \App\Support\JarPalette::fallback($index),
     ])->all();
 @endphp
 
@@ -75,7 +65,7 @@
                                     :name="$tool['name']"
                                     :category="$tool['category']"
                                     :icon="$tool['icon'] ?? null"
-                                    :palette="$palettes[$index % count($palettes)]"
+                                    :palette="$tool['palette'] ?? \App\Support\JarPalette::fallback($index)"
                                 />
                             </div>
                         </div>

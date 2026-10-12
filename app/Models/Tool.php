@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Concerns\HasEnglishTranslations;
+use App\Support\JarPalette;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,6 +20,8 @@ class Tool extends Model
         'url',
         'category',
         'icon',
+        'label_color',
+        'fill_color',
         'sort_order',
         'is_published',
         'tagline_en',
@@ -51,6 +54,7 @@ class Tool extends Model
             'url' => $this->url,
             'category' => $this->translated('category'),
             'icon' => $this->icon,
+            'palette' => JarPalette::fromColors($this->label_color, $this->fill_color),
         ];
     }
 }

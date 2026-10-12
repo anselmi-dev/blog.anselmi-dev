@@ -10,6 +10,7 @@ use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -17,6 +18,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -64,6 +66,12 @@ class ToolResource extends Resource
                 TextInput::make('icon')
                     ->label('Icono Simple Icons')
                     ->helperText('Slug de https://simpleicons.org (ej: laravel, livewire)'),
+                ColorPicker::make('label_color')
+                    ->label('Color de la etiqueta')
+                    ->helperText('Color del frasco en /servicios/herramientas. El texto y las manchas se ajustan solos para que se lea bien.'),
+                ColorPicker::make('fill_color')
+                    ->label('Color del contenido')
+                    ->helperText('Lo que se ve dentro del frasco. Opcional.'),
                 TextInput::make('sort_order')
                     ->label('Orden')
                     ->numeric()
@@ -108,6 +116,8 @@ class ToolResource extends Resource
                     ->label('Tagline')
                     ->limit(40)
                     ->toggleable(),
+                ColorColumn::make('label_color')
+                    ->label('Color'),
                 TextColumn::make('icon')
                     ->label('Icono')
                     ->toggleable(),
