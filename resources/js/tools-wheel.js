@@ -74,17 +74,36 @@ export function initToolsWheels(root = document) {
         let focusedIndex = -1;
         let pendingFocus = null;
 
+        // Tamaño de los frascos y alto de su centro dentro del escenario (lo usa también la escena 3D).
+        const stageLayout = { jarWidth: 150, centerY: 0 };
+
+        /**
+         * Título arriba, frascos al medio y detalle abajo, bien juntos: los frascos
+         * toman el alto que queda libre y, si sobra espacio, el título y el
+         * detalle se acercan a ellos en vez de quedar pegados a los bordes.
+         */
         const layout = () => {
             const width = stage.clientWidth;
             const height = stage.clientHeight;
-            // También depende del alto: arriba va el título y abajo el detalle.
-            const jarWidth = clamp(Math.min(width * 0.32, height * 0.2), 120, 190);
+            const gap = 16;
+            const titleHeight = title?.offsetHeight ?? 0;
+            const footerHeight = footer?.offsetHeight ?? 0;
+            const free = Math.max(0, height - titleHeight - footerHeight - gap * 2);
+            // 1.6 ≈ alto del frasco más el crecimiento e inclinación de los de la izquierda.
+            const jarWidth = clamp(Math.min(width * 0.34, free / 1.6), 110, 230);
+            const jarHeight = jarWidth * 1.6;
+            const shift = Math.max(0, (free - jarHeight) / 2);
 
+            title?.style.setProperty('translate', `0 ${shift}px`);
+            footer?.style.setProperty('translate', `0 ${-shift}px`);
+
+            stageLayout.jarWidth = jarWidth;
+            stageLayout.centerY = titleHeight + shift + gap + jarHeight / 2;
             spacing = jarWidth * 1.5;
 
             stage.style.setProperty('--jar-w', `${jarWidth}px`);
             stage.style.setProperty('--jar-h', `${jarWidth * 1.45}px`);
-            ring.style.top = `${height * 0.5}px`;
+            ring.style.top = `${stageLayout.centerY}px`;
 
             scene3d?.resize();
         };
@@ -432,6 +451,7 @@ export function initToolsWheels(root = document) {
 
                     scene3d = createJarScene(canvasContainer, jars, {
                         getState: () => ({ current, parallax }),
+                        getLayout: () => stageLayout,
                         reducedMotion: reduced,
                     });
 
@@ -440,6 +460,8 @@ export function initToolsWheels(root = document) {
                         section.querySelectorAll('[data-tools-wheel-open]').forEach((button) => {
                             button.hidden = false;
                         });
+                        // El botón "ver en detalle" cambia el alto del bloque de abajo.
+                        layout();
                     }
                 })
                 .catch(() => {})

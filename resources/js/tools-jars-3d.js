@@ -268,9 +268,9 @@ function createJar(jar, index, materials, onLabelUpdate) {
 /**
  * @param {HTMLElement} container
  * @param {Array<{name: string, category: string, tagline: string, url: string, icon: string|null, palette: string[]}>} jars
- * @param {{ getState: () => {current: number, parallax: number}, reducedMotion: boolean }} options
+ * @param {{ getState: () => {current: number, parallax: number}, getLayout?: () => {jarWidth: number, centerY: number}, reducedMotion: boolean }} options
  */
-export function createJarScene(container, jars, { getState, reducedMotion }) {
+export function createJarScene(container, jars, { getState, getLayout, reducedMotion }) {
     if (! supportsWebGL()) {
         return null;
     }
@@ -346,8 +346,9 @@ export function createJarScene(container, jars, { getState, reducedMotion }) {
         const width = container.clientWidth || 1;
         const height = container.clientHeight || 1;
         const narrow = width < 640;
-        // Mismo criterio que la versión HTML/CSS (tools-wheel.js).
-        const jarWidthPx = Math.min(190, Math.max(120, Math.min(width * 0.32, height * 0.2)));
+        // Tamaño y alto los decide tools-wheel.js según el título y el detalle.
+        const layout = getLayout?.() ?? { jarWidth: Math.min(190, Math.max(120, width * 0.32)), centerY: height / 2 };
+        const jarWidthPx = layout.jarWidth;
         const pixelsPerUnit = jarWidthPx / JAR_WIDTH;
         const halfHeight = height / 2 / pixelsPerUnit;
         const distance = halfHeight / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
@@ -359,8 +360,7 @@ export function createJarScene(container, jars, { getState, reducedMotion }) {
         renderer.setSize(width, height, false);
 
         viewport = { halfWidth: halfHeight * camera.aspect, halfHeight, narrow };
-                // Deja lugar arriba para el título y abajo para el detalle del frasco activo.
-        wheel.position.y = halfHeight * (narrow ? -0.04 : 0);
+        wheel.position.y = (height / 2 - layout.centerY) / pixelsPerUnit;
         needsRender = true;
     };
 
