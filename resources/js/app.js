@@ -34,3 +34,13 @@ document.addEventListener('livewire:initialized', () => {
 document.addEventListener('livewire:navigated', () => {
     queueMicrotask(() => boot());
 });
+
+// Si el navegador restaura la página desde el back/forward cache (típico al
+// volver con el botón "atrás"), no hay un load ni un evento de Livewire: la
+// página simplemente se "despausa" tal como quedó. Nada de lo anterior se
+// vuelve a ejecutar, así que hay que forzar el re-init acá explícitamente.
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        boot();
+    }
+});

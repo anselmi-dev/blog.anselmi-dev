@@ -293,7 +293,104 @@ export function initMotion(root = document) {
 
     nodes.forEach((el) => revealElement(el));
     counters.forEach((el) => countElement(el));
+    root.querySelectorAll('[data-scroll-drift]').forEach((el) => bindScrollDrift(el));
 }
+
+const scrollDriftStates = new WeakMap();
+let scrollDriftListening = false;
+let lastScrollDriftY = 0;
+
+/**
+ * Capa decorativa que reacciona a la dirección del scroll.
+ *
+ * - Bajar: aparece y se desplaza de izquierda a derecha.
+ * - Subir: se desvanece y vuelve hacia la izquierda.
+ *
+ * Atributos:
+ * - data-scroll-drift-distance="120" — recorrido horizontal (px) hacia cada lado
+ * - data-scroll-drift-range="640" — scroll (px) para ir de oculto a visible
+ */
+function bindScrollDrift(el) {
+    if (el.dataset.scrollDriftBound === 'true') {
+        return;
+    }
+
+    el.dataset.scrollDriftBound = 'true';
+
+    const distance = parseNumber(el.dataset.scrollDriftDistance, 120);
+    const range = parseNumber(el.dataset.scrollDriftRange, 640);
+    const maxOpacity = 0.6;
+    const rest = 0.5;
+
+    scrollDriftStates.set(el, { progress: rest, rest, distance, range, maxOpacity });
+    gsap.set(el, { x: 0, opacity: rest * maxOpacity, force3D: true });
+
+    if (scrollDriftListening) {
+        return;
+    }
+
+    scrollDriftListening = true;
+    lastScrollDriftY = window.scrollY;
+
+    window.addEventListener(
+        'scroll',
+        () => {
+            const y = window.scrollY;
+            const delta = y - lastScrollDriftY;
+            lastScrollDriftY = y;
+
+            if (delta === 0) {
+                return;
+            }
+
+            document.querySelectorAll('[data-scroll-drift]').forEach((node) => {
+                const state = scrollDriftStates.get(node);
+
+                if (! state || ! isNearViewport(node)) {
+                    return;
+                }
+
+                state.progress = Math.min(1, Math.max(0, state.progress + delta / state.range));
+
+                gsap.to(node, {
+                    x: (state.progress - state.rest) * 2 * state.distance,
+                    opacity: state.progress * state.maxOpacity,
+                    duration: 0.55,
+                    ease: 'power1.out',
+                    overwrite: 'auto',
+                    force3D: true,
+                });
+            });
+        },
+        { passive: true },
+    );
+}
+
+function isNearViewport(el) {
+    const rect = el.getBoundingClientRect();
+
+    return rect.bottom > 0 && rect.top < window.innerHeight;
+}
+
+// Livewire Navigate cachea document.documentElement.outerHTML para que
+// "atrás" sea instantáneo (su propio snapshotCache, no el bfcache del
+// navegador). Los data-*-bound que escribimos arriba son atributos reales,
+// así que quedan horneados en ese HTML cacheado: al restaurarlo, los
+// elementos (nodos nuevos, parseados del string) ya "parecen" inicializados
+// y nunca reciben un IntersectionObserver nuevo — las animaciones quedan
+// muertas en esa página para siempre. Limpiar los flags antes de que
+// Livewire tome la foto (en navigating, no en navigated) evita que viajen.
+document.addEventListener('livewire:navigating', () => {
+    document.querySelectorAll('[data-reveal-bound="true"]').forEach((el) => {
+        delete el.dataset.revealBound;
+    });
+    document.querySelectorAll('[data-count-bound="true"]').forEach((el) => {
+        delete el.dataset.countBound;
+    });
+    document.querySelectorAll('[data-scroll-drift-bound="true"]').forEach((el) => {
+        delete el.dataset.scrollDriftBound;
+    });
+});
 
 export function refreshScrollTriggers() {
     // Compat: los reveals con scroll usan IntersectionObserver.

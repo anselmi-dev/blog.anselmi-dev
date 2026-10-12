@@ -2,6 +2,9 @@
  * Cursor personalizado: punto + anillo con seguimiento suave (lerp).
  * Solo en puntero fino; respeta prefers-reduced-motion.
  */
+let cursorEl = null;
+let cursorBound = false;
+
 export function initCustomCursor(root = document) {
     if (typeof window === 'undefined') {
         return;
@@ -15,11 +18,19 @@ export function initCustomCursor(root = document) {
         return;
     }
 
-    if (document.documentElement.dataset.customCursorBound === 'true') {
+    // wire:navigate reemplaza el contenido de <body> y el nodo inyectado en
+    // runtime no forma parte de ninguna plantilla, así que la navegación lo
+    // descarta aunque el resto del estado (listeners, rAF) siga vivo.
+    // Reengancharlo alcanza, no hace falta recrear nada más.
+    if (cursorEl && ! document.body.contains(cursorEl)) {
+        document.body.appendChild(cursorEl);
+    }
+
+    if (cursorBound) {
         return;
     }
 
-    document.documentElement.dataset.customCursorBound = 'true';
+    cursorBound = true;
     document.documentElement.classList.add('has-custom-cursor');
 
     const cursor = document.createElement('div');
@@ -30,6 +41,7 @@ export function initCustomCursor(root = document) {
         <div class="site-cursor__dot"></div>
     `;
     document.body.appendChild(cursor);
+    cursorEl = cursor;
 
     const ring = cursor.querySelector('.site-cursor__ring');
     const dot = cursor.querySelector('.site-cursor__dot');
@@ -100,8 +112,13 @@ export function initCustomCursor(root = document) {
     rafId = window.requestAnimationFrame(tick);
 
     document.addEventListener('livewire:navigating', () => {
-        // El nodo vive en body y sobrevive a navigate; no destruir.
+        // Livewire Navigate guarda un snapshot en HTML de la página que estás
+        // dejando para que "atrás" sea instantáneo. Si el cursor sigue en el
+        // <body> en ese momento, queda horneado dentro de ese snapshot y al
+        // restaurarlo termina duplicado junto al nodo que reenganchamos acá
+        // abajo. Sacarlo del DOM antes de que se tome esa foto evita eso.
         setVisible(false);
+        cursor.remove();
     });
 
     return () => {
@@ -110,6 +127,7 @@ export function initCustomCursor(root = document) {
         window.removeEventListener('mouseleave', onLeave);
         cursor.remove();
         document.documentElement.classList.remove('has-custom-cursor');
-        delete document.documentElement.dataset.customCursorBound;
+        cursorEl = null;
+        cursorBound = false;
     };
 }
