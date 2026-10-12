@@ -46,14 +46,13 @@
             data-tools-wheel
             data-joined-header
             data-tools-wheel-jars="{{ json_encode($jarsData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}"
-            class="relative mx-auto max-w-8xl"
-            style="height: calc(100svh + {{ count($tools) }} * 38svh);"
+            class="relative mx-auto h-svh min-h-[36rem] max-w-8xl"
             aria-label="{{ __('Mis herramientas') }}"
         >
             <div
                 data-tools-wheel-stage
                 tabindex="0"
-                class="sticky top-0 h-svh cursor-grab touch-pan-y overflow-hidden rounded-b-xl bg-brand-lime transition-colors duration-300 sm:rounded-b-2xl outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/30"
+                class="relative h-full cursor-grab touch-pan-y select-none overflow-hidden rounded-b-xl bg-brand-lime transition-colors duration-300 sm:rounded-b-2xl outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/30"
                 role="region"
                 aria-roledescription="{{ __('carrusel') }}"
                 aria-label="{{ __('Frascos con las herramientas que uso') }}"
@@ -180,7 +179,7 @@
                         {{ __('Cada frasco es una herramienta de mi stack: lo que uso día a día para diseñar, construir y desplegar productos web. Tocá uno para ver qué es y para qué la uso.') }}
                     </p>
                     <p class="mt-3 font-folio-mono text-[0.65rem] uppercase tracking-widest text-zinc-400">
-                        {{ __('Scrolleá o arrastrá para girar') }}
+                        {{ __('Arrastrá o usá las flechas para girar') }}
                     </p>
                 </div>
             </div>

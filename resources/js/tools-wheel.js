@@ -23,11 +23,10 @@ function parseJars(section) {
 /**
  * Rueda de frascos de /servicios/herramientas.
  *
- * [data-tools-wheel] es una sección alta con un escenario sticky
- * ([data-tools-wheel-stage]). El scroll dentro de la sección se traduce en un
- * índice (0 → n-1) y la rueda gira para dejar ese frasco arriba. Arrastrar con
- * mouse o dedo, las flechas y los botones prev/next mueven el scroll, así el
- * scroll es la única fuente de verdad.
+ * El carrusel no usa el scroll de la página (la rueda del mouse solo mueve la
+ * página): se gira agarrándolo con el mouse o el dedo, con los botones
+ * prev/next o con las flechas del teclado. La posición no tiene límites y los
+ * frascos se repiten en bucle (wrappedOffset).
  *
  * Los frascos se dibujan en 3D con three.js (tools-jars-3d.js, carga diferida).
  * Si WebGL no está disponible se usa la versión HTML/CSS ([data-tools-wheel-ring]).
@@ -69,7 +68,6 @@ export function initToolsWheels(root = document) {
         let active = -1;
         let parallax = 0;
         let frame = null;
-        let snapTimer = null;
         let scene3d = null;
         let focusedIndex = -1;
         let pendingFocus = null;
@@ -108,45 +106,17 @@ export function initToolsWheels(root = document) {
             scene3d?.resize();
         };
 
-        const scrollRange = () => Math.max(1, section.offsetHeight - window.innerHeight);
-
-        const indexFromScroll = () => {
-            const top = section.getBoundingClientRect().top;
-            const progress = clamp(-top / scrollRange(), 0, 1);
-
-            return progress * count;
-        };
-
         const wrapIndex = (value) => ((Math.round(value) % count) + count) % count;
 
-        const scrollYFor = (position) => {
-            const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+        const goTo = (position) => {
+            target = position;
 
-            return sectionTop + (position / count) * scrollRange();
-        };
-
-        // Las posiciones 0 y count muestran lo mismo: saltar de una a otra es
-        // invisible y permite dar vueltas sin fin.
-        const teleport = (shift) => {
-            current += shift;
-            target += shift;
-            window.scrollTo({ top: scrollYFor(target), behavior: 'instant' });
-        };
-
-        const scrollToPosition = (position, behavior = 'smooth') => {
-            let next = position;
-
-            while (next < 0) {
-                teleport(count);
-                next += count;
+            // Mover el carrusel con el detalle abierto lo cierra.
+            if (focusedIndex >= 0 && Math.abs(wrappedOffset(focusedIndex, target, count)) > 0.25) {
+                closeFocus({ restoreFocus: false });
             }
 
-            while (next > count) {
-                teleport(-count);
-                next -= count;
-            }
-
-            window.scrollTo({ top: scrollYFor(next), behavior: reduced ? 'auto' : behavior });
+            requestRender();
         };
 
         /** Posición más cercana (yendo para el lado más corto) en la que queda centrado ese frasco. */
@@ -289,31 +259,13 @@ export function initToolsWheels(root = document) {
             }
         };
 
-        const onScroll = () => {
-            target = indexFromScroll();
-            requestRender();
-
-            // Scrollear con el detalle abierto lo cierra.
-            if (focusedIndex >= 0 && Math.abs(wrappedOffset(focusedIndex, target, count)) > 0.25) {
-                closeFocus({ restoreFocus: false });
-            }
-
-            window.clearTimeout(snapTimer);
-            snapTimer = window.setTimeout(() => {
-                const rect = section.getBoundingClientRect();
-                const inside = rect.top <= 0 && rect.bottom >= window.innerHeight;
-                const nearest = Math.round(target);
-
-                if (inside && Math.abs(nearest - target) > 0.02) {
-                    scrollToPosition(nearest);
-                }
-            }, 160);
-        };
-
         // ---- Interacción ---------------------------------------------------
 
-        // Arrastre horizontal (mouse o dedo) → scroll vertical de la sección.
+        // Arrastre horizontal (mouse o dedo). Al soltar sigue un poco por inercia
+        // y encaja en el frasco más cercano.
         let dragging = false;
+        let velocity = 0;
+        let lastMoveAt = 0;
         let lastX = 0;
         let downX = 0;
         let downY = 0;
@@ -326,6 +278,8 @@ export function initToolsWheels(root = document) {
 
             dragging = true;
             moved = false;
+            velocity = 0;
+            lastMoveAt = performance.now();
             lastX = downX = event.clientX;
             downY = event.clientY;
             stage.setPointerCapture(event.pointerId);
@@ -350,27 +304,25 @@ export function initToolsWheels(root = document) {
             }
 
             const dx = event.clientX - lastX;
+            const now = performance.now();
             lastX = event.clientX;
-            const pixelsPerItem = spacing || 1;
-            const deltaPositions = -dx / pixelsPerItem;
-
-            // Solo en el sentido del arrastre, para no rebotar entre los dos extremos.
-            if (deltaPositions < 0 && target + deltaPositions < 0.5) {
-                teleport(count);
-            } else if (deltaPositions > 0 && target + deltaPositions > count - 0.5) {
-                teleport(-count);
-            }
-
-            const delta = deltaPositions * (scrollRange() / count);
-
-            // behavior "instant": el <html> tiene scroll-smooth y cada movimiento cortaría al anterior.
-            window.scrollTo({ top: window.scrollY + delta, behavior: 'instant' });
+            velocity = dx / Math.max(1, now - lastMoveAt);
+            lastMoveAt = now;
+            goTo(target - dx / (spacing || 1));
         }, { signal });
 
         const endDrag = (event) => {
             const wasClick = dragging && ! moved;
+            const wasDrag = dragging && moved;
             dragging = false;
             stage.classList.remove('cursor-grabbing');
+
+            if (wasDrag) {
+                // Inercia: si se suelta en movimiento, avanza un poco más antes de encajar.
+                const recent = performance.now() - lastMoveAt < 80;
+                const fling = recent && ! reduced ? clamp((-velocity * 220) / (spacing || 1), -2, 2) : 0;
+                goTo(Math.round(target + fling));
+            }
 
             if (! wasClick || ! scene3d || event.type !== 'pointerup') {
                 return;
@@ -387,7 +339,7 @@ export function initToolsWheels(root = document) {
             } else {
                 closeFocus({ restoreFocus: false });
                 pendingFocus = index;
-                scrollToPosition(positionFor(index));
+                goTo(positionFor(index));
             }
         };
 
@@ -407,19 +359,19 @@ export function initToolsWheels(root = document) {
                 openFocus(wrapIndex(target));
             } else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
                 event.preventDefault();
-                scrollToPosition(Math.round(target) + 1);
+                goTo(Math.round(target) + 1);
             } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
                 event.preventDefault();
-                scrollToPosition(Math.round(target) - 1);
+                goTo(Math.round(target) - 1);
             }
         }, { signal });
 
         section.querySelectorAll('[data-tools-wheel-prev]').forEach((button) => {
-            button.addEventListener('click', () => scrollToPosition(Math.round(target) - 1), { signal });
+            button.addEventListener('click', () => goTo(Math.round(target) - 1), { signal });
         });
 
         section.querySelectorAll('[data-tools-wheel-next]').forEach((button) => {
-            button.addEventListener('click', () => scrollToPosition(Math.round(target) + 1), { signal });
+            button.addEventListener('click', () => goTo(Math.round(target) + 1), { signal });
         });
 
         section.querySelectorAll('[data-tools-wheel-open]').forEach((button) => {
@@ -428,15 +380,12 @@ export function initToolsWheels(root = document) {
 
         section.querySelector('[data-tools-wheel-close]')?.addEventListener('click', () => closeFocus(), { signal });
 
-        window.addEventListener('scroll', onScroll, { passive: true, signal });
         window.addEventListener('resize', () => {
             layout();
-            onScroll();
+            requestRender();
         }, { signal });
 
         layout();
-        target = indexFromScroll();
-        current = target;
         render();
         section.dataset.wheelReady = 'true';
 
@@ -472,8 +421,6 @@ export function initToolsWheels(root = document) {
 
         controllers.add(abort);
         signal.addEventListener('abort', () => {
-            window.clearTimeout(snapTimer);
-
             if (frame !== null) {
                 cancelAnimationFrame(frame);
             }

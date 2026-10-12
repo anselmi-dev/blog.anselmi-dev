@@ -51,7 +51,7 @@ test('tools page is translated under /en', function () {
 
     $this->get(localized_route('services.tools', [], 'en'))
         ->assertOk()
-        ->assertSee('Scroll or drag to spin')
+        ->assertSee('Drag or use the arrows to spin')
         ->assertSee('Backend & app structure')
         ->assertDontSee('Backend & estructura de la app');
 });
