@@ -86,9 +86,12 @@ export function initToolsWheels(root = document) {
          * detalle se acercan a ellos en vez de quedar pegados a los bordes.
          */
         const layout = () => {
-            // La sección ocupa lo que queda visible debajo del menú al abrir la página.
+            // La sección ocupa lo que queda visible debajo del menú al abrir la página,
+            // dejando abajo el mismo margen que hay arriba del menú.
             const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-            section.style.height = `${Math.max(560, window.innerHeight - sectionTop)}px`;
+            const headerFrame = document.querySelector('[data-site-header]')?.parentElement;
+            const bottomGap = headerFrame ? Math.max(0, headerFrame.getBoundingClientRect().top + window.scrollY) : 0;
+            section.style.height = `${Math.max(560, window.innerHeight - sectionTop - bottomGap)}px`;
 
             const width = stage.clientWidth;
             const height = stage.clientHeight;
