@@ -2,6 +2,7 @@
 
 use App\Models\Song;
 use App\Support\SpotifyEmbed;
+use Database\Seeders\SongSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -67,3 +68,14 @@ test('spotify links are converted to embed urls', function (?string $url, ?strin
     'other host' => ['https://evil.example.com/track/abc', null],
     'empty' => [null, null],
 ]);
+
+test('song seeder loads the playlist once without duplicating songs', function () {
+    $this->seed(SongSeeder::class);
+    $this->seed(SongSeeder::class);
+
+    expect(Song::query()->count())->toBe(11);
+
+    $this->get(route('playlist'))
+        ->assertOk()
+        ->assertSeeInOrder(['Need You Tonight', 'Losing My Religion', 'Hotel California - 2013 Remaster']);
+});
