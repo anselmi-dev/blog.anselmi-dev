@@ -29,4 +29,23 @@ final class SpotifyEmbed
 
         return $url;
     }
+
+    /**
+     * Convierte un enlace de Spotify (track, album, playlist…) en su URL de embed.
+     */
+    public static function toEmbedUrl(?string $url): ?string
+    {
+        if (! self::isAllowed($url)) {
+            return null;
+        }
+
+        $path = (string) parse_url($url, PHP_URL_PATH);
+        $path = preg_replace('#^/(intl-[a-z-]+/)?(embed/)?#i', '', $path);
+
+        if (! preg_match('#^(track|album|playlist|episode|show|artist)/[A-Za-z0-9]+$#', $path)) {
+            return null;
+        }
+
+        return 'https://open.spotify.com/embed/'.$path;
+    }
 }

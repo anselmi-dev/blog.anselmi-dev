@@ -11,6 +11,7 @@
 @php
     use App\Models\HomeSnapshot;
     use App\Models\ReadingBook;
+    use App\Models\Song;
     use App\Support\SpotifyEmbed;
 
     $snapshot = HomeSnapshot::current();
@@ -34,6 +35,7 @@
     $showBooks = count($bookList) > 0;
     $showMap = filled($mapImage) || filled($mapsUrl);
     $showSpotify = filled($spotifyEmbedUrl);
+    $showPlaylistLink = $showSpotify && Song::query()->published()->exists();
 @endphp
 
 @if ($showBooks || $showMap || $showSpotify)
@@ -191,17 +193,29 @@
                             <p class="text-lg font-normal uppercase leading-none tracking-tight text-zinc-500 lg:text-xl">
                                 ¿Qué escucho?
                             </p>
-                            @if (filled($spotifyUrl))
-                                <a
-                                    href="{{ $spotifyUrl }}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="inline-flex size-8 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
-                                    aria-label="Abrir en Spotify"
-                                >
-                                    <x-icon name="external-link" class="size-4" />
-                                </a>
-                            @endif
+                            <div class="flex shrink-0 items-center gap-1">
+                                @if ($showPlaylistLink)
+                                    <a
+                                        href="{{ route('playlist') }}"
+                                        wire:navigate
+                                        class="inline-flex h-8 items-center gap-1 rounded-full border border-zinc-200 px-3 text-sm text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                                    >
+                                        Ver más
+                                        <x-icon name="arrow-right" class="size-4" />
+                                    </a>
+                                @endif
+                                @if (filled($spotifyUrl))
+                                    <a
+                                        href="{{ $spotifyUrl }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-flex size-8 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                                        aria-label="Abrir en Spotify"
+                                    >
+                                        <x-icon name="external-link" class="size-4" />
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                         <div class="overflow-hidden rounded-xl bg-zinc-900/80 ring-1 ring-white/10">
                             <iframe

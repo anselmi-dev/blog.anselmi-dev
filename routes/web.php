@@ -6,6 +6,7 @@ use App\Livewire\Pages\Faq;
 use App\Livewire\Pages\Fonts;
 use App\Livewire\Pages\Gallery;
 use App\Livewire\Pages\Home;
+use App\Livewire\Pages\Playlist;
 use App\Livewire\Pages\Posts;
 use App\Livewire\Pages\PostShow;
 use App\Livewire\Pages\Projects;
@@ -20,6 +21,8 @@ Route::livewire('/sobre-mi', About::class)->name('about');
 Route::livewire('/faq', Faq::class)->name('faq');
 
 Route::livewire('/galeria', Gallery::class)->name('gallery');
+
+Route::livewire('/playlist', Playlist::class)->name('playlist');
 
 Route::livewire('/proyectos', Projects::class)->name('projects');
 Route::livewire('/proyectos/{slug}', ProjectShow::class)->name('projects.show');
