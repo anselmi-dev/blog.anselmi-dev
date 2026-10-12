@@ -3,20 +3,6 @@
     <noscript><style>[data-page-loader] { display: none !important; }</style></noscript>
 @endpush
 
-@section('header-content')
-    <x-hero-content>
-        <p class="mb-2 font-folio-mono text-xs font-medium uppercase tracking-widest text-zinc-600">
-            {{ __('Servicios') }}
-        </p>
-        <h1 class="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
-            {{ __('Mis herramientas') }}
-        </h1>
-        <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-            {{ __('Stack que uso día a día para diseñar, construir y desplegar productos web.') }}
-        </p>
-    </x-hero-content>
-@endsection
-
 @php
     /** Paletas de etiqueta: [fondo, manchas, texto, contenido del frasco]. Se repiten en orden. */
     $palettes = [
@@ -32,6 +18,7 @@
         'name' => $tool['name'],
         'category' => $tool['category'],
         'tagline' => $tool['tagline'],
+        'description' => $tool['description'] ?? null,
         'url' => $tool['url'],
         'icon' => $tool['icon'] ?? null,
         'palette' => $palettes[$index % count($palettes)],
@@ -65,7 +52,7 @@
             data-joined-header
             data-tools-wheel-jars="{{ json_encode($jarsData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}"
             class="relative mx-auto max-w-8xl"
-            style="height: calc(100svh + {{ max(0, count($tools) - 1) }} * 38svh);"
+            style="height: calc(100svh + {{ count($tools) }} * 38svh);"
             aria-label="{{ __('Mis herramientas') }}"
         >
             <div
@@ -171,7 +158,8 @@
                     <p data-panel-index class="font-folio-mono text-[0.7rem] tabular-nums tracking-widest text-zinc-400"></p>
                     <p data-panel-category class="mt-4 font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500"></p>
                     <h2 id="tools-wheel-panel-title" data-panel-name class="mt-1 font-[Fraunces,ui-serif,Georgia,serif] text-4xl italic leading-none text-zinc-900 sm:text-5xl"></h2>
-                    <p data-panel-tagline class="mt-4 text-sm leading-relaxed text-zinc-600 sm:text-base"></p>
+                    <p data-panel-tagline class="mt-3 text-base font-medium leading-snug text-zinc-800"></p>
+                    <p data-panel-description class="mt-3 text-sm leading-relaxed text-zinc-600"></p>
                     <a
                         data-panel-link
                         href="#"
@@ -184,9 +172,21 @@
                     </a>
                 </div>
 
-                <p class="pointer-events-none absolute inset-x-0 top-5 text-center font-folio-mono text-[0.65rem] uppercase tracking-widest text-zinc-400 sm:top-6">
-                    {{ __('Scrolleá o arrastrá para girar') }}
-                </p>
+                {{-- Título de la página, arriba de los frascos --}}
+                <div data-tools-wheel-title class="pointer-events-none absolute inset-x-0 top-0 z-[1] px-6 pt-6 text-center transition-opacity duration-300 sm:pt-10 lg:pt-12">
+                    <p class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">
+                        {{ __('Servicios') }}
+                    </p>
+                    <h1 class="mt-2 font-[Fraunces,ui-serif,Georgia,serif] text-4xl italic leading-none text-zinc-900 sm:text-5xl lg:text-6xl">
+                        {{ __('Mis herramientas') }}
+                    </h1>
+                    <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-600 sm:text-base">
+                        {{ __('Cada frasco es una herramienta de mi stack: lo que uso día a día para diseñar, construir y desplegar productos web. Tocá uno para ver qué es y para qué la uso.') }}
+                    </p>
+                    <p class="mt-3 font-folio-mono text-[0.65rem] uppercase tracking-widest text-zinc-400">
+                        {{ __('Scrolleá o arrastrá para girar') }}
+                    </p>
+                </div>
             </div>
         </section>
     @endif

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { wrappedOffset } from './tools-wheel-math';
 
 /**
  * Frascos 3D para la rueda de /servicios/herramientas.
@@ -345,7 +346,8 @@ export function createJarScene(container, jars, { getState, reducedMotion }) {
         const width = container.clientWidth || 1;
         const height = container.clientHeight || 1;
         const narrow = width < 640;
-        const jarWidthPx = Math.min(190, Math.max(130, width * 0.32));
+        // Mismo criterio que la versión HTML/CSS (tools-wheel.js).
+        const jarWidthPx = Math.min(190, Math.max(120, Math.min(width * 0.32, height * 0.2)));
         const pixelsPerUnit = jarWidthPx / JAR_WIDTH;
         const halfHeight = height / 2 / pixelsPerUnit;
         const distance = halfHeight / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
@@ -357,8 +359,8 @@ export function createJarScene(container, jars, { getState, reducedMotion }) {
         renderer.setSize(width, height, false);
 
         viewport = { halfWidth: halfHeight * camera.aspect, halfHeight, narrow };
-        // El frasco activo queda un poco por encima del centro, como en la versión CSS.
-        wheel.position.y = halfHeight * 0.16;
+                // Deja lugar arriba para el título y abajo para el detalle del frasco activo.
+        wheel.position.y = halfHeight * (narrow ? -0.04 : 0);
         needsRender = true;
     };
 
@@ -393,7 +395,8 @@ export function createJarScene(container, jars, { getState, reducedMotion }) {
         wheel.position.x = parallax / 60;
 
         items.forEach((item, i) => {
-            const offset = i - current;
+            // Bucle infinito: cada frasco toma el desplazamiento "dando la vuelta".
+            const offset = wrappedOffset(i, current, items.length);
             const distance = Math.abs(offset);
             const tilt = tiltFor(i);
 
@@ -418,7 +421,7 @@ export function createJarScene(container, jars, { getState, reducedMotion }) {
                     spin = lerp(spin, Math.PI * 2 * amount + focus.spin, amount);
                 } else {
                     y -= amount * viewport.halfHeight * 1.6;
-                    scale *= 1 - amount * 0.4;
+                    scale *= 1 - amount * 0.95;
                 }
             }
 

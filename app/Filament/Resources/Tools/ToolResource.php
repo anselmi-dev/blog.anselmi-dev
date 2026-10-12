@@ -10,6 +10,7 @@ use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
@@ -48,6 +49,11 @@ class ToolResource extends Resource
                     ->required(),
                 TextInput::make('tagline')
                     ->label('Descripción corta'),
+                Textarea::make('description')
+                    ->label('Descripción')
+                    ->helperText('Se muestra al abrir el frasco en detalle: qué es y para qué la usás.')
+                    ->rows(4)
+                    ->columnSpanFull(),
                 TextInput::make('url')
                     ->label('URL')
                     ->url()
@@ -77,6 +83,10 @@ class ToolResource extends Resource
                         TextInput::make('category_en')
                             ->label('Categoría (EN)')
                             ->maxLength(255),
+                        Textarea::make('description_en')
+                            ->label('Descripción (EN)')
+                            ->rows(4)
+                            ->columnSpanFull(),
                     ]),
             ]);
     }

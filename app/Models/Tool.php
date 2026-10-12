@@ -15,6 +15,7 @@ class Tool extends Model
     protected $fillable = [
         'name',
         'tagline',
+        'description',
         'url',
         'category',
         'icon',
@@ -22,6 +23,7 @@ class Tool extends Model
         'is_published',
         'tagline_en',
         'category_en',
+        'description_en',
     ];
 
     protected function casts(): array
@@ -45,6 +47,7 @@ class Tool extends Model
         return [
             'name' => $this->name,
             'tagline' => $this->translated('tagline'),
+            'description' => $this->translated('description'),
             'url' => $this->url,
             'category' => $this->translated('category'),
             'icon' => $this->icon,

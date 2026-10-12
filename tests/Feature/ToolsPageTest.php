@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Tool;
+use Database\Seeders\ToolDescriptionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -24,7 +25,7 @@ test('tools page shows a loader and one labeled jar per published tool', functio
     makeTool(['name' => 'Tailwind CSS', 'category' => 'Frontend', 'icon' => 'tailwindcss', 'sort_order' => 1]);
     makeTool(['name' => 'Herramienta oculta', 'is_published' => false]);
 
-    $response = $this->get(localized_route('services.tools'));
+    $response = $this->get(localized_route('services.tools', [], 'es'));
 
     $response->assertOk()
         ->assertSee('data-page-loader', false)
@@ -32,6 +33,7 @@ test('tools page shows a loader and one labeled jar per published tool', functio
         ->assertSee('https://cdn.simpleicons.org/laravel/', false)
         ->assertSeeInOrder(['Laravel', 'Tailwind CSS'])
         ->assertSee('01 / 02')
+        ->assertSee('Cada frasco es una herramienta de mi stack')
         ->assertDontSee('Herramienta oculta');
 
     expect(substr_count($response->getContent(), 'data-tools-wheel-item'))->toBe(2);
@@ -63,7 +65,11 @@ test('tools page content continues the header without a gap', function () {
 });
 
 test('tools page passes jar data to the 3d scene and has a detail panel', function () {
-    makeTool(['tagline_en' => 'Backend & app structure']);
+    makeTool([
+        'tagline_en' => 'Backend & app structure',
+        'description' => 'Framework PHP para aplicaciones web.',
+        'description_en' => 'A PHP framework for web applications.',
+    ]);
 
     $response = $this->get(localized_route('services.tools', [], 'en'))->assertOk();
 
@@ -75,6 +81,7 @@ test('tools page passes jar data to the 3d scene and has a detail panel', functi
             'name' => 'Laravel',
             'category' => 'Backend',
             'tagline' => 'Backend & app structure',
+            'description' => 'A PHP framework for web applications.',
             'url' => 'https://laravel.com',
             'icon' => 'laravel',
         ])
@@ -83,4 +90,17 @@ test('tools page passes jar data to the 3d scene and has a detail panel', functi
     $response->assertSee('data-tools-wheel-panel', false)
         ->assertSee('data-tools-wheel-canvas', false)
         ->assertSee('See jar in detail');
+});
+
+test('tool description seeder fills only empty descriptions', function () {
+    makeTool(['description' => 'Mi propia descripción.']);
+    makeTool(['name' => 'Livewire', 'category' => 'Frontend', 'icon' => 'livewire']);
+
+    $this->seed(ToolDescriptionSeeder::class);
+
+    expect(Tool::query()->where('name', 'Laravel')->first())
+        ->description->toBe('Mi propia descripción.')
+        ->description_en->toStartWith('A PHP framework');
+
+    expect(Tool::query()->where('name', 'Livewire')->value('description'))->toStartWith('Permite crear interfaces');
 });

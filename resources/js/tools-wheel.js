@@ -1,3 +1,5 @@
+import { wrappedOffset } from './tools-wheel-math';
+
 const controllers = new Set();
 
 function prefersReducedMotion() {
@@ -46,6 +48,7 @@ export function initToolsWheels(root = document) {
         const details = [...section.querySelectorAll('[data-tools-wheel-detail]')];
         const counter = section.querySelector('[data-tools-wheel-counter]');
         const footer = section.querySelector('[data-tools-wheel-footer]');
+        const title = section.querySelector('[data-tools-wheel-title]');
         const panel = section.querySelector('[data-tools-wheel-panel]');
         const jars = parseJars(section);
         const count = items.length;
@@ -74,13 +77,14 @@ export function initToolsWheels(root = document) {
         const layout = () => {
             const width = stage.clientWidth;
             const height = stage.clientHeight;
-            const jarWidth = clamp(width * 0.32, 130, 190);
+            // También depende del alto: arriba va el título y abajo el detalle.
+            const jarWidth = clamp(Math.min(width * 0.32, height * 0.2), 120, 190);
 
             spacing = jarWidth * 1.5;
 
             stage.style.setProperty('--jar-w', `${jarWidth}px`);
             stage.style.setProperty('--jar-h', `${jarWidth * 1.45}px`);
-            ring.style.top = `${height * 0.42}px`;
+            ring.style.top = `${height * 0.5}px`;
 
             scene3d?.resize();
         };
@@ -91,15 +95,47 @@ export function initToolsWheels(root = document) {
             const top = section.getBoundingClientRect().top;
             const progress = clamp(-top / scrollRange(), 0, 1);
 
-            return progress * (count - 1);
+            return progress * count;
         };
 
-        const scrollToIndex = (index, behavior = 'smooth') => {
-            const clamped = clamp(index, 0, count - 1);
-            const sectionTop = window.scrollY + section.getBoundingClientRect().top;
-            const y = sectionTop + (count > 1 ? (clamped / (count - 1)) * scrollRange() : 0);
+        const wrapIndex = (value) => ((Math.round(value) % count) + count) % count;
 
-            window.scrollTo({ top: y, behavior: reduced ? 'auto' : behavior });
+        const scrollYFor = (position) => {
+            const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+
+            return sectionTop + (position / count) * scrollRange();
+        };
+
+        // Las posiciones 0 y count muestran lo mismo: saltar de una a otra es
+        // invisible y permite dar vueltas sin fin.
+        const teleport = (shift) => {
+            current += shift;
+            target += shift;
+            window.scrollTo({ top: scrollYFor(target), behavior: 'instant' });
+        };
+
+        const scrollToPosition = (position, behavior = 'smooth') => {
+            let next = position;
+
+            while (next < 0) {
+                teleport(count);
+                next += count;
+            }
+
+            while (next > count) {
+                teleport(-count);
+                next -= count;
+            }
+
+            window.scrollTo({ top: scrollYFor(next), behavior: reduced ? 'auto' : behavior });
+        };
+
+        /** Posición más cercana (yendo para el lado más corto) en la que queda centrado ese frasco. */
+        const positionFor = (index) => {
+            const base = Math.round(target);
+            const forward = (((index - base) % count) + count) % count;
+
+            return base + (forward > count / 2 ? forward - count : forward);
         };
 
         const setActive = (index) => {
@@ -135,6 +171,7 @@ export function initToolsWheels(root = document) {
             panel.querySelector('[data-panel-category]').textContent = jar.category ?? '';
             panel.querySelector('[data-panel-name]').textContent = jar.name ?? '';
             panel.querySelector('[data-panel-tagline]').textContent = jar.tagline ?? '';
+            panel.querySelector('[data-panel-description]').textContent = jar.description ?? '';
 
             const link = panel.querySelector('[data-panel-link]');
             link.hidden = ! jar.url;
@@ -152,6 +189,7 @@ export function initToolsWheels(root = document) {
             section.dataset.focused = 'true';
             panel.hidden = false;
             footer?.classList.add('opacity-0', 'pointer-events-none');
+            title?.classList.add('opacity-0');
             panel.animate?.(
                 [{ opacity: 0, translate: '0 16px' }, { opacity: 1, translate: '0 0' }],
                 { duration: reduced ? 1 : 450, delay: reduced ? 0 : 300, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' },
@@ -173,6 +211,7 @@ export function initToolsWheels(root = document) {
             }
 
             footer?.classList.remove('opacity-0', 'pointer-events-none');
+            title?.classList.remove('opacity-0');
 
             if (restoreFocus) {
                 stage.focus({ preventScroll: true });
@@ -195,7 +234,7 @@ export function initToolsWheels(root = document) {
                 // Misma idea que la escena 3D: los de la derecha más chicos (más lejos),
                 // los de la izquierda más grandes (más cerca).
                 items.forEach((item, i) => {
-                    const offset = i - current;
+                    const offset = wrappedOffset(i, current, count);
                     const depthScale = offset > 0 ? 1 / (1 + offset * 0.13) : 1 + Math.min(-offset, 1.7) * 0.09;
                     const x = offset * spacing * (offset > 0 ? 1 / (1 + offset * 0.06) : 1);
                     const y = Math.sin(offset * 0.85) * spacing * 0.08;
@@ -212,9 +251,9 @@ export function initToolsWheels(root = document) {
                 scene3d.invalidate();
             }
 
-            setActive(Math.round(current));
+            setActive(wrapIndex(current));
 
-            if (pendingFocus !== null && Math.abs(current - pendingFocus) < 0.02) {
+            if (pendingFocus !== null && Math.abs(wrappedOffset(pendingFocus, current, count)) < 0.02) {
                 const index = pendingFocus;
                 pendingFocus = null;
                 openFocus(index);
@@ -236,7 +275,7 @@ export function initToolsWheels(root = document) {
             requestRender();
 
             // Scrollear con el detalle abierto lo cierra.
-            if (focusedIndex >= 0 && Math.abs(target - focusedIndex) > 0.25) {
+            if (focusedIndex >= 0 && Math.abs(wrappedOffset(focusedIndex, target, count)) > 0.25) {
                 closeFocus({ restoreFocus: false });
             }
 
@@ -247,7 +286,7 @@ export function initToolsWheels(root = document) {
                 const nearest = Math.round(target);
 
                 if (inside && Math.abs(nearest - target) > 0.02) {
-                    scrollToIndex(nearest);
+                    scrollToPosition(nearest);
                 }
             }, 160);
         };
@@ -294,7 +333,16 @@ export function initToolsWheels(root = document) {
             const dx = event.clientX - lastX;
             lastX = event.clientX;
             const pixelsPerItem = spacing || 1;
-            const delta = (-dx / pixelsPerItem) * (scrollRange() / Math.max(1, count - 1));
+            const deltaPositions = -dx / pixelsPerItem;
+
+            // Solo en el sentido del arrastre, para no rebotar entre los dos extremos.
+            if (deltaPositions < 0 && target + deltaPositions < 0.5) {
+                teleport(count);
+            } else if (deltaPositions > 0 && target + deltaPositions > count - 0.5) {
+                teleport(-count);
+            }
+
+            const delta = deltaPositions * (scrollRange() / count);
 
             // behavior "instant": el <html> tiene scroll-smooth y cada movimiento cortaría al anterior.
             window.scrollTo({ top: window.scrollY + delta, behavior: 'instant' });
@@ -315,12 +363,12 @@ export function initToolsWheels(root = document) {
                 closeFocus();
             } else if (index === focusedIndex) {
                 closeFocus();
-            } else if (index === Math.round(target)) {
+            } else if (index === wrapIndex(target)) {
                 openFocus(index);
             } else {
                 closeFocus({ restoreFocus: false });
                 pendingFocus = index;
-                scrollToIndex(index);
+                scrollToPosition(positionFor(index));
             }
         };
 
@@ -337,22 +385,22 @@ export function initToolsWheels(root = document) {
                 closeFocus();
             } else if (event.key === 'Enter' && event.target === stage && scene3d) {
                 event.preventDefault();
-                openFocus(Math.round(target));
+                openFocus(wrapIndex(target));
             } else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
                 event.preventDefault();
-                scrollToIndex(Math.round(target) + 1);
+                scrollToPosition(Math.round(target) + 1);
             } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
                 event.preventDefault();
-                scrollToIndex(Math.round(target) - 1);
+                scrollToPosition(Math.round(target) - 1);
             }
         }, { signal });
 
         section.querySelectorAll('[data-tools-wheel-prev]').forEach((button) => {
-            button.addEventListener('click', () => scrollToIndex(Math.round(target) - 1), { signal });
+            button.addEventListener('click', () => scrollToPosition(Math.round(target) - 1), { signal });
         });
 
         section.querySelectorAll('[data-tools-wheel-next]').forEach((button) => {
-            button.addEventListener('click', () => scrollToIndex(Math.round(target) + 1), { signal });
+            button.addEventListener('click', () => scrollToPosition(Math.round(target) + 1), { signal });
         });
 
         section.querySelectorAll('[data-tools-wheel-open]').forEach((button) => {
