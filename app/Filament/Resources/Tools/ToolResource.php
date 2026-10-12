@@ -6,11 +6,13 @@ use App\Filament\Resources\Tools\Pages\CreateTool;
 use App\Filament\Resources\Tools\Pages\EditTool;
 use App\Filament\Resources\Tools\Pages\ListTools;
 use App\Models\Tool;
+use App\Support\JarShape;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -72,6 +74,11 @@ class ToolResource extends Resource
                 ColorPicker::make('fill_color')
                     ->label('Color del contenido')
                     ->helperText('Lo que se ve dentro del frasco. Opcional.'),
+                Select::make('jar_shape')
+                    ->label('Forma del frasco')
+                    ->options(JarShape::class)
+                    ->placeholder('Automática')
+                    ->helperText('Si la dejás vacía, se elige una según el orden.'),
                 TextInput::make('sort_order')
                     ->label('Orden')
                     ->numeric()

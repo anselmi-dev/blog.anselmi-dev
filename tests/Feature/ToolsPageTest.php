@@ -5,6 +5,7 @@ use App\Models\Setting;
 use App\Models\Tool;
 use App\Models\User;
 use App\Support\JarPalette;
+use App\Support\JarShape;
 use Database\Seeders\ToolDescriptionSeeder;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -160,4 +161,33 @@ test('tools page shows the loader when it is enabled in the settings', function 
     $this->get(localized_route('services.tools', [], 'es'))
         ->assertOk()
         ->assertSee('data-page-loader', false);
+});
+
+test('each jar uses the shape chosen in filament', function () {
+    makeTool(['jar_shape' => JarShape::Hexagonal]);
+    makeTool(['name' => 'Sin forma', 'sort_order' => 1]);
+
+    $response = $this->get(localized_route('services.tools', [], 'es'))->assertOk();
+
+    preg_match('/data-tools-wheel-jars="([^"]+)"/', $response->getContent(), $matches);
+    $shapes = array_column(json_decode(html_entity_decode($matches[1]), true), 'shape');
+
+    expect($shapes)->toBe(['hexagonal', JarShape::fallback(1)->value]);
+    $response->assertSee('data-shape="hexagonal"', false);
+});
+
+test('admin can choose the jar shape of a tool', function () {
+    $user = User::factory()->create();
+    config(['app.admin_emails' => [strtolower($user->email)]]);
+    $this->actingAs($user);
+    Filament::setCurrentPanel('admin');
+
+    $tool = makeTool();
+
+    Livewire::test(EditTool::class, ['record' => $tool->getRouteKey()])
+        ->fillForm(['jar_shape' => 'round'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($tool->refresh()->jar_shape)->toBe(JarShape::Round);
 });

@@ -430,6 +430,35 @@ select:focus[data-flux-control] {
         linear-gradient(90deg, transparent 76%, rgb(255 255 255 / 0.2) 80%, transparent 86%);
 }
 
+/* Formas del frasco en la versión HTML/CSS (la 3D está en tools-jars-3d.js). */
+.tools-jar[data-shape='tall'] {
+    scale: 0.8 1.12;
+}
+
+.tools-jar[data-shape='squat'] {
+    scale: 1.15 0.72;
+    translate: 0 14%;
+}
+
+.tools-jar[data-shape='round'] .tools-jar__body {
+    border-radius: 42% 42% 46% 46% / 34% 34% 40% 40%;
+}
+
+.tools-jar[data-shape='round'] .tools-jar__lid {
+    inset-inline: 20%;
+}
+
+.tools-jar[data-shape='hexagonal'] .tools-jar__body {
+    border-radius: 4%;
+    clip-path: polygon(0 3%, 100% 3%, 100% 100%, 0 100%);
+}
+
+.tools-jar[data-shape='hexagonal'] .tools-jar__glass {
+    background:
+        linear-gradient(90deg, rgb(0 0 0 / 0.2) 0 18%, transparent 18% 82%, rgb(0 0 0 / 0.18) 82%),
+        linear-gradient(90deg, transparent 22%, rgb(255 255 255 / 0.4) 26%, transparent 32%);
+}
+
 /* Rueda de frascos: los frascos se ubican sobre un arco y la rueda gira con JS.
  * Con la escena 3D activa (data-wheel3d) la versión HTML/CSS se oculta. */
 [data-wheel3d] .tools-wheel__ring {

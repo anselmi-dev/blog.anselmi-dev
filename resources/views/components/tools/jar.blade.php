@@ -2,6 +2,8 @@
     'name' => '',
     'category' => '',
     'icon' => null,
+    /** Forma (App\Support\JarShape): classic, tall, squat, round o hexagonal. */
+    'shape' => 'classic',
     /** Paleta de la etiqueta: [fondo, manchas, texto, contenido del frasco]. */
     'palette' => ['#1f4d33', '#3f7a52', '#f5efe0', '#c99a4b'],
 ])
@@ -14,6 +16,7 @@
 {{-- Frasco de vidrio con tapa metálica y etiqueta de la tecnología. Todo en HTML/CSS para poder reusarlo con cualquier herramienta. --}}
 <div
     {{ $attributes->class(['tools-jar relative select-none']) }}
+    data-shape="{{ $shape }}"
     style="--jar-label: {{ $labelColor }}; --jar-blob: {{ $blobColor }}; --jar-ink: {{ $inkColor }}; --jar-fill: {{ $fillColor }};"
     aria-hidden="true"
 >

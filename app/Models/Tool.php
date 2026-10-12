@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Concerns\HasEnglishTranslations;
 use App\Support\JarPalette;
+use App\Support\JarShape;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,6 +23,7 @@ class Tool extends Model
         'icon',
         'label_color',
         'fill_color',
+        'jar_shape',
         'sort_order',
         'is_published',
         'tagline_en',
@@ -33,6 +35,7 @@ class Tool extends Model
     {
         return [
             'is_published' => 'boolean',
+            'jar_shape' => JarShape::class,
             'sort_order' => 'integer',
         ];
     }
@@ -55,6 +58,7 @@ class Tool extends Model
             'category' => $this->translated('category'),
             'icon' => $this->icon,
             'palette' => JarPalette::fromColors($this->label_color, $this->fill_color),
+            'shape' => $this->jar_shape?->value,
         ];
     }
 }

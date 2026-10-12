@@ -24,7 +24,6 @@ const VISIBLE_AHEAD = 3.6;
 function tiltFor(index) {
     return Math.sin(index * 2.1 + 0.6) * 0.16;
 }
-const LABEL_HEIGHT = 1.05;
 const FONT = 'Fraunces, ui-serif, Georgia, serif';
 
 function supportsWebGL() {
@@ -45,33 +44,105 @@ function easeInOut(t) {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-/** Perfil del vidrio (radio, altura) para LatheGeometry. */
-function glassProfile() {
-    return [
-        [0, 0],
-        [0.86, 0],
-        [0.95, 0.03],
-        [1, 0.14],
-        [1, 1.86],
-        [0.97, 1.98],
-        [0.9, 2.04],
-        [0.88, 2.1],
-        [0.88, 2.2],
-    ].map(([x, y]) => new THREE.Vector2(x, y));
+/**
+ * Formas de frasco (App\\Support\\JarShape). Cada una define el perfil del vidrio
+ * (radio, altura) para LatheGeometry, hasta dónde llega el contenido, dónde va
+ * la etiqueta y la tapa. Las alturas están en unidades de la escena (el
+ * frasco clásico mide 2 de ancho).
+ */
+const CLASSIC_PROFILE = [
+    [0, 0], [0.86, 0], [0.95, 0.03], [1, 0.14], [1, 1.86],
+    [0.97, 1.98], [0.9, 2.04], [0.88, 2.1], [0.88, 2.2],
+];
+
+const JAR_SHAPES = {
+    classic: {
+        profile: CLASSIC_PROFILE,
+        fillTop: 1.84,
+        label: { radius: 1.012, height: 1.05, y: 0.98 },
+        lid: { radius: 0.97, bottom: 2.13, top: 2.62 },
+    },
+    tall: {
+        profile: [
+            [0, 0], [0.7, 0], [0.78, 0.03], [0.82, 0.14], [0.82, 2.5],
+            [0.79, 2.62], [0.72, 2.68], [0.7, 2.74], [0.7, 2.84],
+        ],
+        fillTop: 2.46,
+        label: { radius: 0.832, height: 1.3, y: 1.3 },
+        lid: { radius: 0.79, bottom: 2.77, top: 3.2 },
+    },
+    squat: {
+        profile: [
+            [0, 0], [1.02, 0], [1.12, 0.03], [1.18, 0.12], [1.18, 1.12],
+            [1.14, 1.22], [1.06, 1.27], [1.04, 1.32], [1.04, 1.42],
+        ],
+        fillTop: 1.1,
+        label: { radius: 1.192, height: 0.78, y: 0.6 },
+        lid: { radius: 1.13, bottom: 1.35, top: 1.74 },
+    },
+    round: {
+        profile: [
+            [0, 0], [0.55, 0], [0.8, 0.1], [0.98, 0.36], [1.07, 0.72], [1.07, 1.0],
+            [0.98, 1.34], [0.84, 1.6], [0.74, 1.76], [0.72, 1.86], [0.72, 1.96],
+        ],
+        fillTop: 1.5,
+        label: { radius: 1.085, height: 0.62, y: 0.86 },
+        lid: { radius: 0.8, bottom: 1.89, top: 2.28 },
+    },
+    hexagonal: {
+        profile: CLASSIC_PROFILE,
+        fillTop: 1.84,
+        label: { radius: 1.015, height: 1.05, y: 0.98 },
+        lid: { radius: 0.97, bottom: 2.13, top: 2.62 },
+        // 6 caras planas, con una cara (no una arista) de frente.
+        segments: 6,
+        phiStart: Math.PI / 6,
+    },
+};
+
+function shapeFor(name) {
+    return JAR_SHAPES[name] ?? JAR_SHAPES.classic;
 }
 
-/** Perfil de la tapa con borde redondeado. */
-function lidProfile() {
+function toVectors(points) {
+    return points.map(([x, y]) => new THREE.Vector2(x, y));
+}
+
+/** Contenido: el mismo perfil que el vidrio, un poco más angosto y cortado en fillTop. */
+function fillProfile(profile, fillTop) {
+    const points = [];
+
+    for (let i = 0; i < profile.length; i++) {
+        const [x, y] = profile[i];
+
+        if (y <= fillTop) {
+            points.push([x * 0.94, Math.max(0.05, y)]);
+            continue;
+        }
+
+        const [px, py] = profile[i - 1];
+        const radiusAtTop = px + ((x - px) * (fillTop - py)) / (y - py);
+        points.push([radiusAtTop * 0.94, fillTop]);
+        break;
+    }
+
+    points.push([0, fillTop]);
+
+    return points;
+}
+
+/** Tapa con borde redondeado. */
+function lidProfile({ radius, bottom, top }) {
     return [
-        [0, 2.62],
-        [0.86, 2.62],
-        [0.93, 2.6],
-        [0.965, 2.55],
-        [0.97, 2.5],
-        [0.97, 2.18],
-        [0.95, 2.14],
-        [0.9, 2.13],
-    ].map(([x, y]) => new THREE.Vector2(x, y));
+        [0, top],
+        [radius - 0.11, top],
+        [radius - 0.04, top - 0.02],
+        [radius - 0.005, top - 0.07],
+        [radius, top - 0.12],
+        [radius, bottom + 0.05],
+        [radius - 0.02, bottom + 0.01],
+        [radius - 0.07, bottom],
+    ];
 }
 
 /** Rayas verticales finas para el lateral de la tapa (mapa de rugosidad). */
@@ -165,6 +236,26 @@ function drawLabel(ctx, jar, index, logo) {
     ctx.fillRect(0, height - 13, width, 3);
     ctx.globalAlpha = 1;
 
+    // Texto chico en la parte de atrás, como la etiqueta trasera de un frasco.
+    const backScale = Math.min(1, height / 340);
+    ctx.fillStyle = inkColor;
+    ctx.font = `400 ${Math.round(22 * backScale)}px ${FONT}`;
+    ctx.globalAlpha = 0.65;
+    [jar.name, jar.category, jar.tagline || '', 'anselmi.dev'].forEach((line, i) => {
+        const y = (70 + i * 36) * backScale + (height - 340 * backScale) / 2;
+        ctx.fillText(String(line), 60, y, 420);
+        ctx.fillText(String(line), width - 480, y, 420);
+    });
+    ctx.globalAlpha = 1;
+
+    // Los textos se diseñan para una etiqueta de 340 px de alto: en etiquetas más
+    // bajas se achican (sin deformarse) y en las más altas se centran.
+    const designHeight = 340;
+    const scale = Math.min(1, height / designHeight);
+    ctx.save();
+    ctx.translate(center * (1 - scale), (height - designHeight * scale) / 2);
+    ctx.scale(scale, scale);
+
     const left = center - 300;
     const maxWidth = 600;
 
@@ -187,46 +278,52 @@ function drawLabel(ctx, jar, index, logo) {
 
     ctx.font = `400 26px ${FONT}`;
     ctx.globalAlpha = 0.7;
-    ctx.fillText('anselmi.dev', left, height - 44);
+    ctx.fillText('anselmi.dev', left, designHeight - 44);
     ctx.globalAlpha = 1;
 
     if (logo) {
         ctx.drawImage(logo, center + 300 - 84, 44, 84, 84);
     }
 
-    // Texto chico en la parte de atrás, como la etiqueta trasera de un frasco.
-    ctx.font = `400 22px ${FONT}`;
-    ctx.globalAlpha = 0.65;
-    const lines = [jar.name, jar.category, jar.tagline || '', 'anselmi.dev'];
-    lines.forEach((line, i) => {
-        ctx.fillText(String(line), 60, 70 + i * 36, 420);
-        ctx.fillText(String(line), width - 480, 70 + i * 36, 420);
-    });
     ctx.globalAlpha = 1;
+    ctx.restore();
 }
 
 function createJar(jar, index, materials, onLabelUpdate) {
     const [, , inkColor, fillColor] = jar.palette;
+    const shape = shapeFor(jar.shape);
+    const segments = shape.segments ?? 72;
+    const phiStart = shape.phiStart ?? 0;
     const group = new THREE.Group();
 
-    const glass = new THREE.Mesh(new THREE.LatheGeometry(glassProfile(), 72), materials.glass);
+    const glass = new THREE.Mesh(
+        new THREE.LatheGeometry(toVectors(shape.profile), segments, phiStart),
+        materials.glass,
+    );
     glass.renderOrder = 2;
     group.add(glass);
 
     const fill = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.94, 0.9, 1.78, 64),
+        new THREE.LatheGeometry(toVectors(fillProfile(shape.profile, shape.fillTop)), segments, phiStart),
         new THREE.MeshStandardMaterial({ color: fillColor, roughness: 0.6, metalness: 0 }),
     );
-    fill.position.y = 0.06 + 1.78 / 2;
     group.add(fill);
 
+    // El alto del canvas sigue la proporción de la etiqueta para que el texto no se deforme.
+    const { radius: labelRadius, height: labelHeight, y: labelY } = shape.label;
     const canvas = document.createElement('canvas');
     canvas.width = 2048;
-    canvas.height = 340;
+    canvas.height = Math.round((2048 * labelHeight) / (2 * Math.PI * labelRadius));
     const ctx = canvas.getContext('2d');
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = 4;
+
+    if (phiStart) {
+        // Corre la etiqueta para que el texto quede centrado en la cara de frente.
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.offset.x = phiStart / (2 * Math.PI);
+    }
 
     const redraw = (logo = null) => {
         drawLabel(ctx, jar, index, logo);
@@ -242,23 +339,24 @@ function createJar(jar, index, materials, onLabelUpdate) {
     });
 
     const label = new THREE.Mesh(
-        new THREE.CylinderGeometry(1.012, 1.012, LABEL_HEIGHT, 96, 1, true, Math.PI, Math.PI * 2),
+        new THREE.CylinderGeometry(labelRadius, labelRadius, labelHeight, shape.segments ?? 96, 1, true, Math.PI + phiStart, Math.PI * 2),
         new THREE.MeshStandardMaterial({ map: texture, roughness: 0.5, metalness: 0 }),
     );
-    label.position.y = 0.98;
+    label.position.y = labelY;
     group.add(label);
 
-    const lid = new THREE.Mesh(new THREE.LatheGeometry(lidProfile(), 96), materials.lid);
+    const lid = new THREE.Mesh(new THREE.LatheGeometry(toVectors(lidProfile(shape.lid)), 96), materials.lid);
     group.add(lid);
 
-    const lidTop = new THREE.Mesh(new THREE.CircleGeometry(0.86, 64), materials.lidTop);
+    const lidTop = new THREE.Mesh(new THREE.CircleGeometry(shape.lid.radius - 0.11, 64), materials.lidTop);
     lidTop.rotation.x = -Math.PI / 2;
-    lidTop.position.y = 2.632;
+    lidTop.position.y = shape.lid.top + 0.012;
     group.add(lidTop);
 
     // El origen del frasco queda en su centro.
+    const center = shape.lid.top / 2;
     group.children.forEach((child) => {
-        child.position.y -= 1.31;
+        child.position.y -= center;
         child.userData.jarIndex = index;
     });
 

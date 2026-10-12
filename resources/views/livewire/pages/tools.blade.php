@@ -14,6 +14,7 @@
         'url' => $tool['url'],
         'icon' => $tool['icon'] ?? null,
         'palette' => $tool['palette'] ?? \App\Support\JarPalette::fallback($index),
+        'shape' => $tool['shape'] ?? \App\Support\JarShape::fallback($index)->value,
     ])->all();
 @endphp
 
@@ -70,6 +71,7 @@
                                     :category="$tool['category']"
                                     :icon="$tool['icon'] ?? null"
                                     :palette="$tool['palette'] ?? \App\Support\JarPalette::fallback($index)"
+                                    :shape="$tool['shape'] ?? \App\Support\JarShape::fallback($index)->value"
                                 />
                             </div>
                         </div>
