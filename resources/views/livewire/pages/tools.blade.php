@@ -46,91 +46,98 @@
             data-tools-wheel
             data-joined-header
             data-tools-wheel-jars="{{ json_encode($jarsData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}"
-            class="relative mx-auto h-svh min-h-[36rem] max-w-8xl"
+            class="relative mx-auto h-[calc(100svh-8rem)] min-h-[35rem] max-w-8xl"
             aria-label="{{ __('Mis herramientas') }}"
         >
             <div
                 data-tools-wheel-stage
                 tabindex="0"
-                class="relative h-full cursor-grab touch-pan-y select-none overflow-hidden rounded-b-xl bg-brand-lime transition-colors duration-300 sm:rounded-b-2xl outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/30"
+                class="relative h-full cursor-grab touch-pan-y select-none rounded-b-xl bg-brand-lime transition-colors duration-300 sm:rounded-b-2xl outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/30"
                 role="region"
                 aria-roledescription="{{ __('carrusel') }}"
                 aria-label="{{ __('Frascos con las herramientas que uso') }}"
             >
-                {{-- Escena 3D (three.js). Si WebGL no está disponible queda la versión HTML/CSS de abajo. --}}
-                <div data-tools-wheel-canvas class="absolute inset-0" aria-hidden="true"></div>
+                {{-- Escena 3D (three.js), a todo el ancho de la pantalla para que los frascos entren y salgan por los bordes. Si WebGL no está disponible queda la versión HTML/CSS de abajo. --}}
+                <div class="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-hidden">
+                    <div data-tools-wheel-canvas class="absolute inset-0" aria-hidden="true"></div>
 
-                <div data-tools-wheel-ring class="tools-wheel__ring">
-                    @foreach ($tools as $index => $tool)
-                        <div data-tools-wheel-item class="tools-wheel__item">
-                            <div class="size-full transition-[filter] duration-500 [[data-active]>&]:drop-shadow-[0_24px_30px_rgb(60_40_20/0.25)]">
-                                <x-tools.jar
-                                    class="size-full text-[calc(var(--jar-w)*0.11)]"
-                                    :name="$tool['name']"
-                                    :category="$tool['category']"
-                                    :icon="$tool['icon'] ?? null"
-                                    :palette="$tool['palette'] ?? \App\Support\JarPalette::fallback($index)"
-                                    :shape="$tool['shape'] ?? \App\Support\JarShape::fallback($index)->value"
-                                />
+                    <div data-tools-wheel-ring class="tools-wheel__ring">
+                        @foreach ($tools as $index => $tool)
+                            <div data-tools-wheel-item class="tools-wheel__item">
+                                <div class="size-full transition-[filter] duration-500 [[data-active]>&]:drop-shadow-[0_24px_30px_rgb(60_40_20/0.25)]">
+                                    <x-tools.jar
+                                        class="size-full text-[calc(var(--jar-w)*0.11)]"
+                                        :name="$tool['name']"
+                                        :category="$tool['category']"
+                                        :icon="$tool['icon'] ?? null"
+                                        :palette="$tool['palette'] ?? \App\Support\JarPalette::fallback($index)"
+                                        :shape="$tool['shape'] ?? \App\Support\JarShape::fallback($index)->value"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
 
-                <div data-tools-wheel-footer class="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center gap-4 px-6 pb-8 text-center transition-opacity duration-300 sm:pb-10">
-                    @foreach ($tools as $index => $tool)
-                        <div
-                            data-tools-wheel-detail
-                            class="pointer-events-auto flex max-w-md flex-col items-center"
-                            aria-live="polite"
-                            @if ($index > 0) hidden @endif
-                        >
-                            <p class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ $tool['category'] }}</p>
-                            <h2 class="mt-1 font-[Fraunces,ui-serif,Georgia,serif] text-3xl italic text-zinc-900 sm:text-4xl">{{ $tool['name'] }}</h2>
-                            <p class="mt-2 text-sm leading-relaxed text-zinc-600">{{ $tool['tagline'] }}</p>
-                            @if (filled($tool['url']))
-                                <a
-                                    href="{{ $tool['url'] }}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900"
-                                >
-                                    {{ __('Visitar sitio') }}
-                                    <x-icon name="arrow-up-right" class="size-4" />
-                                </a>
-                            @endif
-                            <button
-                                type="button"
-                                data-tools-wheel-open="{{ $index }}"
-                                hidden
-                                class="mt-2 cursor-pointer text-xs font-medium text-zinc-500 underline decoration-zinc-300 underline-offset-4 transition hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
-                            >
-                                {{ __('Ver frasco en detalle') }}
-                            </button>
-                        </div>
-                    @endforeach
-
-                    <div class="pointer-events-auto flex items-center gap-4">
+                <div data-tools-wheel-footer class="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-8 text-center transition-opacity duration-300 sm:pb-10">
+                    {{-- Botones a los costados del nombre de la herramienta --}}
+                    <div class="relative w-full max-w-xl">
                         <button
                             type="button"
                             data-tools-wheel-prev
-                            class="inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-900/20 text-zinc-900 transition hover:border-zinc-900 hover:bg-zinc-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                            class="pointer-events-auto absolute top-4 inline-flex size-12 cursor-pointer items-center justify-center rounded-full border border-zinc-900/25 bg-brand-lime text-zinc-900 transition hover:border-zinc-900 hover:bg-zinc-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 sm:size-14 left-0"
                             aria-label="{{ __('Herramienta anterior') }}"
                         >
-                            <x-icon name="arrow-left" class="size-4" />
+                            <x-icon name="arrow-left" class="size-5 sm:size-6" />
                         </button>
-                        <span data-tools-wheel-counter class="min-w-16 font-folio-mono text-xs tabular-nums tracking-widest text-zinc-500">
-                            01 / {{ str_pad((string) count($tools), 2, '0', STR_PAD_LEFT) }}
-                        </span>
                         <button
                             type="button"
                             data-tools-wheel-next
-                            class="inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-900/20 text-zinc-900 transition hover:border-zinc-900 hover:bg-zinc-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                            class="pointer-events-auto absolute top-4 inline-flex size-12 cursor-pointer items-center justify-center rounded-full border border-zinc-900/25 bg-brand-lime text-zinc-900 transition hover:border-zinc-900 hover:bg-zinc-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 sm:size-14 right-0"
                             aria-label="{{ __('Herramienta siguiente') }}"
                         >
-                            <x-icon name="arrow-right" class="size-4" />
+                            <x-icon name="arrow-right" class="size-5 sm:size-6" />
                         </button>
+
+                        <div class="mx-auto max-w-[calc(100%-7.5rem)] sm:max-w-md">
+                        @foreach ($tools as $index => $tool)
+                            <div
+                                data-tools-wheel-detail
+                                class="pointer-events-auto flex max-w-md flex-col items-center"
+                                aria-live="polite"
+                                @if ($index > 0) hidden @endif
+                            >
+                                <p class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ $tool['category'] }}</p>
+                                <h2 class="mt-1 font-[Fraunces,ui-serif,Georgia,serif] text-3xl italic text-zinc-900 sm:text-4xl">{{ $tool['name'] }}</h2>
+                                <p class="mt-2 text-sm leading-relaxed text-zinc-600">{{ $tool['tagline'] }}</p>
+                                @if (filled($tool['url']))
+                                    <a
+                                        href="{{ $tool['url'] }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900"
+                                    >
+                                        {{ __('Visitar sitio') }}
+                                        <x-icon name="arrow-up-right" class="size-4" />
+                                    </a>
+                                @endif
+                                <button
+                                    type="button"
+                                    data-tools-wheel-open="{{ $index }}"
+                                    hidden
+                                    class="mt-2 cursor-pointer text-xs font-medium text-zinc-500 underline decoration-zinc-300 underline-offset-4 transition hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                                >
+                                    {{ __('Ver frasco en detalle') }}
+                                </button>
+                            </div>
+                        @endforeach
+                        </div>
                     </div>
+
+                    <span data-tools-wheel-counter class="mt-3 font-folio-mono text-xs tabular-nums tracking-widest text-zinc-500">
+                        01 / {{ str_pad((string) count($tools), 2, '0', STR_PAD_LEFT) }}
+                    </span>
+                </div>
                 </div>
 
                 {{-- Panel de detalle al seleccionar un frasco --}}

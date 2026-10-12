@@ -81,6 +81,10 @@ export function initToolsWheels(root = document) {
          * detalle se acercan a ellos en vez de quedar pegados a los bordes.
          */
         const layout = () => {
+            // La sección ocupa lo que queda visible debajo del menú al abrir la página.
+            const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+            section.style.height = `${Math.max(560, window.innerHeight - sectionTop)}px`;
+
             const width = stage.clientWidth;
             const height = stage.clientHeight;
             const gap = 16;
@@ -88,7 +92,7 @@ export function initToolsWheels(root = document) {
             const footerHeight = footer?.offsetHeight ?? 0;
             const free = Math.max(0, height - titleHeight - footerHeight - gap * 2);
             // 1.6 ≈ alto del frasco más el crecimiento e inclinación de los de la izquierda.
-            const jarWidth = clamp(Math.min(width * 0.34, free / 1.6), 110, 230);
+            const jarWidth = clamp(Math.min(width * 0.34, free / 1.6), 110, 210);
             const jarHeight = jarWidth * 1.6;
             const shift = Math.max(0, (free - jarHeight) / 2);
 

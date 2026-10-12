@@ -489,3 +489,9 @@ body:has([data-joined-header]) [data-site-header] {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
+
+/* Los frascos de herramientas ocupan todo el ancho de la pantalla (fuera del
+ * marco): se recorta el desborde horizontal para que no aparezca scroll lateral. */
+body:has([data-tools-wheel]) {
+    overflow-x: clip;
+}
