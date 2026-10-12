@@ -1,6 +1,8 @@
 @push('meta')
     <link href="https://fonts.bunny.net/css?family=fraunces:400i,500i,600" rel="stylesheet" />
-    <noscript><style>[data-tools-wheel-jars-layer] { opacity: 1 !important; } [data-tools-wheel-loader] { display: none !important; }</style></noscript>
+    @if (count($tools) > 0)
+        <noscript><style>[data-tools-wheel-jars-layer] { opacity: 1 !important; } [data-tools-wheel-loader] { display: none !important; }</style></noscript>
+    @endif
     @if ($showLoader)
         <noscript><style>[data-page-loader] { display: none !important; }</style></noscript>
     @endif
