@@ -64,6 +64,10 @@ export function initToolsWheels(root = document) {
         const reduced = prefersReducedMotion();
 
         let spacing = 0;
+        // Lugares de la versión HTML: los frascos y, si no alcanzan para llegar a
+        // los bordes de la pantalla, copias de ellos (ver fillWidth).
+        const slots = [...items];
+        let lead = count * 0.3;
         let current = 0;
         let target = 0;
         let active = -1;
@@ -109,7 +113,39 @@ export function initToolsWheels(root = document) {
             ring.style.top = `${stageLayout.centerY}px`;
             stage.style.setProperty('--jar-center', `${stageLayout.centerY}px`);
 
+            fillWidth(jarWidth);
             scene3d?.resize();
+        };
+
+        /**
+         * Versión HTML: cuenta cuántos frascos entran hasta cada borde de la capa
+         * (que ocupa todo el ancho de la pantalla) y agrega copias hasta cubrirlos.
+         * Usa los mismos desplazamientos y escalas que render().
+         */
+        const fillWidth = (jarWidth) => {
+            const reach = ring.parentElement.clientWidth / 2 + 24;
+            const halfJar = jarWidth * 0.6;
+
+            let behind = 1;
+            while ((behind * spacing) - halfJar * (1 + Math.min(behind, 1.7) * 0.09) < reach) {
+                behind++;
+            }
+
+            let ahead = 1;
+            while (ahead < 14 && (ahead * spacing) / (1 + ahead * 0.06) - halfJar / (1 + ahead * 0.13) < reach) {
+                ahead++;
+            }
+
+            const total = Math.ceil((behind + ahead + 1) / count) * count;
+            while (slots.length < total) {
+                const copy = items[slots.length % count].cloneNode(true);
+                copy.removeAttribute('data-tools-wheel-item');
+                copy.setAttribute('aria-hidden', 'true');
+                ring.appendChild(copy);
+                slots.push(copy);
+            }
+
+            lead = behind + 0.5;
         };
 
         const wrapIndex = (value) => ((Math.round(value) % count) + count) % count;
@@ -145,8 +181,6 @@ export function initToolsWheels(root = document) {
                 detail.hidden = ! isActive;
                 detail.setAttribute('aria-hidden', isActive ? 'false' : 'true');
             });
-
-            items.forEach((item, i) => item.toggleAttribute('data-active', i === index));
 
             if (counter) {
                 counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(count).padStart(2, '0')}`;
@@ -228,13 +262,16 @@ export function initToolsWheels(root = document) {
 
                 // Misma idea que la escena 3D: los de la derecha más chicos (más lejos),
                 // los de la izquierda más grandes (más cerca).
-                items.forEach((item, i) => {
-                    const offset = wrappedOffset(i, current, count);
+                slots.forEach((item, i) => {
+                    const offset = wrappedOffset(i, current, slots.length, lead);
                     const depthScale = offset > 0 ? 1 / (1 + offset * 0.13) : 1 + Math.min(-offset, 1.7) * 0.09;
                     const x = offset * spacing * (offset > 0 ? 1 / (1 + offset * 0.06) : 1);
                     const y = Math.sin(offset * 0.85) * spacing * 0.08;
-                    const tilt = Math.sin(i * 2.1 + 0.6) * 9 * (0.35 + 0.65 * Math.min(1, Math.abs(offset)));
-                    const visible = offset > -1.7 && offset < 3.6;
+                    const tilt = Math.sin((i % count) * 2.1 + 0.6) * 9 * (0.35 + 0.65 * Math.min(1, Math.abs(offset)));
+                    const visible = offset > -lead + 0.5;
+
+                    // Con frascos repetidos solo resalta la copia del centro.
+                    item.toggleAttribute('data-active', Math.round(offset) === 0);
 
                     item.style.transform = `translate(${x}px, ${y}px) rotate(${-tilt}deg)`;
                     item.style.zIndex = String(100 - Math.round(offset * 10));
