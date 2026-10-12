@@ -17,8 +17,10 @@ const SPACING = JAR_WIDTH * 1.5;
 // más chicos; al avanzar se acercan y crecen hacia la izquierda.
 const DEPTH_AHEAD = 3;
 const DEPTH_BEHIND = 1.6;
-const VISIBLE_BEHIND = 1.7;
-const VISIBLE_AHEAD = 3.6;
+// Margen (en unidades) para que un frasco quede del todo fuera de la pantalla
+// antes de dar la vuelta: medio ancho más inclinación, escala y parallax.
+const EDGE_MARGIN = 1.8;
+const MAX_AHEAD = 12;
 
 /** Inclinación propia de cada frasco, para que la fila no se vea rígida. */
 function tiltFor(index) {
@@ -427,26 +429,36 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
     const wheel = new THREE.Group();
     scene.add(wheel);
 
-    const items = jars.map((jar, index) => {
-        const { group, texture, ready } = createJar(jar, index, materials, () => {
-            needsRender = true;
-        });
+    const originals = jars.map((jar, index) => createJar(jar, index, materials, () => {
+        needsRender = true;
+    }));
+
+    /**
+     * Lugares de la rueda. Si las herramientas no alcanzan para llenar el ancho
+     * de la pantalla se repiten: las copias comparten geometría, materiales y
+     * etiqueta con el original.
+     */
+    const items = [];
+    const addSlot = () => {
+        const toolIndex = items.length % jars.length;
+        const group = items.length < jars.length ? originals[toolIndex].group : originals[toolIndex].group.clone();
         const pivot = new THREE.Group();
         pivot.add(group);
         wheel.add(pivot);
-
-        return { pivot, spin: group, texture, ready };
-    });
+        items.push({ pivot, spin: group, toolIndex });
+    };
+    jars.forEach(addSlot);
 
     // Lista cuando todas las etiquetas tienen fuente y logo (o pasaron 4 s).
     const ready = Promise.race([
-        Promise.allSettled(items.map((item) => item.ready)),
+        Promise.allSettled(originals.map((jar) => jar.ready)),
         new Promise((resolve) => window.setTimeout(resolve, 4000)),
     ]);
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     let viewport = { halfWidth: 1, halfHeight: 1, narrow: false };
+    let lead = jars.length * 0.3;
     let frame = null;
     let visible = true;
     let lastTime = performance.now();
@@ -473,8 +485,35 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
         renderer.setSize(width, height, false);
 
         viewport = { halfWidth: halfHeight * camera.aspect, halfHeight, narrow };
+        fillWidth(distance);
         wheel.position.y = (height / 2 - layout.centerY) / pixelsPerUnit;
         needsRender = true;
+    };
+
+    /**
+     * Calcula cuántos frascos entran hasta cada borde de la pantalla (con la
+     * perspectiva de la cámara) y agrega copias hasta cubrirlos.
+     */
+    const fillWidth = (distance) => {
+        const reach = viewport.halfWidth + EDGE_MARGIN;
+        const projected = (x, z) => (distance - z > 0.1 ? x * distance / (distance - z) : Infinity);
+
+        let behind = 1;
+        while (projected(behind * SPACING - EDGE_MARGIN, behind * DEPTH_BEHIND) < reach) {
+            behind++;
+        }
+
+        let ahead = 1;
+        while (ahead < MAX_AHEAD && projected(ahead * SPACING * 1.12 - EDGE_MARGIN, -ahead * DEPTH_AHEAD) < reach) {
+            ahead++;
+        }
+
+        const slots = Math.ceil((behind + ahead + 1) / jars.length) * jars.length;
+        while (items.length < slots) {
+            addSlot();
+        }
+
+        lead = behind + 0.5;
     };
 
     const update = (delta) => {
@@ -507,11 +546,18 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
 
         wheel.position.x = parallax / 60;
 
+        // Bucle infinito: cada lugar toma el desplazamiento "dando la vuelta".
+        const offsets = items.map((item, i) => wrappedOffset(i, current, items.length, lead));
+        // Con herramientas repetidas, al detalle va la copia más cercana al centro.
+        const focusSlot = focus.index < 0 ? -1 : items.reduce(
+            (best, item, i) => (item.toolIndex === focus.index && (best < 0 || Math.abs(offsets[i]) < Math.abs(offsets[best])) ? i : best),
+            -1,
+        );
+
         items.forEach((item, i) => {
-            // Bucle infinito: cada frasco toma el desplazamiento "dando la vuelta".
-            const offset = wrappedOffset(i, current, items.length);
+            const offset = offsets[i];
             const distance = Math.abs(offset);
-            const tilt = tiltFor(i);
+            const tilt = tiltFor(item.toolIndex);
 
             // Un poco más de separación adelante: la perspectiva los junta.
             let x = offset * SPACING * (offset > 0 ? 1.12 : 1);
@@ -524,7 +570,7 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
             if (focus.index >= 0) {
                 const amount = focus.amount;
 
-                if (i === focus.index) {
+                if (i === focusSlot) {
                     x = lerp(x, focusX, amount);
                     y = lerp(y, focusY, amount);
                     z = lerp(z, 0, amount);
@@ -541,7 +587,9 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
             item.pivot.position.set(x, y, z);
             item.pivot.rotation.z = rotationZ;
             item.pivot.scale.setScalar(Math.max(0.0001, scale));
-            item.pivot.visible = (offset > -VISIBLE_BEHIND && offset < VISIBLE_AHEAD) || i === focus.index;
+            // Los de atrás quedan lejos de la cámara y no llegan a salir de cuadro: se ocultan al achicarse.
+            const shrunk = focusSlot >= 0 && i !== focusSlot && focus.amount > 0.9;
+            item.pivot.visible = i === focusSlot || (offset > -lead + 0.5 && ! shrunk);
             item.spin.rotation.y = spin;
             item.spin.rotation.x = reducedMotion ? 0 : Math.sin(time * 0.6 + i * 1.7) * 0.03;
         });
@@ -640,7 +688,7 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
                     object.material.dispose();
                 }
             });
-            items.forEach((item) => item.texture.dispose());
+            originals.forEach((jar) => jar.texture.dispose());
             Object.values(materials).forEach((material) => material.dispose());
             ridges.dispose();
             environment.dispose();
