@@ -61,3 +61,26 @@ test('tools page content continues the header without a gap', function () {
         ->assertSee('data-site-header', false)
         ->assertSee('data-joined-header', false);
 });
+
+test('tools page passes jar data to the 3d scene and has a detail panel', function () {
+    makeTool(['tagline_en' => 'Backend & app structure']);
+
+    $response = $this->get(localized_route('services.tools', [], 'en'))->assertOk();
+
+    preg_match('/data-tools-wheel-jars="([^"]+)"/', $response->getContent(), $matches);
+    $jars = json_decode(html_entity_decode($matches[1] ?? '[]'), true);
+
+    expect($jars)->toHaveCount(1)
+        ->and($jars[0])->toMatchArray([
+            'name' => 'Laravel',
+            'category' => 'Backend',
+            'tagline' => 'Backend & app structure',
+            'url' => 'https://laravel.com',
+            'icon' => 'laravel',
+        ])
+        ->and($jars[0]['palette'])->toHaveCount(4);
+
+    $response->assertSee('data-tools-wheel-panel', false)
+        ->assertSee('data-tools-wheel-canvas', false)
+        ->assertSee('See jar in detail');
+});

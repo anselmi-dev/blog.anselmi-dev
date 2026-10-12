@@ -430,7 +430,12 @@ select:focus[data-flux-control] {
         linear-gradient(90deg, transparent 76%, rgb(255 255 255 / 0.2) 80%, transparent 86%);
 }
 
-/* Rueda de frascos: los frascos se ubican sobre un arco y la rueda gira con JS. */
+/* Rueda de frascos: los frascos se ubican sobre un arco y la rueda gira con JS.
+ * Con la escena 3D activa (data-wheel3d) la versión HTML/CSS se oculta. */
+[data-wheel3d] .tools-wheel__ring {
+    display: none;
+}
+
 .tools-wheel__ring {
     position: absolute;
     left: 50%;

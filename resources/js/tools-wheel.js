@@ -8,14 +8,28 @@ function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
 }
 
+function parseJars(section) {
+    try {
+        const jars = JSON.parse(section.dataset.toolsWheelJars || '[]');
+
+        return Array.isArray(jars) ? jars : [];
+    } catch {
+        return [];
+    }
+}
+
 /**
  * Rueda de frascos de /servicios/herramientas.
  *
  * [data-tools-wheel] es una sección alta con un escenario sticky
  * ([data-tools-wheel-stage]). El scroll dentro de la sección se traduce en un
- * índice (0 → n-1) y la rueda ([data-tools-wheel-ring]) gira para dejar ese
- * frasco arriba. Arrastrar con mouse o dedo, las flechas y los botones
- * prev/next mueven el scroll, así el scroll es la única fuente de verdad.
+ * índice (0 → n-1) y la rueda gira para dejar ese frasco arriba. Arrastrar con
+ * mouse o dedo, las flechas y los botones prev/next mueven el scroll, así el
+ * scroll es la única fuente de verdad.
+ *
+ * Los frascos se dibujan en 3D con three.js (tools-jars-3d.js, carga diferida).
+ * Si WebGL no está disponible se usa la versión HTML/CSS ([data-tools-wheel-ring]).
+ * Al hacer clic en un frasco se abre el modo detalle ([data-tools-wheel-panel]).
  */
 export function initToolsWheels(root = document) {
     root.querySelectorAll('[data-tools-wheel]').forEach((section) => {
@@ -27,12 +41,18 @@ export function initToolsWheels(root = document) {
 
         const stage = section.querySelector('[data-tools-wheel-stage]');
         const ring = section.querySelector('[data-tools-wheel-ring]');
+        const canvasContainer = section.querySelector('[data-tools-wheel-canvas]');
         const items = [...section.querySelectorAll('[data-tools-wheel-item]')];
         const details = [...section.querySelectorAll('[data-tools-wheel-detail]')];
         const counter = section.querySelector('[data-tools-wheel-counter]');
+        const footer = section.querySelector('[data-tools-wheel-footer]');
+        const panel = section.querySelector('[data-tools-wheel-panel]');
+        const jars = parseJars(section);
         const count = items.length;
 
         if (! stage || ! ring || count === 0) {
+            announceReady();
+
             return;
         }
 
@@ -48,6 +68,9 @@ export function initToolsWheels(root = document) {
         let parallax = 0;
         let frame = null;
         let snapTimer = null;
+        let scene3d = null;
+        let focusedIndex = -1;
+        let pendingFocus = null;
 
         const layout = () => {
             const width = stage.clientWidth;
@@ -64,6 +87,8 @@ export function initToolsWheels(root = document) {
             items.forEach((item, index) => {
                 item.style.transform = `rotate(${index * step}deg) translateY(${-radius}px)`;
             });
+
+            scene3d?.resize();
         };
 
         const scrollRange = () => Math.max(1, section.offsetHeight - window.innerHeight);
@@ -103,6 +128,65 @@ export function initToolsWheels(root = document) {
             }
         };
 
+        // ---- Modo detalle -------------------------------------------------
+
+        const fillPanel = (index) => {
+            const jar = jars[index];
+
+            if (! panel || ! jar) {
+                return;
+            }
+
+            panel.querySelector('[data-panel-index]').textContent = `${String(index + 1).padStart(2, '0')} / ${String(count).padStart(2, '0')}`;
+            panel.querySelector('[data-panel-category]').textContent = jar.category ?? '';
+            panel.querySelector('[data-panel-name]').textContent = jar.name ?? '';
+            panel.querySelector('[data-panel-tagline]').textContent = jar.tagline ?? '';
+
+            const link = panel.querySelector('[data-panel-link]');
+            link.hidden = ! jar.url;
+            link.href = jar.url || '#';
+        };
+
+        const openFocus = (index) => {
+            if (! scene3d || ! panel) {
+                return;
+            }
+
+            focusedIndex = index;
+            fillPanel(index);
+            scene3d.focus(index);
+            section.dataset.focused = 'true';
+            panel.hidden = false;
+            footer?.classList.add('opacity-0', 'pointer-events-none');
+            panel.animate?.(
+                [{ opacity: 0, translate: '0 16px' }, { opacity: 1, translate: '0 0' }],
+                { duration: reduced ? 1 : 450, delay: reduced ? 0 : 300, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' },
+            );
+            panel.querySelector('[data-tools-wheel-close]')?.focus({ preventScroll: true });
+        };
+
+        const closeFocus = ({ restoreFocus = true } = {}) => {
+            if (focusedIndex < 0) {
+                return;
+            }
+
+            focusedIndex = -1;
+            scene3d?.blur();
+            delete section.dataset.focused;
+
+            if (panel) {
+                panel.hidden = true;
+            }
+
+            footer?.classList.remove('opacity-0', 'pointer-events-none');
+
+            if (restoreFocus) {
+                stage.focus({ preventScroll: true });
+            }
+        };
+
+        // ---- Render de la versión HTML/CSS y estado ------------------------
+
         const render = () => {
             frame = null;
             current += (target - current) * (reduced ? 1 : 0.12);
@@ -111,20 +195,30 @@ export function initToolsWheels(root = document) {
                 current = target;
             }
 
-            ring.style.transform = `translateX(${parallax}px) rotate(${-current * step}deg)`;
+            if (! scene3d) {
+                ring.style.transform = `translateX(${parallax}px) rotate(${-current * step}deg)`;
 
-            items.forEach((item, i) => {
-                const distance = Math.abs(i - current);
-                const scale = 1 - Math.min(distance, 3) * 0.1;
-                const opacity = clamp(1.6 - distance * 0.45, 0, 1);
-                const jar = item.firstElementChild;
+                items.forEach((item, i) => {
+                    const distance = Math.abs(i - current);
+                    const scale = 1 - Math.min(distance, 3) * 0.1;
+                    const opacity = clamp(1.6 - distance * 0.45, 0, 1);
+                    const jar = item.firstElementChild;
 
-                jar.style.transform = `scale(${scale})`;
-                item.style.opacity = String(opacity);
-                item.style.visibility = opacity <= 0 ? 'hidden' : 'visible';
-            });
+                    jar.style.transform = `scale(${scale})`;
+                    item.style.opacity = String(opacity);
+                    item.style.visibility = opacity <= 0 ? 'hidden' : 'visible';
+                });
+            } else if (reduced) {
+                scene3d.invalidate();
+            }
 
             setActive(Math.round(current));
+
+            if (pendingFocus !== null && Math.abs(current - pendingFocus) < 0.02) {
+                const index = pendingFocus;
+                pendingFocus = null;
+                openFocus(index);
+            }
 
             if (current !== target) {
                 frame = requestAnimationFrame(render);
@@ -141,6 +235,11 @@ export function initToolsWheels(root = document) {
             target = indexFromScroll();
             requestRender();
 
+            // Scrollear con el detalle abierto lo cierra.
+            if (focusedIndex >= 0 && Math.abs(target - focusedIndex) > 0.25) {
+                closeFocus({ restoreFocus: false });
+            }
+
             window.clearTimeout(snapTimer);
             snapTimer = window.setTimeout(() => {
                 const rect = section.getBoundingClientRect();
@@ -153,19 +252,25 @@ export function initToolsWheels(root = document) {
             }, 160);
         };
 
+        // ---- Interacción ---------------------------------------------------
+
         // Arrastre horizontal (mouse o dedo) → scroll vertical de la sección.
         let dragging = false;
         let lastX = 0;
+        let downX = 0;
+        let downY = 0;
+        let moved = false;
 
         stage.addEventListener('pointerdown', (event) => {
-            if (event.button !== 0 || event.target.closest('a, button')) {
+            if (event.button !== 0 || event.target.closest('a, button, [data-tools-wheel-panel]')) {
                 return;
             }
 
             dragging = true;
-            lastX = event.clientX;
+            moved = false;
+            lastX = downX = event.clientX;
+            downY = event.clientY;
             stage.setPointerCapture(event.pointerId);
-            stage.classList.add('cursor-grabbing');
         }, { signal });
 
         stage.addEventListener('pointermove', (event) => {
@@ -173,8 +278,17 @@ export function initToolsWheels(root = document) {
             parallax = ((event.clientX - rect.left) / rect.width - 0.5) * -24;
             requestRender();
 
-            if (! dragging) {
+            if (scene3d && ! dragging && focusedIndex < 0) {
+                stage.style.cursor = scene3d.pick(event.clientX, event.clientY) >= 0 ? 'pointer' : '';
+            }
+
+            if (! dragging || focusedIndex >= 0) {
                 return;
+            }
+
+            if (Math.abs(event.clientX - downX) > 5 || Math.abs(event.clientY - downY) > 5) {
+                moved = true;
+                stage.classList.add('cursor-grabbing');
             }
 
             const dx = event.clientX - lastX;
@@ -186,9 +300,28 @@ export function initToolsWheels(root = document) {
             window.scrollTo({ top: window.scrollY + delta, behavior: 'instant' });
         }, { signal });
 
-        const endDrag = () => {
+        const endDrag = (event) => {
+            const wasClick = dragging && ! moved;
             dragging = false;
             stage.classList.remove('cursor-grabbing');
+
+            if (! wasClick || ! scene3d || event.type !== 'pointerup') {
+                return;
+            }
+
+            const index = scene3d.pick(event.clientX, event.clientY);
+
+            if (index < 0) {
+                closeFocus();
+            } else if (index === focusedIndex) {
+                closeFocus();
+            } else if (index === Math.round(target)) {
+                openFocus(index);
+            } else {
+                closeFocus({ restoreFocus: false });
+                pendingFocus = index;
+                scrollToIndex(index);
+            }
         };
 
         stage.addEventListener('pointerup', endDrag, { signal });
@@ -199,7 +332,13 @@ export function initToolsWheels(root = document) {
         }, { signal });
 
         stage.addEventListener('keydown', (event) => {
-            if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+            if (event.key === 'Escape' && focusedIndex >= 0) {
+                event.preventDefault();
+                closeFocus();
+            } else if (event.key === 'Enter' && event.target === stage && scene3d) {
+                event.preventDefault();
+                openFocus(Math.round(target));
+            } else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
                 event.preventDefault();
                 scrollToIndex(Math.round(target) + 1);
             } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
@@ -216,6 +355,12 @@ export function initToolsWheels(root = document) {
             button.addEventListener('click', () => scrollToIndex(Math.round(target) + 1), { signal });
         });
 
+        section.querySelectorAll('[data-tools-wheel-open]').forEach((button) => {
+            button.addEventListener('click', () => openFocus(Number(button.dataset.toolsWheelOpen)), { signal });
+        });
+
+        section.querySelector('[data-tools-wheel-close]')?.addEventListener('click', () => closeFocus(), { signal });
+
         window.addEventListener('scroll', onScroll, { passive: true, signal });
         window.addEventListener('resize', () => {
             layout();
@@ -228,18 +373,53 @@ export function initToolsWheels(root = document) {
         render();
         section.dataset.wheelReady = 'true';
 
+        // ---- Escena 3D (carga diferida) -----------------------------------
+
+        if (canvasContainer && jars.length === count) {
+            import('./tools-jars-3d')
+                .then(({ createJarScene }) => {
+                    if (signal.aborted) {
+                        return;
+                    }
+
+                    scene3d = createJarScene(canvasContainer, jars, {
+                        getState: () => ({ current, parallax }),
+                        reducedMotion: reduced,
+                    });
+
+                    if (scene3d) {
+                        section.dataset.wheel3d = 'true';
+                        section.querySelectorAll('[data-tools-wheel-open]').forEach((button) => {
+                            button.hidden = false;
+                        });
+                    }
+                })
+                .catch(() => {})
+                .finally(announceReady);
+        } else {
+            announceReady();
+        }
+
         controllers.add(abort);
         signal.addEventListener('abort', () => {
             window.clearTimeout(snapTimer);
+
             if (frame !== null) {
                 cancelAnimationFrame(frame);
             }
+
+            scene3d?.destroy();
+            scene3d = null;
             controllers.delete(abort);
         });
     });
 }
 
-// Al navegar con wire:navigate la sección desaparece: soltamos los listeners de window.
+function announceReady() {
+    document.dispatchEvent(new CustomEvent('tools-wheel:ready'));
+}
+
+// Al navegar con wire:navigate la sección desaparece: soltamos listeners y la escena 3D.
 document.addEventListener('livewire:navigating', () => {
     controllers.forEach((controller) => controller.abort());
 });

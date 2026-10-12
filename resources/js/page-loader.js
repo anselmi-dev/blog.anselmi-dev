@@ -22,7 +22,9 @@ export function initPageLoaders(root = document) {
         const bar = loader.querySelector('[data-page-loader-bar]');
         const value = loader.querySelector('[data-page-loader-value]');
         const images = [...document.querySelectorAll('main img')].filter((img) => img.loading !== 'lazy');
-        const tasks = images.length + 1;
+        // La escena 3D de herramientas avisa con "tools-wheel:ready" cuando está lista.
+        const waitsForWheel = document.querySelector('[data-tools-wheel]') !== null;
+        const tasks = images.length + 1 + (waitsForWheel ? 1 : 0);
         let done = 0;
         let shown = 0;
         const startedAt = performance.now();
@@ -41,6 +43,10 @@ export function initPageLoaders(root = document) {
         });
 
         (document.fonts?.ready ?? Promise.resolve()).then(markDone);
+
+        if (waitsForWheel) {
+            document.addEventListener('tools-wheel:ready', markDone, { once: true });
+        }
 
         // Por si alguna imagen externa nunca responde.
         const safety = window.setTimeout(() => {
