@@ -8,6 +8,7 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Actions;
@@ -69,6 +70,13 @@ class ManageSettings extends Page
                                                 ->label('Meta description')
                                                 ->rows(3)
                                                 ->helperText('Descripción por defecto para SEO y redes.'),
+                                        ]),
+                                    Section::make('Animaciones')
+                                        ->schema([
+                                            Toggle::make('site.tools_loader')
+                                                ->label('Pantalla de carga en Herramientas')
+                                                ->helperText('Muestra la barra de 0 a 100 % mientras cargan los frascos de /servicios/herramientas.')
+                                                ->default(false),
                                         ]),
                                 ]),
                             Tab::make('Contacto')

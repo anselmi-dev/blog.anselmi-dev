@@ -1,6 +1,8 @@
 @push('meta')
     <link href="https://fonts.bunny.net/css?family=fraunces:400i,500i,600" rel="stylesheet" />
-    <noscript><style>[data-page-loader] { display: none !important; }</style></noscript>
+    @if ($showLoader)
+        <noscript><style>[data-page-loader] { display: none !important; }</style></noscript>
+    @endif
 @endpush
 
 @php
@@ -16,25 +18,27 @@
 @endphp
 
 <div class="pb-16 sm:pb-20 lg:pb-24">
-    {{-- Pantalla de carga: barra central de 0 a 100 % --}}
-    <div
-        data-page-loader
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-brand-lime"
-        role="progressbar"
-        aria-busy="true"
-        aria-label="{{ __('Cargando') }}"
-        aria-valuemin="0"
-        aria-valuemax="100"
-    >
-        <div class="flex w-[min(60vw,18rem)] flex-col items-center gap-4">
-            <div class="h-px w-full overflow-hidden bg-zinc-900/15">
-                <div data-page-loader-bar class="h-full w-full origin-left bg-zinc-900" style="transform: scaleX(0)"></div>
+    {{-- Pantalla de carga: barra central de 0 a 100 %. Se activa desde Filament (Ajustes → Sitio). --}}
+    @if ($showLoader)
+        <div
+            data-page-loader
+            class="fixed inset-0 z-[100] flex items-center justify-center bg-brand-lime"
+            role="progressbar"
+            aria-busy="true"
+            aria-label="{{ __('Cargando') }}"
+            aria-valuemin="0"
+            aria-valuemax="100"
+        >
+            <div class="flex w-[min(60vw,18rem)] flex-col items-center gap-4">
+                <div class="h-px w-full overflow-hidden bg-zinc-900/15">
+                    <div data-page-loader-bar class="h-full w-full origin-left bg-zinc-900" style="transform: scaleX(0)"></div>
+                </div>
+                <p class="font-folio-mono text-xs tabular-nums tracking-widest text-zinc-900">
+                    <span data-page-loader-value>0</span>%
+                </p>
             </div>
-            <p class="font-folio-mono text-xs tabular-nums tracking-widest text-zinc-900">
-                <span data-page-loader-value>0</span>%
-            </p>
         </div>
-    </div>
+    @endif
 
     @if (count($tools) > 0)
         <section

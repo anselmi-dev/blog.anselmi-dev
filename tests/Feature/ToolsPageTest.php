@@ -1,6 +1,7 @@
 <?php
 
 use App\Filament\Resources\Tools\Pages\EditTool;
+use App\Models\Setting;
 use App\Models\Tool;
 use App\Models\User;
 use App\Support\JarPalette;
@@ -25,7 +26,7 @@ function makeTool(array $attributes = []): Tool
     ]);
 }
 
-test('tools page shows a loader and one labeled jar per published tool', function () {
+test('tools page shows one labeled jar per published tool and no loader by default', function () {
     makeTool();
     makeTool(['name' => 'Tailwind CSS', 'category' => 'Frontend', 'icon' => 'tailwindcss', 'sort_order' => 1]);
     makeTool(['name' => 'Herramienta oculta', 'is_published' => false]);
@@ -33,7 +34,7 @@ test('tools page shows a loader and one labeled jar per published tool', functio
     $response = $this->get(localized_route('services.tools', [], 'es'));
 
     $response->assertOk()
-        ->assertSee('data-page-loader', false)
+        ->assertDontSee('data-page-loader', false)
         ->assertSee('data-tools-wheel', false)
         ->assertSee('https://cdn.simpleicons.org/laravel/', false)
         ->assertSeeInOrder(['Laravel', 'Tailwind CSS'])
@@ -149,4 +150,14 @@ test('admin can set the jar colors of a tool', function () {
     expect($tool->refresh())
         ->label_color->toBe('#6a4fae')
         ->fill_color->toBe('#e9c35b');
+});
+
+test('tools page shows the loader when it is enabled in the settings', function () {
+    makeTool();
+    Setting::putMany('site', ['tools_loader' => true]);
+    Setting::forgetGroupCache('site');
+
+    $this->get(localized_route('services.tools', [], 'es'))
+        ->assertOk()
+        ->assertSee('data-page-loader', false);
 });

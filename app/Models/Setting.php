@@ -106,6 +106,7 @@ class Setting extends Model
         return [
             'meta_description' => 'Desarrollador web: diseño y construyo productos digitales con foco en claridad, performance y experiencia de uso.',
             'author_name' => config('app.name', 'Sitio'),
+            'tools_loader' => false,
         ];
     }
 
@@ -143,7 +144,7 @@ class Setting extends Model
     }
 
     /**
-     * @return array{meta_description: string|null, author_name: string|null}
+     * @return array{meta_description: string|null, author_name: string|null, tools_loader: bool|null}
      */
     public static function site(): array
     {
