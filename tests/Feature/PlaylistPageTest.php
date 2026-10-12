@@ -150,3 +150,28 @@ test('songs without a spotify link have no play button', function () {
         ->assertDontSee('Reproducir Sin enlace')
         ->assertSee('Reproducir Con enlace');
 });
+
+test('song seeder moves losing my religion to the out of time version', function () {
+    Storage::fake('public');
+
+    Song::create([
+        'title' => 'Losing My Religion',
+        'artist' => 'R.E.M.',
+        'spotify_url' => 'https://open.spotify.com/track/0TuMqSmrKZNH4CeRg6I9er',
+        'is_published' => true,
+    ]);
+
+    Song::create([
+        'title' => 'Dream On',
+        'artist' => 'Aerosmith',
+        'spotify_url' => 'https://open.spotify.com/track/mi-version-elegida',
+        'is_published' => true,
+    ]);
+
+    $this->seed(SongSeeder::class);
+
+    expect(Song::query()->where('title', 'Losing My Religion')->value('spotify_url'))
+        ->toBe('https://open.spotify.com/track/6bCPryuQjsts5cEybA3Nb5');
+    expect(Song::query()->where('title', 'Dream On')->value('spotify_url'))
+        ->toBe('https://open.spotify.com/track/mi-version-elegida');
+});
