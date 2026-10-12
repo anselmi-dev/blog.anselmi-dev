@@ -82,6 +82,17 @@ class ManageHomeSnapshot extends Page
                                     }
                                 })
                                 ->columnSpanFull(),
+                            TextInput::make('playlist_url')
+                                ->label('Playlist de Spotify')
+                                ->url()
+                                ->helperText('Enlace de tu playlist (Compartir → Copiar enlace). Se muestra en la página /playlist.')
+                                ->maxLength(500)
+                                ->rule(fn (): \Closure => function (string $attribute, mixed $value, \Closure $fail): void {
+                                    if (filled($value) && SpotifyEmbed::toEmbedUrl((string) $value) === null) {
+                                        $fail('El enlace debe ser de una playlist o álbum de open.spotify.com.');
+                                    }
+                                })
+                                ->columnSpanFull(),
                         ]),
                     Section::make('Carrusel de libros')
                         ->schema([

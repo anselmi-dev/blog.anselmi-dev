@@ -13,11 +13,48 @@
 @endsection
 
 <div class="pb-16 pt-4 sm:pb-20 sm:pt-6 lg:pb-24">
-    @if (count($songs) === 0)
+    @if (filled($playlistEmbedUrl))
+        <section
+            class="mx-auto mb-10 max-w-8xl"
+            data-reveal="fade-up"
+            data-reveal-scroll
+        >
+            <div class="mb-3 flex items-center justify-between gap-3">
+                <p class="text-lg font-normal uppercase leading-none tracking-tight text-zinc-500 lg:text-xl">
+                    Playlist completa
+                </p>
+                <a
+                    href="{{ $playlistUrl }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex h-8 items-center gap-1 rounded-full border border-zinc-200 px-3 text-sm text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                >
+                    Abrir en Spotify
+                    <x-icon name="external-link" class="size-4" />
+                </a>
+            </div>
+            <div class="overflow-hidden rounded-xl bg-zinc-900/80 ring-1 ring-white/10">
+                <iframe
+                    class="block w-full"
+                    style="border-radius: 12px"
+                    src="{{ $playlistEmbedUrl }}"
+                    width="100%"
+                    height="452"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
+                    loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    title="Spotify — mi playlist"
+                ></iframe>
+            </div>
+        </section>
+    @endif
+
+    @if (count($songs) === 0 && blank($playlistEmbedUrl))
         <p class="mx-auto max-w-8xl text-sm text-zinc-500">
             Todavía no hay canciones en la playlist.
         </p>
-    @else
+    @elseif (count($songs) > 0)
         <ol
             class="mx-auto flex max-w-8xl flex-col gap-3"
             data-reveal="fade-up"

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\HomeSnapshot;
 use App\Models\Song;
 use App\Support\SpotifyEmbed;
 use Database\Seeders\SongSeeder;
@@ -36,13 +37,36 @@ test('playlist page lists published songs in order', function () {
         ->assertDontSee('Canción oculta');
 });
 
+test('playlist page embeds the full spotify playlist', function () {
+    HomeSnapshot::current()->update([
+        'playlist_url' => 'https://open.spotify.com/playlist/6zZEmocQXHdXIFunj8UJUS?si=abc&utm_source=copy-link',
+    ]);
+
+    $this->get(route('playlist'))
+        ->assertOk()
+        ->assertSee('https://open.spotify.com/embed/playlist/6zZEmocQXHdXIFunj8UJUS', false)
+        ->assertDontSee('Todavía no hay canciones en la playlist.');
+});
+
+test('home listening block links to the playlist when a spotify playlist is set', function () {
+    HomeSnapshot::current()->update(['playlist_url' => 'https://open.spotify.com/playlist/6zZEmocQXHdXIFunj8UJUS']);
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee(route('playlist'), false);
+});
+
 test('playlist page renders when there are no songs', function () {
+    HomeSnapshot::current()->update(['playlist_url' => null]);
+
     $this->get(route('playlist'))
         ->assertOk()
         ->assertSee('Todavía no hay canciones en la playlist.');
 });
 
 test('home listening block links to the playlist when songs are published', function () {
+    HomeSnapshot::current()->update(['playlist_url' => null]);
+
     $this->get(route('home'))
         ->assertOk()
         ->assertDontSee(route('playlist'), false);

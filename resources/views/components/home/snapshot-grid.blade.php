@@ -35,7 +35,7 @@
     $showBooks = count($bookList) > 0;
     $showMap = filled($mapImage) || filled($mapsUrl);
     $showSpotify = filled($spotifyEmbedUrl);
-    $showPlaylistLink = $showSpotify && Song::query()->published()->exists();
+    $showPlaylistLink = $showSpotify && (filled($snapshot->playlist_url) || Song::query()->published()->exists());
 @endphp
 
 @if ($showBooks || $showMap || $showSpotify)
