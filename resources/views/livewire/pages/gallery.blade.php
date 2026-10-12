@@ -36,7 +36,7 @@
                 @else
                     @php
                         $wide = ($item['span'] ?? 'tall') === 'wide';
-                        $url = $item['image_url'] ?? sprintf(
+                        $url = $item['thumb_url'] ?? $item['image_url'] ?? sprintf(
                             'https://picsum.photos/seed/gallery-fallback/%d/%d',
                             (int) ($item['w'] ?? 800),
                             (int) ($item['h'] ?? 1200)

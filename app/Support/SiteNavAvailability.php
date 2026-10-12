@@ -3,7 +3,8 @@
 namespace App\Support;
 
 use App\Models\Faq;
-use App\Models\GalleryItem;
+use App\Models\Gallery;
+use App\Models\Media;
 use App\Models\Post;
 use Illuminate\Support\Facades\Cache;
 
@@ -28,9 +29,9 @@ class SiteNavAvailability
         self::$memo = Cache::remember(self::CACHE_KEY, self::CACHE_TTL_SECONDS, static function (): array {
             return [
                 'hasPublishedFaqs' => Faq::query()->published()->exists(),
-                'hasPublishedGalleryPhotos' => GalleryItem::query()
+                'hasPublishedGalleryPhotos' => Gallery::query()
                     ->published()
-                    ->where('kind', 'photo')
+                    ->where('galleryable_type', Media::class)
                     ->exists(),
                 'hasPublishedPosts' => Post::query()->published()->exists(),
             ];

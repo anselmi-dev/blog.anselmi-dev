@@ -2,11 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Collection;
 use App\Models\Faq;
 use App\Models\Font;
-use App\Models\GalleryItem;
+use App\Models\Gallery;
 use App\Models\HomeSnapshot;
+use App\Models\Media;
 use App\Models\Post;
+use App\Models\Quote;
 use App\Models\ReadingBook;
 use App\Models\SiteColor;
 use App\Models\Tool;
@@ -85,7 +88,7 @@ class ContentSeeder extends Seeder
 
     private function seedGallery(): void
     {
-        if (GalleryItem::query()->exists()) {
+        if (Gallery::query()->exists()) {
             return;
         }
 
@@ -174,9 +177,28 @@ class ContentSeeder extends Seeder
             ],
         ];
 
+        $collection = Collection::query()->firstOrCreate(
+            ['slug' => 'principal'],
+            ['name' => 'Galería principal', 'is_published' => true, 'sort_order' => 0]
+        );
+
         foreach ($items as $i => $item) {
-            GalleryItem::query()->create([
-                ...$item,
+            ['kind' => $kind, 'span' => $span] = $item;
+            $featured = $item['featured'] ?? false;
+            $play = $item['play'] ?? false;
+            $attributes = array_diff_key($item, array_flip(['kind', 'span', 'featured', 'play']));
+
+            $galleryable = $kind === 'quote'
+                ? Quote::query()->create($attributes)
+                : Media::query()->create($attributes);
+
+            Gallery::query()->create([
+                'collection_id' => $collection->id,
+                'galleryable_type' => $galleryable::class,
+                'galleryable_id' => $galleryable->id,
+                'span' => $span,
+                'featured' => $featured,
+                'play' => $play,
                 'sort_order' => $i,
                 'is_published' => true,
             ]);

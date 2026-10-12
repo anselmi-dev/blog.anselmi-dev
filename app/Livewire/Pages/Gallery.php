@@ -2,7 +2,8 @@
 
 namespace App\Livewire\Pages;
 
-use App\Models\GalleryItem;
+use App\Models\Collection;
+use App\Models\Gallery as GalleryModel;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -29,11 +30,16 @@ class Gallery extends Component
 
     public function mount(): void
     {
-        $this->items = GalleryItem::query()
-            ->published()
-            ->get()
-            ->map(fn (GalleryItem $item): array => $item->toViewArray())
-            ->all();
+        $collection = Collection::query()->published()->first();
+
+        $this->items = $collection
+            ? $collection->items()
+                ->published()
+                ->with('galleryable')
+                ->get()
+                ->map(fn (GalleryModel $item): array => $item->toViewArray())
+                ->all()
+            : [];
     }
 
     public function updatedLightboxShow(bool $value): void
