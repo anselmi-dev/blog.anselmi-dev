@@ -1,8 +1,8 @@
 @props([
-    'galleryHref' => route('gallery'),
-    'kicker' => '07. fotografía',
-    'titleLine1' => 'Lo que veo cuando',
-    'titleItalic' => 'no estoy codando',
+    'galleryHref' => localized_route('gallery'),
+    'kicker' => __('07. fotografía'),
+    'titleLine1' => __('Lo que veo cuando'),
+    'titleItalic' => __('no estoy codando'),
     'items' => null,
 ])
 
@@ -11,7 +11,7 @@
     use App\Models\Gallery;
     use App\Models\Media;
 
-    $galleryUrl = $galleryHref ?? route('gallery');
+    $galleryUrl = $galleryHref ?? localized_route('gallery');
 
     $photos = $items ?? (Collection::query()->published()->first()
         ?->items()
@@ -59,7 +59,7 @@
             <x-section-head
                 kicker="{{ $kicker }}"
                 title="{{ $titleLine1 }}"
-                actionTitle="Ver galería"
+                :actionTitle="__('Ver galería')"
                 actionHref="{{ $galleryHref }}"
             />
 
@@ -93,7 +93,7 @@
                     wire:navigate
                     class="text-sm text-folio-muted-dark transition-colors hover:text-folio-fg dark:text-folio-muted dark:hover:text-zinc-100"
                 >
-                    Ver galería completa →
+                    {{ __('Ver galería completa') }} →
                 </a>
             </div>
         </div>

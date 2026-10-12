@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEnglishTranslations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Tool extends Model
 {
+    use HasEnglishTranslations;
+
     protected $fillable = [
         'name',
         'tagline',
@@ -17,6 +20,8 @@ class Tool extends Model
         'icon',
         'sort_order',
         'is_published',
+        'tagline_en',
+        'category_en',
     ];
 
     protected function casts(): array
@@ -39,9 +44,9 @@ class Tool extends Model
     {
         return [
             'name' => $this->name,
-            'tagline' => $this->tagline,
+            'tagline' => $this->translated('tagline'),
             'url' => $this->url,
-            'category' => $this->category,
+            'category' => $this->translated('category'),
             'icon' => $this->icon,
         ];
     }

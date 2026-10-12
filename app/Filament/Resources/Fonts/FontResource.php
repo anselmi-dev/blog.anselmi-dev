@@ -14,6 +14,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -95,6 +96,22 @@ class FontResource extends Resource
                 Toggle::make('is_published')
                     ->label('Publicado')
                     ->default(true),
+                Section::make('Inglés')
+                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
+                    ->collapsible()
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->schema([
+                        TextInput::make('category_en')
+                            ->label('Categoría (EN)')
+                            ->maxLength(255),
+                        TextInput::make('sample_en')
+                            ->label('Texto de muestra (EN)')
+                            ->maxLength(255),
+                        Textarea::make('note_en')
+                            ->label('Nota (EN)')
+                            ->rows(3),
+                    ]),
             ]);
     }
 

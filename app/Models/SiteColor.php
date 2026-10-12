@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEnglishTranslations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class SiteColor extends Model
 {
+    use HasEnglishTranslations;
+
     protected $fillable = [
         'name',
         'hex',
@@ -19,6 +22,7 @@ class SiteColor extends Model
         'column_index',
         'sort_order',
         'is_published',
+        'name_en',
     ];
 
     protected function casts(): array
@@ -78,7 +82,7 @@ class SiteColor extends Model
     public function toViewArray(): array
     {
         return [
-            'name' => $this->name,
+            'name' => $this->translated('name'),
             'hex' => $this->hex,
             'rgb' => $this->rgb ?? [],
             'cmyk' => $this->cmyk ?? [],

@@ -6,11 +6,14 @@ namespace App\Models;
 
 use App\Actions\Media\GenerateThumbnail;
 use App\Contracts\Galleryable;
+use App\Models\Concerns\HasEnglishTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Media extends Model implements Galleryable
 {
+    use HasEnglishTranslations;
+
     protected $table = 'media';
 
     protected $fillable = [
@@ -29,11 +32,17 @@ class Media extends Model implements Galleryable
         'shutter',
         'focal_length',
         'camera',
+        'title_en',
+        'category_en',
+        'location_en',
+        'description_en',
+        'tags_en',
     ];
 
     protected function casts(): array
     {
         return [
+            'tags_en' => 'array',
             'tags' => 'array',
             'width' => 'integer',
             'height' => 'integer',
@@ -85,21 +94,21 @@ class Media extends Model implements Galleryable
     public function toGalleryArray(): array
     {
         return [
-            'title' => $this->title,
-            'category' => $this->category,
+            'title' => $this->translated('title'),
+            'category' => $this->translated('category'),
             'image_url' => $this->imageUrl($this->width, $this->height),
             'thumb_url' => $this->thumbUrl(),
             'w' => $this->width ?? 800,
             'h' => $this->height ?? 1200,
             'released_at' => $this->released_at,
-            'location' => $this->location,
-            'description' => $this->description,
+            'location' => $this->translated('location'),
+            'description' => $this->translated('description'),
             'iso' => $this->iso,
             'aperture' => $this->aperture,
             'shutter' => $this->shutter,
             'focal_length' => $this->focal_length,
             'camera' => $this->camera,
-            'tags' => $this->tags ?? [],
+            'tags' => $this->translated('tags') ?? [],
         ];
     }
 }

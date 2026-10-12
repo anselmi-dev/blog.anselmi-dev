@@ -10,7 +10,7 @@
         role="dialog"
         aria-modal="true"
         @if ($lightboxImageOnly)
-            aria-label="Foto: {{ $lb['title'] }}"
+            aria-label="{{ __('Foto') }}: {{ $lb['title'] }}"
         @else
             aria-labelledby="gallery-lightbox-title"
         @endif
@@ -44,7 +44,7 @@
                         type="button"
                         class="inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/95 text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:bg-white hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 dark:border-zinc-700 dark:bg-zinc-900/95 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-900"
                         wire:click="lightboxPrev"
-                        aria-label="Foto anterior"
+                        aria-label="{{ __('Foto anterior') }}"
                     >
                         <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
@@ -54,7 +54,7 @@
                         type="button"
                         class="inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/95 text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:bg-white hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 dark:border-zinc-700 dark:bg-zinc-900/95 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-900"
                         wire:click="lightboxNext"
-                        aria-label="Foto siguiente"
+                        aria-label="{{ __('Foto siguiente') }}"
                     >
                         <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
@@ -66,7 +66,7 @@
                     class="inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/95 text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:bg-white hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 dark:border-zinc-700 dark:bg-zinc-900/95 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-900"
                     wire:click="toggleLightboxImageOnly"
                     aria-pressed="{{ $lightboxImageOnly ? 'true' : 'false' }}"
-                    aria-label="{{ $lightboxImageOnly ? 'Mostrar detalles de la foto' : 'Maximizar solo imagen' }}"
+                    aria-label="{{ $lightboxImageOnly ? __('Mostrar detalles de la foto') : __('Maximizar solo imagen') }}"
                 >
                     @if ($lightboxImageOnly)
                         {{-- Restaurar / ver detalles --}}
@@ -84,7 +84,7 @@
                     type="button"
                     class="inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/95 text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:bg-white hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 dark:border-zinc-700 dark:bg-zinc-900/95 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-900"
                     wire:click="closeLightbox"
-                    aria-label="Cerrar"
+                    aria-label="{{ __('Cerrar') }}"
                 >
                     <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
@@ -143,25 +143,25 @@
                     <dl class="grid grid-cols-1 gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
                         @if (! empty($lb['location']))
                             <div class="flex flex-col gap-0.5">
-                                <dt class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Ubicación</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-zinc-400">{{ __('Ubicación') }}</dt>
                                 <dd class="font-medium text-zinc-800">{{ $lb['location'] }}</dd>
                             </div>
                         @endif
                         @if (! empty($lb['released_at']))
                             <div class="flex flex-col gap-0.5">
-                                <dt class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Publicación</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-zinc-400">{{ __('Publicación') }}</dt>
                                 <dd class="font-medium text-zinc-800">{{ $lb['released_at'] }}</dd>
                             </div>
                         @endif
                         @if (! empty($lb['camera']))
                             <div class="flex flex-col gap-0.5">
-                                <dt class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Cámara</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-zinc-400">{{ __('Cámara') }}</dt>
                                 <dd class="font-medium text-zinc-800">{{ $lb['camera'] }}</dd>
                             </div>
                         @endif
                         @if (! empty($lb['iso']) || ! empty($lb['aperture']) || ! empty($lb['shutter']) || ! empty($lb['focal_length']))
                             <div class="flex flex-col gap-0.5 sm:col-span-2">
-                                <dt class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Técnica</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-zinc-400">{{ __('Técnica') }}</dt>
                                 <dd class="flex flex-wrap gap-x-3 gap-y-1 font-medium text-zinc-800">
                                     @if (! empty($lb['iso']))
                                         <span>ISO {{ $lb['iso'] }}</span>

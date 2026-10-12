@@ -13,6 +13,7 @@ use Filament\Actions\EditAction;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -49,6 +50,19 @@ class QuoteResource extends Resource
                     ->columnSpanFull(),
                 TextInput::make('attribution')
                     ->label('Atribución'),
+                Section::make('Inglés')
+                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
+                    ->collapsible()
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->schema([
+                        Textarea::make('quote_en')
+                            ->label('Cita (EN)')
+                            ->rows(3),
+                        TextInput::make('attribution_en')
+                            ->label('Atribución (EN)')
+                            ->maxLength(255),
+                    ]),
             ]);
     }
 

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEnglishTranslations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
+    use HasEnglishTranslations;
+
     protected $fillable = [
         'slug',
         'kind',
@@ -27,11 +30,18 @@ class Post extends Model
         'sort_order',
         'is_published',
         'published_at',
+        'kicker_en',
+        'title_en',
+        'excerpt_en',
+        'body_en',
+        'caption_en',
+        'alt_en',
     ];
 
     protected function casts(): array
     {
         return [
+            'body_en' => 'array',
             'body' => 'array',
             'show_in_bento' => 'boolean',
             'is_published' => 'boolean',
@@ -78,12 +88,12 @@ class Post extends Model
     {
         return [
             'kind' => $this->kind,
-            'kicker' => $this->kicker,
-            'title' => $this->title,
-            'excerpt' => $this->excerpt,
-            'body' => $this->body ?? [],
-            'caption' => $this->caption,
-            'alt' => $this->alt,
+            'kicker' => $this->translated('kicker'),
+            'title' => $this->translated('title'),
+            'excerpt' => $this->translated('excerpt'),
+            'body' => $this->translated('body') ?? [],
+            'caption' => $this->translated('caption'),
+            'alt' => $this->translated('alt'),
             'slug' => $this->slug,
             'image_path' => $this->image_path,
             'image_url' => $this->imageUrl(),

@@ -8,13 +8,13 @@
 @section('header-content')
     <x-hero-content>
         <p class="mb-2 font-folio-mono text-xs font-medium uppercase tracking-widest text-zinc-600">
-            Servicios
+            {{ __('Servicios') }}
         </p>
         <h1 class="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
-            Mis fuentes
+            {{ __('Mis fuentes') }}
         </h1>
         <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-            Tipografías que uso o pruebo en proyectos. Tocá una para ver cómo cargarla con CSS o Tailwind.
+            {{ __('Tipografías que uso o pruebo en proyectos. Tocá una para ver cómo cargarla con CSS o Tailwind.') }}
         </p>
     </x-hero-content>
 @endsection
@@ -101,7 +101,7 @@
                 type="button"
                 class="absolute right-3 top-3 inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                 x-on:click="close()"
-                aria-label="Cerrar"
+                aria-label="{{ __('Cerrar') }}"
             >
                 <x-icon name="x" class="size-5" />
             </button>
@@ -125,7 +125,7 @@
                         rel="noopener noreferrer"
                         class="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900"
                     >
-                        Abrir ficha
+                        {{ __('Abrir ficha') }}
                         <x-icon name="arrow-up-right" class="size-3.5" />
                     </a>
                 </div>

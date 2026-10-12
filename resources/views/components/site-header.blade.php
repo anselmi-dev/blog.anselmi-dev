@@ -1,29 +1,31 @@
 @php
     $dropdownLinks = [
-        ['label' => 'Mis fuentes', 'href' => route('services.fonts'), 'navigate' => true],
-        ['label' => 'Mis colores', 'href' => route('services.colors'), 'navigate' => true],
-        ['label' => 'Mis herramientas', 'href' => route('services.tools'), 'navigate' => true],
+        ['label' => __('Mis fuentes'), 'href' => localized_route('services.fonts'), 'navigate' => true],
+        ['label' => __('Mis colores'), 'href' => localized_route('services.colors'), 'navigate' => true],
+        ['label' => __('Mis herramientas'), 'href' => localized_route('services.tools'), 'navigate' => true],
     ];
 
     if ($hasPublishedGalleryPhotos ?? false) {
-        $dropdownLinks[] = ['label' => 'Galería', 'href' => route('gallery'), 'navigate' => true];
+        $dropdownLinks[] = ['label' => __('Galería'), 'href' => localized_route('gallery'), 'navigate' => true];
     }
 
-    $dropdownLinks[] = ['label' => 'Proyectos', 'href' => route('projects'), 'navigate' => true];
+    $dropdownLinks[] = ['label' => __('Proyectos'), 'href' => localized_route('projects'), 'navigate' => true];
 
     $navLinks = [];
 
     if ($hasPublishedPosts ?? false) {
-        $navLinks[] = ['label' => 'Blog', 'href' => route('blog'), 'navigate' => true];
+        $navLinks[] = ['label' => 'Blog', 'href' => localized_route('blog'), 'navigate' => true];
     }
 
     if ($hasPublishedFaqs ?? false) {
-        $navLinks[] = ['label' => 'FAQ', 'href' => route('faq'), 'navigate' => true];
+        $navLinks[] = ['label' => 'FAQ', 'href' => localized_route('faq'), 'navigate' => true];
     }
 
-    $navLinks[] = ['label' => 'Sobre mí', 'href' => route('about'), 'navigate' => true];
+    $navLinks[] = ['label' => __('Sobre mí'), 'href' => localized_route('about'), 'navigate' => true];
 
     $mobileLinks = [...$dropdownLinks, ...$navLinks];
+
+    $alternateLocale = \App\Support\Localization::isEnglish() ? 'es' : 'en';
 @endphp
 
 <x-site-frame
@@ -37,7 +39,7 @@
             class="relative z-0 flex min-h-[4.5rem] items-center justify-between gap-3 px-4 pt-3 sm:min-h-[5.25rem] sm:px-6 lg:min-h-[5.5rem] lg:px-8 lg:pt-4"
         >
             <a
-                href="{{ route('home') }}"
+                href="{{ localized_route('home') }}"
                 wire:navigate
                 data-reveal-item
                 class="inline-flex items-center text-zinc-900 transition hover:text-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
@@ -47,10 +49,10 @@
 
             <nav
                 class="items-center gap-7 text-sm font-medium text-zinc-900 md:flex lg:gap-10 hidden"
-                aria-label="Navegación principal"
+                aria-label="{{ __('Navegación principal') }}"
             >
                 <div data-reveal-item>
-                    <x-dropdown label="Servicios" :items="$dropdownLinks" />
+                    <x-dropdown :label="__('Servicios')" :items="$dropdownLinks" />
                 </div>
 
                 @foreach ($navLinks as $item)
@@ -65,6 +67,16 @@
             </nav>
 
             <div class="flex items-center gap-2 sm:gap-3" data-reveal-item>
+                <a
+                    href="{{ \App\Support\Localization::switchUrl($alternateLocale) }}"
+                    hreflang="{{ $alternateLocale }}"
+                    lang="{{ $alternateLocale }}"
+                    class="inline-flex size-11 items-center justify-center rounded-full border border-zinc-900 text-xs font-semibold uppercase tracking-wide text-zinc-900 transition hover:bg-zinc-900/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 sm:size-12 sm:text-sm"
+                    aria-label="{{ $alternateLocale === 'en' ? 'View this page in English' : 'Ver esta página en español' }}"
+                >
+                    {{ $alternateLocale }}
+                </a>
+
                 <details
                     class="relative md:hidden"
                     x-data
@@ -73,7 +85,7 @@
                 >
                     <summary
                         class="flex cursor-pointer list-none items-center justify-center rounded-full border border-zinc-900 p-2.5 marker:hidden [&::-webkit-details-marker]:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
-                        aria-label="Abrir menú"
+                        aria-label="{{ __('Abrir menú') }}"
                     >
                         <x-icon name="menu" class="size-6" />
                     </summary>
@@ -118,7 +130,7 @@
                             <path d="M10 20c2 2 4 3 6 3s4-1 6-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                         </svg>
                     </span>
-                    <span class="max-[360px]:sr-only sm:inline">Contacto</span>
+                    <span class="max-[360px]:sr-only sm:inline">{{ __('Contacto') }}</span>
                 </button>
             </div>
         </div>

@@ -76,11 +76,11 @@ class ContactModal extends Component
     protected function messages(): array
     {
         return [
-            'name.required' => 'El nombre es obligatorio.',
-            'email.required' => 'El correo es obligatorio.',
-            'email.email' => 'Ingresá un correo válido.',
-            'message.required' => 'Contanos un poco sobre el proyecto.',
-            'message.min' => 'El mensaje debe tener al menos :min caracteres.',
+            'name.required' => __('El nombre es obligatorio.'),
+            'email.required' => __('El correo es obligatorio.'),
+            'email.email' => __('Ingresá un correo válido.'),
+            'message.required' => __('Contanos un poco sobre el proyecto.'),
+            'message.min' => __('El mensaje debe tener al menos :min caracteres.'),
         ];
     }
 
@@ -101,7 +101,7 @@ class ContactModal extends Component
             $seconds = RateLimiter::availableIn($key);
 
             throw ValidationException::withMessages([
-                'email' => "Demasiados mensajes. Probá de nuevo en {$seconds} segundos.",
+                'email' => __('Demasiados mensajes. Probá de nuevo en :seconds segundos.', ['seconds' => $seconds]),
             ]);
         }
 
@@ -112,7 +112,7 @@ class ContactModal extends Component
 
     public function render()
     {
-        $contact = Setting::contact();
+        $contact = Setting::localizedContact();
         $site = Setting::site();
 
         return view('livewire.contact-modal', [

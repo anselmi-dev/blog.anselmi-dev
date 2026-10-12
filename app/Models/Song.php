@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEnglishTranslations;
 use App\Support\SpotifyEmbed;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Storage;
 
 class Song extends Model
 {
+    use HasEnglishTranslations;
+
     protected $fillable = [
         'title',
         'artist',
@@ -20,6 +23,7 @@ class Song extends Model
         'note',
         'sort_order',
         'is_published',
+        'note_en',
     ];
 
     protected function casts(): array
@@ -59,7 +63,7 @@ class Song extends Model
             'title' => $this->title,
             'artist' => $this->artist,
             'album' => $this->album ?? '',
-            'note' => $this->note ?? '',
+            'note' => $this->translated('note') ?? '',
             'image' => $this->imageUrl() ?? '',
             'spotify_url' => $spotifyUrl ?? '',
             'embed_url' => SpotifyEmbed::toEmbedUrl($spotifyUrl) ?? '',

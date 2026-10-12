@@ -1,13 +1,13 @@
 @section('header-content')
     <x-hero-content>
         <p class="mb-2 font-folio-mono text-xs font-medium uppercase tracking-widest text-zinc-600">
-            Servicios
+            {{ __('Servicios') }}
         </p>
         <h1 class="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
-            Mis herramientas
+            {{ __('Mis herramientas') }}
         </h1>
         <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-            Stack que uso día a día para diseñar, construir y desplegar productos web.
+            {{ __('Stack que uso día a día para diseñar, construir y desplegar productos web.') }}
         </p>
     </x-hero-content>
 @endsection
@@ -57,7 +57,7 @@
                     </p>
                 </div>
                 <span class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-900">
-                    Visitar sitio
+                    {{ __('Visitar sitio') }}
                     <x-icon name="arrow-up-right" class="size-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
             </a>

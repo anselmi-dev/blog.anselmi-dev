@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Contracts\Galleryable;
+use App\Models\Concerns\HasEnglishTranslations;
 use Illuminate\Database\Eloquent\Model;
 
 class Quote extends Model implements Galleryable
 {
+    use HasEnglishTranslations;
+
     protected $fillable = [
         'quote',
         'attribution',
+        'quote_en',
+        'attribution_en',
     ];
 
     public function galleryKind(): string
@@ -25,8 +30,8 @@ class Quote extends Model implements Galleryable
     public function toGalleryArray(): array
     {
         return [
-            'quote' => $this->quote,
-            'attribution' => $this->attribution,
+            'quote' => $this->translated('quote'),
+            'attribution' => $this->translated('attribution'),
         ];
     }
 }

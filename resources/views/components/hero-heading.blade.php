@@ -1,6 +1,6 @@
 @props([
-    'line1' => 'Diseño y desarrollo que',
-    'line2' => 'impulsan tu presencia digital',
+    'line1' => __('Diseño y desarrollo que'),
+    'line2' => __('impulsan tu presencia digital'),
 ])
 
 <h1

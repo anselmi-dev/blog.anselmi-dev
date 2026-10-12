@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEnglishTranslations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class ReadingBook extends Model
 {
+    use HasEnglishTranslations;
+
     protected $fillable = [
         'title',
         'author',
         'image_path',
         'sort_order',
         'is_published',
+        'title_en',
+        'author_en',
     ];
 
     protected function casts(): array
@@ -50,8 +55,8 @@ class ReadingBook extends Model
     public function toViewArray(): array
     {
         return [
-            'title' => $this->title,
-            'author' => $this->author,
+            'title' => $this->translated('title'),
+            'author' => $this->translated('author'),
             'image' => $this->imageUrl() ?? '',
         ];
     }

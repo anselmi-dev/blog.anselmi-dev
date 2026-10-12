@@ -31,7 +31,7 @@
                     type="button"
                     class="absolute right-3 top-3 z-20 inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/90 text-zinc-600 transition hover:border-zinc-300 hover:bg-white hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                     wire:click="close"
-                    aria-label="Cerrar"
+                    aria-label="{{ __('Cerrar') }}"
                 >
                     <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
@@ -66,7 +66,7 @@
                                     </svg>
                                 </span>
                                 <div>
-                                    <p class="font-bold text-zinc-900">{{ $contact['email_label'] ?: 'Escribinos' }}</p>
+                                    <p class="font-bold text-zinc-900">{{ $contact['email_label'] ?: __('Escribinos') }}</p>
                                     @if (filled($contact['email_description']))
                                         <p class="mt-1 leading-relaxed">{{ $contact['email_description'] }}</p>
                                     @endif
@@ -127,7 +127,7 @@
                     </div>
 
                     @if (count($socialLinks) > 0)
-                        <div class="mt-auto flex flex-wrap gap-2 border-t border-zinc-100 pt-6" aria-label="Redes sociales">
+                        <div class="mt-auto flex flex-wrap gap-2 border-t border-zinc-100 pt-6" aria-label="{{ __('Redes sociales') }}">
                             @foreach ($socialLinks as $net)
                                 @if (filled($net['url']))
                                     <a
@@ -142,7 +142,7 @@
                                 @else
                                     <span
                                         class="inline-flex size-9 items-center justify-center rounded-md border border-dashed border-zinc-200 bg-zinc-50 text-[0.65rem] font-bold tracking-tighter text-zinc-400"
-                                        title="Próximamente"
+                                        title="{{ __('Próximamente') }}"
                                     >
                                         {{ mb_substr($net['label'], 0, 1) }}
                                     </span>
@@ -165,9 +165,9 @@
                                 </svg>
                             </span>
                             <div>
-                                <p class="text-xl font-bold tracking-tight text-zinc-900">{{ $contact['success_title'] ?: '¡Recibido!' }}</p>
+                                <p class="text-xl font-bold tracking-tight text-zinc-900">{{ $contact['success_title'] ?: __('¡Recibido!') }}</p>
                                 <p class="mt-2 text-sm leading-relaxed text-zinc-800">
-                                    {{ $contact['success_description'] ?: 'Gracias por escribir. Te respondo a la brevedad.' }}
+                                    {{ $contact['success_description'] ?: __('Gracias por escribir. Te respondo a la brevedad.') }}
                                 </p>
                             </div>
                             <button
@@ -175,12 +175,12 @@
                                 class="inline-flex cursor-pointer items-center justify-center rounded-xl bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                                 wire:click="close"
                             >
-                                Cerrar
+                                {{ __('Cerrar') }}
                             </button>
                         </div>
                     @else
                         <h2 id="contact-modal-title" class="text-2xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-3xl">
-                            {{ $contact['form_title'] ?: '¿Ideas en mente? Sumemos.' }}
+                            {{ $contact['form_title'] ?: __('¿Ideas en mente? Sumemos.') }}
                         </h2>
                         @if (filled($contact['form_description']))
                             <p class="mt-2 text-sm leading-relaxed text-zinc-800 sm:text-base">
@@ -190,7 +190,7 @@
 
                         <form class="mt-8 flex flex-col gap-6" wire:submit.prevent="submit">
                             <div class="relative">
-                                <label class="sr-only" for="contact-name">Tu nombre</label>
+                                <label class="sr-only" for="contact-name">{{ __('Tu nombre') }}</label>
                                 <input
                                     id="contact-name"
                                     type="text"
@@ -199,7 +199,7 @@
                                         'w-full border-0 border-b-2 border-zinc-900 bg-transparent py-2 text-sm font-medium text-zinc-900 placeholder:text-zinc-600/80 focus:border-zinc-900 focus:outline-none focus:ring-0',
                                         'pr-11' => $errors->has('name'),
                                     ])
-                                    placeholder="Tu nombre"
+                                    placeholder="{{ __('Tu nombre') }}"
                                     wire:model.blur="name"
                                     @error('name') aria-invalid="true" @enderror
                                 />
@@ -207,7 +207,7 @@
                             </div>
 
                             <div class="relative">
-                                <label class="sr-only" for="contact-email">Correo</label>
+                                <label class="sr-only" for="contact-email">{{ __('Correo') }}</label>
                                 <input
                                     id="contact-email"
                                     type="email"
@@ -216,7 +216,7 @@
                                         'w-full border-0 border-b-2 border-zinc-900 bg-transparent py-2 text-sm font-medium text-zinc-900 placeholder:text-zinc-600/80 focus:border-zinc-900 focus:outline-none focus:ring-0',
                                         'pr-11' => $errors->has('email'),
                                     ])
-                                    placeholder="vos@empresa.com"
+                                    placeholder="{{ __('vos@empresa.com') }}"
                                     wire:model.blur="email"
                                     @error('email') aria-invalid="true" @enderror
                                 />
@@ -224,7 +224,7 @@
                             </div>
 
                             <div class="relative">
-                                <label class="sr-only" for="contact-message">Proyecto</label>
+                                <label class="sr-only" for="contact-message">{{ __('Proyecto') }}</label>
                                 <textarea
                                     id="contact-message"
                                     rows="3"
@@ -232,7 +232,7 @@
                                         'w-full resize-none border-0 border-b-2 border-zinc-900 bg-transparent py-2 text-sm font-medium text-zinc-900 placeholder:text-zinc-600/80 focus:border-zinc-900 focus:outline-none focus:ring-0',
                                         'pr-11' => $errors->has('message'),
                                     ])
-                                    placeholder="Contame un poco sobre el proyecto…"
+                                    placeholder="{{ __('Contame un poco sobre el proyecto…') }}"
                                     wire:model.blur="message"
                                     @error('message') aria-invalid="true" @enderror
                                 ></textarea>
@@ -245,8 +245,8 @@
                                 wire:loading.attr="disabled"
                                 wire:target="submit"
                             >
-                                <span wire:loading.remove wire:target="submit">{{ $contact['submit_label'] ?: '¡Arranquemos!' }}</span>
-                                <span wire:loading wire:target="submit">Enviando…</span>
+                                <span wire:loading.remove wire:target="submit">{{ $contact['submit_label'] ?: __('¡Arranquemos!') }}</span>
+                                <span wire:loading wire:target="submit">{{ __('Enviando…') }}</span>
                             </button>
                         </form>
                     @endif

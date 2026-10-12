@@ -28,6 +28,7 @@ class ContentSeeder extends Seeder
         $this->seedSnapshot();
         $this->seedReadingBooks();
         $this->call(SongSeeder::class);
+        $this->call(EnglishContentSeeder::class);
     }
 
     private function seedPosts(): void

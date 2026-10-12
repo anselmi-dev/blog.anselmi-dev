@@ -14,25 +14,59 @@ use App\Livewire\Pages\ProjectShow;
 use App\Livewire\Pages\Tools;
 use Illuminate\Support\Facades\Route;
 
-Route::livewire('/', Home::class)->name('home');
+/**
+ * Páginas públicas del sitio. Se registran dos veces: en español sin prefijo
+ * y en inglés bajo /en, con nombres "en.*" y slugs traducidos.
+ *
+ * @param  array<string, string>  $paths
+ */
+$registerSiteRoutes = function (array $paths): void {
+    Route::livewire($paths['home'], Home::class)->name('home');
 
-Route::livewire('/sobre-mi', About::class)->name('about');
+    Route::livewire($paths['about'], About::class)->name('about');
 
-Route::livewire('/faq', Faq::class)->name('faq');
+    Route::livewire($paths['faq'], Faq::class)->name('faq');
 
-Route::livewire('/galeria', Gallery::class)->name('gallery');
+    Route::livewire($paths['gallery'], Gallery::class)->name('gallery');
 
-Route::livewire('/playlist', Playlist::class)->name('playlist');
+    Route::livewire($paths['playlist'], Playlist::class)->name('playlist');
 
-Route::livewire('/proyectos', Projects::class)->name('projects');
-Route::livewire('/proyectos/{slug}', ProjectShow::class)->name('projects.show');
+    Route::livewire($paths['projects'], Projects::class)->name('projects');
+    Route::livewire($paths['projects'].'/{slug}', ProjectShow::class)->name('projects.show');
 
-Route::livewire('/blog', Posts::class)->name('blog');
-Route::livewire('/blog/{slug}', PostShow::class)->name('blog.show');
+    Route::livewire($paths['blog'], Posts::class)->name('blog');
+    Route::livewire($paths['blog'].'/{slug}', PostShow::class)->name('blog.show');
 
-Route::livewire('/servicios/fuentes', Fonts::class)->name('services.fonts');
-Route::livewire('/servicios/colores', Colors::class)->name('services.colors');
-Route::livewire('/servicios/herramientas', Tools::class)->name('services.tools');
+    Route::livewire($paths['fonts'], Fonts::class)->name('services.fonts');
+    Route::livewire($paths['colors'], Colors::class)->name('services.colors');
+    Route::livewire($paths['tools'], Tools::class)->name('services.tools');
+};
+
+Route::middleware('locale:es')->group(fn () => $registerSiteRoutes([
+    'home' => '/',
+    'about' => '/sobre-mi',
+    'faq' => '/faq',
+    'gallery' => '/galeria',
+    'playlist' => '/playlist',
+    'projects' => '/proyectos',
+    'blog' => '/blog',
+    'fonts' => '/servicios/fuentes',
+    'colors' => '/servicios/colores',
+    'tools' => '/servicios/herramientas',
+]));
+
+Route::prefix('en')->name('en.')->middleware('locale:en')->group(fn () => $registerSiteRoutes([
+    'home' => '/',
+    'about' => '/about',
+    'faq' => '/faq',
+    'gallery' => '/gallery',
+    'playlist' => '/playlist',
+    'projects' => '/projects',
+    'blog' => '/blog',
+    'fonts' => '/services/fonts',
+    'colors' => '/services/colors',
+    'tools' => '/services/tools',
+]));
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::redirect('dashboard', '/admin')->name('dashboard');

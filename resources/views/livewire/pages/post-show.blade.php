@@ -25,13 +25,13 @@
         data-reveal-duration="0.85"
     >
         <a
-            href="{{ route('blog') }}"
+            href="{{ localized_route('blog') }}"
             wire:navigate
             data-reveal-item
             class="inline-flex items-center gap-2 text-base font-medium text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
         >
             <x-icon name="arrow-left" class="size-4 shrink-0" />
-            Volver al blog
+            {{ __('Volver al blog') }}
         </a>
 
         @if (($entry['kind'] ?? '') === 'image')

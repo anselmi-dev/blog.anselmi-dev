@@ -145,6 +145,33 @@ class PostResource extends Resource
                         DateTimePicker::make('published_at')
                             ->label('Fecha de publicación'),
                     ]),
+                Section::make('Inglés')
+                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
+                    ->collapsible()
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->schema([
+                        TextInput::make('title_en')
+                            ->label('Título (EN)')
+                            ->maxLength(255),
+                        TextInput::make('kicker_en')
+                            ->label('Kicker (EN)')
+                            ->maxLength(255),
+                        Textarea::make('excerpt_en')
+                            ->label('Extracto (EN)')
+                            ->rows(3),
+                        Repeater::make('body_en')
+                            ->label('Cuerpo (EN)')
+                            ->simple(Textarea::make('paragraph')->rows(3))
+                            ->defaultItems(0)
+                            ->columnSpanFull(),
+                        Textarea::make('caption_en')
+                            ->label('Pie de imagen (EN)')
+                            ->rows(3),
+                        TextInput::make('alt_en')
+                            ->label('Texto alternativo (EN)')
+                            ->maxLength(255),
+                    ]),
             ]);
     }
 

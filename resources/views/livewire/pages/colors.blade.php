@@ -1,13 +1,13 @@
 @section('header-content')
     <x-hero-content>
         <p class="mb-2 font-folio-mono text-xs font-medium uppercase tracking-widest text-zinc-600">
-            Servicios
+            {{ __('Servicios') }}
         </p>
         <h1 class="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
-            Mis colores
+            {{ __('Mis colores') }}
         </h1>
         <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-            Paleta del layout (brand lime) y una guía de color de referencia. Tocá un color para exportarlo a Tailwind v2 o v3.
+            {{ __('Paleta del layout (brand lime) y una guía de color de referencia. Tocá un color para exportarlo a Tailwind v2 o v3.') }}
         </p>
     </x-hero-content>
 @endsection
@@ -47,7 +47,7 @@
                         x-on:click="show({{ $columnIndex }}, {{ $swatchIndex }})"
                         class="relative flex {{ $spanClass[$swatch['span'] ?? 'md'] }} cursor-pointer flex-col justify-between p-4 text-left transition hover:brightness-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-zinc-900 sm:p-5"
                         style="background-color: {{ $swatch['hex'] }}"
-                        aria-label="Ver {{ $swatch['name'] }}"
+                        aria-label="{{ __('Ver :name', ['name' => $swatch['name']]) }}"
                     >
                         <p class="text-sm font-semibold tracking-tight {{ $ink }}">
                             {{ $swatch['name'] }}
@@ -93,7 +93,7 @@
                 type="button"
                 class="absolute right-3 top-3 inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                 x-on:click="close()"
-                aria-label="Cerrar"
+                aria-label="{{ __('Cerrar') }}"
             >
                 <x-icon name="x" class="size-5" />
             </button>
@@ -128,7 +128,7 @@
             </dl>
 
             <div class="mt-6" x-show="active">
-                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Escala generada</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">{{ __('Escala generada') }}</p>
                 <div class="mt-2 flex overflow-hidden rounded-xl ring-1 ring-zinc-200">
                     <template x-for="shade in shadeEntries" :key="shade.step">
                         <div
@@ -171,7 +171,7 @@
                 </div>
 
                 <div class="sm:px-4">
-                    <p class="mb-3 text-[0.65rem] font-semibold uppercase tracking-wider text-zinc-400">Formato</p>
+                    <p class="mb-3 text-[0.65rem] font-semibold uppercase tracking-wider text-zinc-400">{{ __('Formato') }}</p>
                     <ul class="space-y-1">
                         <li>
                             <button
@@ -203,7 +203,7 @@
                         x-on:click="copyExport()"
                     >
                         <x-icon name="clipboard" class="size-3.5" />
-                        <span x-text="copied ? 'Copiado' : 'Copy to clipboard'"></span>
+                        <span x-text="copied ? @js(__('Copiado')) : @js(__('Copiar al portapapeles'))"></span>
                     </button>
                     <pre class="max-h-[18rem] overflow-auto p-4 pt-12 font-mono text-[0.72rem] leading-relaxed text-zinc-300"><code x-html="exportCodeHtml"></code></pre>
                 </div>
@@ -211,11 +211,11 @@
 
             <div class="mt-6 space-y-4 border-t border-zinc-100 pt-6" x-show="active">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Uso rápido — sólido</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">{{ __('Uso rápido — sólido') }}</p>
                     <pre class="mt-2 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-4 font-mono text-xs leading-relaxed text-zinc-800"><code x-text="active ? `<div class=&quot;${solidTw}&quot;>\n  ${active.name}\n</div>` : ''"></code></pre>
                 </div>
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Uso rápido — degradado</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">{{ __('Uso rápido — degradado') }}</p>
                     <pre class="mt-2 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-4 font-mono text-xs leading-relaxed text-zinc-800"><code x-text="active ? `<div class=&quot;${gradTw}&quot;>\n  ${active.name}\n</div>` : ''"></code></pre>
                 </div>
             </div>

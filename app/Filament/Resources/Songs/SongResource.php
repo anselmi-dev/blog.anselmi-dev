@@ -17,6 +17,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -90,6 +91,16 @@ class SongResource extends Resource
                 Toggle::make('is_published')
                     ->label('Publicado')
                     ->default(true),
+                Section::make('Inglés')
+                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
+                    ->collapsible()
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->schema([
+                        Textarea::make('note_en')
+                            ->label('Nota (EN)')
+                            ->rows(3),
+                    ]),
             ]);
     }
 

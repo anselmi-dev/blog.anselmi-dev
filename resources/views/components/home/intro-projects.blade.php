@@ -14,7 +14,7 @@
         <div data-reveal-item>
             <span class="mb-6 block text-xs font-medium tabular-nums tracking-widest text-zinc-400">04</span>
             <h2 id="intro-proyectos" class="text-lg font-bold text-black sm:text-xl">
-                Proyectos
+                {{ __('Proyectos') }}
             </h2>
         </div>
 
@@ -22,7 +22,7 @@
             @foreach ($projects as $slug => $project)
                 <li class="border-b border-zinc-200">
                     <a
-                        href="{{ route('projects.show', $slug) }}"
+                        href="{{ localized_route('projects.show', $slug) }}"
                         wire:navigate
                         class="group flex items-start justify-between gap-6 py-6 transition hover:bg-zinc-50/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 sm:gap-10 sm:py-7"
                     >
@@ -58,11 +58,11 @@
 
         <div data-reveal-item>
             <a
-                href="{{ route('projects') }}"
+                href="{{ localized_route('projects') }}"
                 wire:navigate
                 class="group inline-flex items-center justify-between gap-4 pt-6 font-semibold text-black transition hover:text-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-900"
             >
-                <span>Ver portafolio completo</span>
+                <span>{{ __('Ver portafolio completo') }}</span>
                 <x-icon name="arrow-right" class="size-4 shrink-0 text-zinc-900 transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
         </div>

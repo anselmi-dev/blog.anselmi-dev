@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEnglishTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class HomeSnapshot extends Model
 {
+    use HasEnglishTranslations;
+
     protected $fillable = [
         'map_image_path',
         'maps_url',
@@ -16,6 +19,7 @@ class HomeSnapshot extends Model
         'spotify_embed_url',
         'playlist_url',
         'carousel_interval',
+        'map_label_en',
     ];
 
     protected function casts(): array

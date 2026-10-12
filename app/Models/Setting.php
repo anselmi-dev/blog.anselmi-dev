@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Support\Localization;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
@@ -147,6 +148,73 @@ class Setting extends Model
     public static function site(): array
     {
         return static::group('site', static::siteDefaults());
+    }
+
+    /**
+     * Textos de contacto que tienen versión en inglés ("{clave}_en").
+     *
+     * @var list<string>
+     */
+    public const TRANSLATABLE_CONTACT_KEYS = [
+        'email_label',
+        'email_description',
+        'location_label',
+        'location_description',
+        'schedule_label',
+        'schedule_description',
+        'form_title',
+        'form_description',
+        'submit_label',
+        'success_title',
+        'success_description',
+    ];
+
+    /**
+     * Ajustes de contacto en el idioma actual del sitio público.
+     *
+     * @return array<string, mixed>
+     */
+    public static function localizedContact(): array
+    {
+        return static::localize(static::contact(), self::TRANSLATABLE_CONTACT_KEYS);
+    }
+
+    /**
+     * Ajustes del sitio en el idioma actual del sitio público.
+     *
+     * @return array<string, mixed>
+     */
+    public static function localizedSite(): array
+    {
+        return static::localize(static::site(), ['meta_description']);
+    }
+
+    /**
+     * En inglés usa "{clave}_en" si tiene valor; si no, la traducción del texto
+     * en español cuando existe en lang/en.json (los textos por defecto la
+     * tienen) o el texto en español tal cual.
+     *
+     * @param  array<string, mixed>  $values
+     * @param  list<string>  $keys
+     * @return array<string, mixed>
+     */
+    protected static function localize(array $values, array $keys): array
+    {
+        if (! Localization::isEnglish()) {
+            return $values;
+        }
+
+        foreach ($keys as $key) {
+            $englishValue = $values[$key.'_en'] ?? null;
+
+            if (filled($englishValue)) {
+                $values[$key] = $englishValue;
+            } elseif (is_string($values[$key] ?? null) && filled($values[$key])) {
+                $values[$key] = __($values[$key]);
+            }
+        }
+
+        return $values;
     }
 
     public static function forgetGroupCache(string $group): void

@@ -147,6 +147,52 @@ class ManageSettings extends Page
                                                 ->collapsible(),
                                         ]),
                                 ]),
+                            Tab::make('Inglés')
+                                ->icon(Heroicon::OutlinedLanguage)
+                                ->schema([
+                                    Section::make('Versión en inglés (/en)')
+                                        ->description('Si dejás un campo vacío, se usa la traducción del texto por defecto o el texto en español.')
+                                        ->columns(2)
+                                        ->schema([
+                                            Textarea::make('site.meta_description_en')
+                                                ->label('Meta description')
+                                                ->rows(3)
+                                                ->columnSpanFull(),
+                                            TextInput::make('contact.email_label_en')
+                                                ->label('Correo — título')
+                                                ->maxLength(120),
+                                            Textarea::make('contact.email_description_en')
+                                                ->label('Correo — descripción')
+                                                ->rows(2),
+                                            TextInput::make('contact.location_label_en')
+                                                ->label('Ubicación — título')
+                                                ->maxLength(120),
+                                            Textarea::make('contact.location_description_en')
+                                                ->label('Ubicación — descripción')
+                                                ->rows(2),
+                                            TextInput::make('contact.schedule_label_en')
+                                                ->label('Horario — título')
+                                                ->maxLength(120),
+                                            Textarea::make('contact.schedule_description_en')
+                                                ->label('Horario — descripción')
+                                                ->rows(2),
+                                            TextInput::make('contact.form_title_en')
+                                                ->label('Formulario — título')
+                                                ->maxLength(200),
+                                            Textarea::make('contact.form_description_en')
+                                                ->label('Formulario — descripción')
+                                                ->rows(2),
+                                            TextInput::make('contact.submit_label_en')
+                                                ->label('Texto del botón')
+                                                ->maxLength(80),
+                                            TextInput::make('contact.success_title_en')
+                                                ->label('Título de éxito')
+                                                ->maxLength(120),
+                                            Textarea::make('contact.success_description_en')
+                                                ->label('Mensaje de éxito')
+                                                ->rows(2),
+                                        ]),
+                                ]),
                         ]),
                 ])
                     ->livewireSubmitHandler('save')

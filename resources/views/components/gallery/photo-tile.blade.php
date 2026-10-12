@@ -52,7 +52,7 @@
                 <span
                     class="inline-flex rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-widest text-white backdrop-blur-sm"
                 >
-                    Destacado
+                    {{ __('Destacado') }}
                 </span>
             </div>
         @endif

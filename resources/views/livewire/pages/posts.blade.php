@@ -4,10 +4,10 @@
             Blog
         </p>
         <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
-            Notas
+            {{ __('Notas') }}
         </h1>
         <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg">
-            Textos cortos sobre cómo trabajo, qué uso en el stack y por qué a veces conviene decir que no.
+            {{ __('Textos cortos sobre cómo trabajo, qué uso en el stack y por qué a veces conviene decir que no.') }}
         </p>
     </x-hero-content>
 @endsection
@@ -15,7 +15,7 @@
 <div class="pb-16 pt-4 sm:pb-20 sm:pt-6 lg:pb-24">
     <section
         class="py-10 dark:bg-zinc-950 sm:py-12 lg:py-16"
-        aria-label="Notas en rejilla"
+        aria-label="{{ __('Notas en rejilla') }}"
         data-reveal="fade-up"
         data-reveal-scroll
         data-reveal-stagger="0.07"
@@ -54,7 +54,7 @@
                         @endphp
                         <x-posts.bento-card
                             data-reveal-item
-                            :href="route('blog.show', $cell['slug'] ?? '')"
+                            :href="localized_route('blog.show', $cell['slug'] ?? '')"
                             :kicker="$e['kicker'] ?? ''"
                             :title="$e['title'] ?? ''"
                             :excerpt="$e['excerpt'] ?? ''"
@@ -72,7 +72,7 @@
                             );
                         @endphp
                         <a
-                            href="{{ route('blog.show', $cell['slug'] ?? '') }}"
+                            href="{{ localized_route('blog.show', $cell['slug'] ?? '') }}"
                             wire:navigate
                             data-reveal-item
                             @class([

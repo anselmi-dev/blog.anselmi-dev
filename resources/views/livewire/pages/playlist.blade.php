@@ -1,13 +1,13 @@
 @section('header-content')
     <x-hero-content>
         <p class="mb-2 font-folio-mono text-xs font-medium uppercase tracking-widest text-zinc-600">
-            ¿Qué escucho?
+            {{ __('¿Qué escucho?') }}
         </p>
         <h1 class="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
-            Mi playlist
+            {{ __('Mi playlist') }}
         </h1>
         <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-            Las canciones que me acompañan mientras diseño, programo o simplemente desconecto.
+            {{ __('Las canciones que me acompañan mientras diseño, programo o simplemente desconecto.') }}
         </p>
     </x-hero-content>
 @endsection
@@ -21,7 +21,7 @@
         >
             <div class="mb-3 flex items-center justify-between gap-3">
                 <p class="text-lg font-normal uppercase leading-none tracking-tight text-zinc-500 lg:text-xl">
-                    Playlist completa
+                    {{ __('Playlist completa') }}
                 </p>
                 <a
                     href="{{ $playlistUrl }}"
@@ -29,7 +29,7 @@
                     rel="noopener noreferrer"
                     class="inline-flex h-8 items-center gap-1 rounded-full border border-zinc-200 px-3 text-sm text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                 >
-                    Abrir en Spotify
+                    {{ __('Abrir en Spotify') }}
                     <x-icon name="external-link" class="size-4" />
                 </a>
             </div>
@@ -44,7 +44,7 @@
                     sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
                     loading="lazy"
                     referrerpolicy="strict-origin-when-cross-origin"
-                    title="Spotify — mi playlist"
+                    title="Spotify — {{ __('mi playlist') }}"
                 ></iframe>
             </div>
         </section>
@@ -52,7 +52,7 @@
 
     @if (count($songs) === 0 && blank($playlistEmbedUrl))
         <p class="mx-auto max-w-8xl text-sm text-zinc-500">
-            Todavía no hay canciones en la playlist.
+            {{ __('Todavía no hay canciones en la playlist.') }}
         </p>
     @elseif (count($songs) > 0)
         <ol
@@ -109,7 +109,7 @@
                                     :aria-expanded="playing"
                                     class="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                                     :class="{ 'border-brand-lime bg-brand-lime text-zinc-900': playing }"
-                                    aria-label="Reproducir {{ $song['title'] }}"
+                                    aria-label="{{ __('Reproducir :title', ['title' => $song['title']]) }}"
                                 >
                                     <x-icon name="play" class="size-4" />
                                 </button>
@@ -120,7 +120,7 @@
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="inline-flex size-9 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
-                                    aria-label="Abrir {{ $song['title'] }} en Spotify"
+                                    aria-label="{{ __('Abrir :title en Spotify', ['title' => $song['title']]) }}"
                                 >
                                     <x-icon name="external-link" class="size-4" />
                                 </a>

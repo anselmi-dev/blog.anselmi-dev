@@ -22,8 +22,8 @@ class Faq extends Component
             ->published()
             ->get()
             ->map(fn (FaqModel $faq): array => [
-                'question' => $faq->question,
-                'answer' => $faq->answer,
+                'question' => $faq->translated('question'),
+                'answer' => $faq->translated('answer'),
             ])
             ->all();
     }

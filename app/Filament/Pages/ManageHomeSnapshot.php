@@ -68,6 +68,10 @@ class ManageHomeSnapshot extends Page
                                 ->label('Etiqueta')
                                 ->placeholder('MONTEVIDEO · URUGUAY')
                                 ->maxLength(120),
+                            TextInput::make('map_label_en')
+                                ->label('Etiqueta (EN)')
+                                ->helperText('Para la versión en inglés. Si queda vacío, se usa la etiqueta en español.')
+                                ->maxLength(120),
                         ]),
                     Section::make('Música')
                         ->schema([

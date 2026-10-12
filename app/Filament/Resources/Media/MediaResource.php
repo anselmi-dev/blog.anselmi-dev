@@ -124,6 +124,27 @@ class MediaResource extends Resource
                         TextInput::make('width')->label('Ancho px')->numeric(),
                         TextInput::make('height')->label('Alto px')->numeric(),
                     ]),
+                Section::make('Inglés')
+                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
+                    ->collapsible()
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->schema([
+                        TextInput::make('title_en')
+                            ->label('Título (EN)')
+                            ->maxLength(255),
+                        TextInput::make('category_en')
+                            ->label('Categoría (EN)')
+                            ->maxLength(255),
+                        Textarea::make('description_en')
+                            ->label('Descripción (EN)')
+                            ->rows(3),
+                        TextInput::make('location_en')
+                            ->label('Ubicación (EN)')
+                            ->maxLength(255),
+                        TagsInput::make('tags_en')
+                            ->label('Etiquetas (EN)'),
+                    ]),
             ]);
     }
 

@@ -23,20 +23,20 @@
                 <span class="inline-block w-fit rounded-full border border-[#111] px-4 py-[5px] text-[0.78rem] font-medium text-[#111]">Montevideo · Uruguay</span>
 
                 <h1 class="font-cond m-0 text-[clamp(1.9rem,3.8vw,2.75rem)] font-black leading-[1.1] text-[#111]">
-                    <span class="block">Hola</span>
-                    <span class="block">Soy Anselmi</span>
+                    <span class="block">{{ __('Hola') }}</span>
+                    <span class="block">{{ __('Soy Anselmi') }}</span>
                 </h1>
 
                 <p class="m-0 max-w-[400px] text-base leading-[1.65] text-[#333]">
-                    Ayudo a construir productos web rápidos y confiables con Laravel &amp; Livewire
+                    {{ __('Ayudo a construir productos web rápidos y confiables con Laravel & Livewire') }}
                 </p>
 
                 <a
-                    href="{{ route('about') }}"
+                    href="{{ localized_route('about') }}"
                     wire:navigate
                     class="group inline-flex w-fit items-center gap-[10px] rounded-full bg-brand-lime-500 px-5 py-[11px] text-[0.85rem] font-semibold text-brand-lime-50 no-underline transition-[background-color,transform] duration-300 hover:scale-[1.03] hover:bg-[#2a2a2a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
                 >
-                    Conocé más
+                    {{ __('Conocé más') }}
                     <span
                         class="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-brand-lime text-zinc-900 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-105"
                         aria-hidden="true"
@@ -57,7 +57,7 @@
             <!-- RIGHT: two photos -->
             <div class="flex flex-[2_1_240px] items-start gap-[10px] max-[600px]:w-full max-[600px]:flex-none max-[420px]:gap-2">
                 <div class="h-[270px] flex-1 overflow-hidden rounded-2xl max-[600px]:h-[190px] max-[420px]:h-[160px]">
-                    <img class="block size-full object-cover" src="{{ asset('images/DSC_0307.jpg') }}" alt="Cyclist racing" />
+                    <img class="block size-full object-cover" src="{{ asset('images/DSC_0307.jpg') }}" alt="{{ __('Retrato de Carlos Anselmi') }}" />
                 </div>
                 {{-- <div class="mt-11 h-[220px] flex-1 overflow-hidden rounded-2xl max-[600px]:mt-7 max-[600px]:h-[160px] max-[420px]:mt-6 max-[420px]:h-[130px]">
                     <img class="block size-full object-cover" src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=400&h=500&fit=crop&crop=top" alt="Cyclist with bike" />
@@ -70,13 +70,13 @@
             <!-- Photo / craft card -->
             <div class="flex min-w-[240px] flex-[2_1_280px] flex-col gap-4 rounded-3xl bg-brand-lime p-7 max-[600px]:min-w-0">
                 <p class="m-0 text-base font-semibold leading-snug text-brand-lime-500">
-                    Entre mis hobbies está la fotografía. Sí, "estoy tomando fotografía"... todavía aprendiendo, así que cualquier parecido con un profesional es pura coincidencia.
+                    {{ __('Entre mis hobbies está la fotografía. Sí, "estoy tomando fotografía"... todavía aprendiendo, así que cualquier parecido con un profesional es pura coincidencia.') }}
                     @if ($hasPublishedGalleryPhotos ?? false)
-                        <a href="{{ route('gallery') }}" wire:navigate class="text-brand-lime-700 underline decoration-brand-lime-700/50 underline-offset-2 transition-colors hover:text-brand-lime-900 hover:decoration-brand-lime-900">Podés ver más acá</a>.
+                        <a href="{{ localized_route('gallery') }}" wire:navigate class="text-brand-lime-700 underline decoration-brand-lime-700/50 underline-offset-2 transition-colors hover:text-brand-lime-900 hover:decoration-brand-lime-900">{{ __('Podés ver más acá') }}</a>.
                     @endif
                 </p>
                 <div class="relative min-h-[170px] flex-1 overflow-hidden rounded-2xl max-[600px]:min-h-[150px]">
-                    <img class="block min-h-[170px] w-full object-cover max-[600px]:min-h-[150px]" src="{{ asset('images/001-UCU.webp') }}" alt="Cyclist group" />
+                    <img class="block min-h-[170px] w-full object-cover max-[600px]:min-h-[150px]" src="{{ asset('images/001-UCU.webp') }}" alt="{{ __('Fotografía tomada por Carlos Anselmi') }}" />
                     {{-- <div class="absolute bottom-[14px] left-[14px] flex flex-col gap-2">
                         <div class="flex gap-2">
                             <span class="w-fit rounded-full border border-white/80 bg-black/15 px-[14px] py-1 text-[0.75rem] font-medium text-white backdrop-blur-sm">Código</span>
@@ -95,13 +95,13 @@
             <div class="flex min-w-[260px] flex-[3_1_320px] flex-col justify-between gap-7 rounded-3xl bg-brand-lime px-10 py-9 max-[600px]:px-6 max-[600px]:py-6">
                 <div>
                     <h2 class="font-cond mb-3 m-0 text-[clamp(1.75rem,3.2vw,2.5rem)] font-black leading-[1.15] text-brand-lime-500">
-                        Años escribiendo código, resolviendo problemas y sobreviviendo a litros de café.
+                        {{ __('Años escribiendo código, resolviendo problemas y sobreviviendo a litros de café.') }}
                     </h2>
                     <p class="m-0 max-w-[580px] text-base leading-[1.65] text-[#333]">
-                        Desde landing pages hasta paneles de administración y e-commerce. Laravel es mi base, Livewire mi aliado y Tailwind el encargado de que todo se vea bien.
+                        {{ __('Desde landing pages hasta paneles de administración y e-commerce. Laravel es mi base, Livewire mi aliado y Tailwind el encargado de que todo se vea bien.') }}
                     </p>
                     <p class="mt-2 text-base leading-[1.65] text-[#333]">
-                        Y sigo aprendiendo. La tecnología cambia demasiado rápido como para quedarse quieto. Hoy la IA está redefiniendo cómo desarrollamos software, así que cada semana hay algo nuevo por descubrir. Quizá John Connor tenía razón.
+                        {{ __('Y sigo aprendiendo. La tecnología cambia demasiado rápido como para quedarse quieto. Hoy la IA está redefiniendo cómo desarrollamos software, así que cada semana hay algo nuevo por descubrir. Quizá John Connor tenía razón.') }}
                     </p>
                 </div>
 
@@ -113,7 +113,7 @@
                             data-count-prefix="+"
                             data-count-once
                         >0</div>
-                        <div class="mt-1 text-[0.73rem] font-medium text-[#555]">Experiencia</div>
+                        <div class="mt-1 text-[0.73rem] font-medium text-[#555]">{{ __('Experiencia') }}</div>
                     </div>
                     <div>
                         <div
@@ -122,7 +122,7 @@
                             data-count-prefix="+"
                             data-count-once
                         >0</div>
-                        <div class="mt-1 text-[0.73rem] font-medium text-[#555]">Proyectos</div>
+                        <div class="mt-1 text-[0.73rem] font-medium text-[#555]">{{ __('Proyectos') }}</div>
                     </div>
                     <div>
                         <div
@@ -130,7 +130,7 @@
                             data-count="2"
                             data-count-once
                         >0</div>
-                        <div class="mt-1 text-[0.73rem] font-medium text-[#555]">Mascotas</div>
+                        <div class="mt-1 text-[0.73rem] font-medium text-[#555]">{{ __('Mascotas') }}</div>
                     </div>
                 </div>
             </div>
@@ -139,10 +139,10 @@
 
     <section class="mx-auto max-w-8xl py-16">
         <x-section-head
-            kicker="02. proyectos"
-            title="Estos son algunos de mis proyectos"
-            actionTitle="Ver proyectos"
-            actionHref="{{ route('projects') }}"
+            :kicker="__('02. proyectos')"
+            :title="__('Estos son algunos de mis proyectos')"
+            :actionTitle="__('Ver proyectos')"
+            actionHref="{{ localized_route('projects') }}"
         />
         <div
             class="grid grid-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-4"
@@ -150,10 +150,10 @@
             data-reveal-scroll
             data-reveal-stagger="0.08"
         >
-            @foreach (config('projects.entries', []) as $slug => $project)
+            @foreach (\App\Support\ProjectCatalog::entries() as $slug => $project)
                 <x-cards.projects
                     data-reveal-item
-                    :href="route('projects.show', $slug)"
+                    :href="localized_route('projects.show', $slug)"
                     wire:navigate
                     :title="$project['title']"
                     :description="$project['excerpt']"

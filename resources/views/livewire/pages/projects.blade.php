@@ -1,13 +1,13 @@
 @section('header-content')
     <x-hero-content>
         <p class="mb-2 font-folio-mono text-xs font-medium uppercase tracking-widest text-zinc-600">
-            Trabajos
+            {{ __('Trabajos') }}
         </p>
         <h1 class="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
-            Proyectos
+            {{ __('Proyectos') }}
         </h1>
         <p class="mt-4 max-w-4xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-            Productos web en los que participé como fullstack: ecommerce, catálogos de marca y plataformas de gestión.
+            {{ __('Productos web en los que participé como fullstack: ecommerce, catálogos de marca y plataformas de gestión.') }}
         </p>
     </x-hero-content>
 @endsection
@@ -23,7 +23,7 @@
             @foreach ($projects as $slug => $project)
                 <x-cards.projects
                     data-reveal-item
-                    :href="route('projects.show', $slug)"
+                    :href="localized_route('projects.show', $slug)"
                     wire:navigate
                     :title="$project['title']"
                     :description="$project['excerpt']"
