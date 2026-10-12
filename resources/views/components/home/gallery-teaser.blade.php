@@ -18,30 +18,36 @@
         ->published()
         ->where('galleryable_type', Media::class)
         ->with('galleryable')
-        ->take(7)
+        ->take(12)
         ->get()
         ->map(fn (Gallery $item): array => $item->toViewArray())
         ->all() ?? []);
 
-    $gridClasses = [
-        'row-span-2 min-h-[280px]',
-        'aspect-square',
-        'aspect-square',
-        'aspect-square',
-        'col-span-1 md:col-span-2 md:aspect-[2/1]',
-        'aspect-square',
-        'aspect-square',
-    ];
+    // Grilla tipo masonry: el span de cada foto sale de su propio aspect
+    // ratio (ancho/alto reales), no de una posición fija, así que se adapta
+    // a lo que esté publicado. grid-flow-dense rellena los huecos que deja
+    // mezclar spans de 1 y 2 columnas/filas.
+    $spanFor = function (array $photo): string {
+        $w = max(1, (int) ($photo['w'] ?? 800));
+        $h = max(1, (int) ($photo['h'] ?? 1200));
+        $ratio = $w / $h;
+        $wide = $ratio >= 1.3;
+        $tall = $ratio <= 0.72;
 
-    $gradients = [
-        'from-brand-lime-50 to-brand-lime-200',
-        'from-brand-lime-100 to-brand-lime-300',
-        'from-brand-lime-100 to-brand-lime-300',
-        'from-brand-lime-200 to-brand-lime-400',
-        'from-brand-lime to-brand-lime-300',
-        'from-brand-lime-100 to-brand-lime-400',
-        'from-brand-lime-50 to-brand-lime-200',
-    ];
+        if (($photo['featured'] ?? false) && ! $tall) {
+            return 'col-span-2 row-span-2';
+        }
+
+        if ($wide) {
+            return 'col-span-2 row-span-1';
+        }
+
+        if ($tall) {
+            return 'row-span-2';
+        }
+
+        return '';
+    };
 @endphp
 
 @if (filled($photos))
@@ -58,17 +64,17 @@
             />
 
             <div
-                class="grid grid-cols-2 gap-3 md:grid-cols-4"
+                class="grid grid-flow-row-dense grid-cols-2 auto-rows-[120px] gap-3 sm:grid-cols-3 sm:auto-rows-[140px] lg:grid-cols-4"
                 data-reveal="fade-scale"
                 data-reveal-scroll
                 data-reveal-stagger="0.07"
             >
-                @foreach ($photos as $index => $photo)
+                @foreach ($photos as $photo)
                     <x-home.gallery-tile
                         data-reveal-item
                         :href="$galleryUrl"
-                        grid-class="{{ $gridClasses[$index] ?? 'aspect-square' }}"
-                        gradient="{{ $gradients[$index] ?? 'from-brand-lime-100 to-brand-lime-300' }}"
+                        grid-class="{{ $spanFor($photo) }}"
+                        gradient="from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900"
                     >
                         <img
                             src="{{ $photo['thumb_url'] ?? $photo['image_url'] }}"
