@@ -9,9 +9,9 @@
     ]) }}
 >
     <span class="block">{{ $line1 }}</span>
-    <span class="mt-2 flex flex-wrap items-center gap-3 sm:mt-3 sm:gap-4">
+    <span class="mt-2 block sm:mt-3 sm:flex sm:flex-wrap sm:items-center sm:gap-4">
         <span
-            class="hero-plant-mark inline-flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-zinc-900 bg-white transition-transform duration-300 ease-out sm:size-14 md:size-16 group-hover:scale-105 group-hover:-rotate-3"
+            class="hero-plant-mark mr-1 inline-flex size-12 shrink-0 items-center align-middle sm:mr-0 justify-center rounded-full border-2 border-zinc-900 bg-white transition-transform duration-300 ease-out sm:size-14 md:size-16 group-hover:scale-105 group-hover:-rotate-3"
             aria-hidden="true"
         >
             <svg
@@ -37,6 +37,6 @@
                 />
             </svg>
         </span>
-        <span class="min-w-0">{{ $line2 }}</span>
+        <span class="align-middle sm:min-w-0">{{ $line2 }}</span>
     </span>
 </h1>
