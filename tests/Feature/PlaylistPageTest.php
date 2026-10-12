@@ -107,6 +107,9 @@ test('song seeder loads the playlist once without duplicating songs', function (
         ->assertSeeInOrder(['Need You Tonight', 'Losing My Religion', 'Hotel California - 2013 Remaster']);
 
     expect(Song::query()->whereNull('image_path')->exists())->toBeFalse();
+    expect(Song::query()->whereNull('spotify_url')->exists())->toBeFalse();
+    expect(Song::query()->where('title', 'Dream On')->value('spotify_url'))
+        ->toBe('https://open.spotify.com/track/5MxNLUsfh7uzROypsoO5qe');
     Storage::disk('public')->assertExists('songs/hotel-california.jpg');
 });
 
@@ -123,6 +126,7 @@ test('song seeder keeps a cover already set from filament', function () {
     $this->seed(SongSeeder::class);
 
     expect(Song::query()->where('title', 'Dream On')->value('image_path'))->toBe('songs/mi-portada.jpg');
+    expect(Song::query()->where('title', 'Dream On')->value('spotify_url'))->not->toBeNull();
     Storage::disk('public')->assertMissing('songs/dream-on.jpg');
 });
 
