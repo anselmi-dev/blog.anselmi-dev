@@ -60,8 +60,7 @@ export function initToolsWheels(root = document) {
         const { signal } = abort;
         const reduced = prefersReducedMotion();
 
-        let radius = 0;
-        let step = 0;
+        let spacing = 0;
         let current = 0;
         let target = 0;
         let active = -1;
@@ -77,16 +76,11 @@ export function initToolsWheels(root = document) {
             const height = stage.clientHeight;
             const jarWidth = clamp(width * 0.32, 130, 190);
 
-            radius = clamp(width * 0.95, 620, 1300);
-            step = (Math.asin(clamp((jarWidth * 1.55) / radius, 0.05, 0.9)) * 180) / Math.PI;
+            spacing = jarWidth * 1.5;
 
             stage.style.setProperty('--jar-w', `${jarWidth}px`);
             stage.style.setProperty('--jar-h', `${jarWidth * 1.45}px`);
-            ring.style.top = `${height * 0.42 + radius}px`;
-
-            items.forEach((item, index) => {
-                item.style.transform = `rotate(${index * step}deg) translateY(${-radius}px)`;
-            });
+            ring.style.top = `${height * 0.42}px`;
 
             scene3d?.resize();
         };
@@ -196,17 +190,23 @@ export function initToolsWheels(root = document) {
             }
 
             if (! scene3d) {
-                ring.style.transform = `translateX(${parallax}px) rotate(${-current * step}deg)`;
+                ring.style.transform = `translateX(${parallax}px)`;
 
+                // Misma idea que la escena 3D: los de la derecha más chicos (más lejos),
+                // los de la izquierda más grandes (más cerca).
                 items.forEach((item, i) => {
-                    const distance = Math.abs(i - current);
-                    const scale = 1 - Math.min(distance, 3) * 0.1;
-                    const opacity = clamp(1.6 - distance * 0.45, 0, 1);
-                    const jar = item.firstElementChild;
+                    const offset = i - current;
+                    const depthScale = offset > 0 ? 1 / (1 + offset * 0.13) : 1 + Math.min(-offset, 1.7) * 0.09;
+                    const x = offset * spacing * (offset > 0 ? 1 / (1 + offset * 0.06) : 1);
+                    const y = Math.sin(offset * 0.85) * spacing * 0.08;
+                    const tilt = Math.sin(i * 2.1 + 0.6) * 9 * (0.35 + 0.65 * Math.min(1, Math.abs(offset)));
+                    const visible = offset > -1.7 && offset < 3.6;
 
-                    jar.style.transform = `scale(${scale})`;
-                    item.style.opacity = String(opacity);
-                    item.style.visibility = opacity <= 0 ? 'hidden' : 'visible';
+                    item.style.transform = `translate(${x}px, ${y}px) rotate(${-tilt}deg)`;
+                    item.style.zIndex = String(100 - Math.round(offset * 10));
+                    item.firstElementChild.style.transform = `scale(${depthScale})`;
+                    item.style.opacity = visible ? '1' : '0';
+                    item.style.visibility = visible ? 'visible' : 'hidden';
                 });
             } else if (reduced) {
                 scene3d.invalidate();
@@ -293,7 +293,7 @@ export function initToolsWheels(root = document) {
 
             const dx = event.clientX - lastX;
             lastX = event.clientX;
-            const pixelsPerItem = (radius * Math.sin((step * Math.PI) / 180)) || 1;
+            const pixelsPerItem = spacing || 1;
             const delta = (-dx / pixelsPerItem) * (scrollRange() / Math.max(1, count - 1));
 
             // behavior "instant": el <html> tiene scroll-smooth y cada movimiento cortaría al anterior.

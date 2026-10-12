@@ -11,9 +11,18 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
  */
 
 const JAR_WIDTH = 2; // radio 1
-const SPACING = JAR_WIDTH * 1.55;
-const RADIUS = 16;
-const STEP = SPACING / RADIUS;
+const SPACING = JAR_WIDTH * 1.5;
+// Recorrido en profundidad: los que vienen (derecha) están más atrás y se ven
+// más chicos; al avanzar se acercan y crecen hacia la izquierda.
+const DEPTH_AHEAD = 3;
+const DEPTH_BEHIND = 1.6;
+const VISIBLE_BEHIND = 1.7;
+const VISIBLE_AHEAD = 3.6;
+
+/** Inclinación propia de cada frasco, para que la fila no se vea rígida. */
+function tiltFor(index) {
+    return Math.sin(index * 2.1 + 0.6) * 0.16;
+}
 const LABEL_HEIGHT = 1.05;
 const FONT = 'Fraunces, ui-serif, Georgia, serif';
 
@@ -385,13 +394,15 @@ export function createJarScene(container, jars, { getState, reducedMotion }) {
 
         items.forEach((item, i) => {
             const offset = i - current;
-            const angle = offset * STEP;
             const distance = Math.abs(offset);
+            const tilt = tiltFor(i);
 
-            let x = RADIUS * Math.sin(angle);
-            let y = RADIUS * Math.cos(angle) - RADIUS;
-            let rotationZ = -angle;
-            let scale = 1 - Math.min(distance, 3) * 0.09;
+            // Un poco más de separación adelante: la perspectiva los junta.
+            let x = offset * SPACING * (offset > 0 ? 1.12 : 1);
+            let y = Math.sin(offset * 0.85) * 0.35;
+            let z = offset > 0 ? -offset * DEPTH_AHEAD : -offset * DEPTH_BEHIND;
+            let rotationZ = -tilt * (0.35 + 0.65 * Math.min(1, distance)) - offset * 0.04;
+            let scale = 1;
             let spin = reducedMotion ? 0 : offset * 0.9 + Math.sin(time * 0.8 + i) * 0.12;
 
             if (focus.index >= 0) {
@@ -400,6 +411,7 @@ export function createJarScene(container, jars, { getState, reducedMotion }) {
                 if (i === focus.index) {
                     x = lerp(x, focusX, amount);
                     y = lerp(y, focusY, amount);
+                    z = lerp(z, 0, amount);
                     rotationZ = lerp(rotationZ, 0, amount);
                     scale = lerp(scale, focusScale, amount);
                     // Una vuelta completa al entrar y luego giro lento sobre su eje.
@@ -410,10 +422,10 @@ export function createJarScene(container, jars, { getState, reducedMotion }) {
                 }
             }
 
-            item.pivot.position.set(x, y, 0);
+            item.pivot.position.set(x, y, z);
             item.pivot.rotation.z = rotationZ;
             item.pivot.scale.setScalar(Math.max(0.0001, scale));
-            item.pivot.visible = distance < 3.6 || i === focus.index;
+            item.pivot.visible = (offset > -VISIBLE_BEHIND && offset < VISIBLE_AHEAD) || i === focus.index;
             item.spin.rotation.y = spin;
             item.spin.rotation.x = reducedMotion ? 0 : Math.sin(time * 0.6 + i * 1.7) * 0.03;
         });
