@@ -38,7 +38,7 @@
                 data-reveal-item
                 class="inline-flex items-center text-zinc-900 transition hover:text-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
             >
-                <x-logo.app class="size-8" />
+                <x-logo.app class="size-8" animated />
             </a>
 
             <nav

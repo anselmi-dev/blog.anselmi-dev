@@ -1,6 +1,7 @@
 import { createIcons, icons } from 'lucide';
 import { initBookCarousels } from './book-carousel';
 import { initCustomCursor } from './custom-cursor';
+import { initLogoAnimation } from './logo-animation';
 import { initMotion } from './motion';
 import { initPageLoaders } from './page-loader';
 import { initToolsWheels } from './tools-wheel';
@@ -25,6 +26,7 @@ function boot(root = document) {
     initMotion(root);
     initBookCarousels(root);
     initCustomCursor(root);
+    initLogoAnimation(root);
     initPageLoaders(root);
     initToolsWheels(root);
 }
