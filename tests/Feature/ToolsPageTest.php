@@ -46,6 +46,15 @@ test('tools page shows one labeled jar per published tool and no loader by defau
     expect(substr_count($response->getContent(), 'data-tools-wheel-item'))->toBe(2);
 });
 
+test('tools page keeps the footer inside the page frame', function () {
+    makeTool();
+
+    $content = $this->get(localized_route('services.tools'))->assertOk()->getContent();
+    $main = str($content)->after('<main')->before('</main>')->toString();
+
+    expect(substr_count($main, '<div'))->toBe(substr_count($main, '</div>'));
+});
+
 test('tools page is translated under /en', function () {
     makeTool(['tagline_en' => 'Backend & app structure']);
 

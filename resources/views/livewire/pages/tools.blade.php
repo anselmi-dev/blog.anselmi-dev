@@ -21,7 +21,7 @@
     ])->all();
 @endphp
 
-<div class="pb-16 sm:pb-20 lg:pb-24">
+<div>
     {{-- Pantalla de carga: barra central de 0 a 100 %. Se activa desde Filament (Ajustes → Sitio). --}}
     @if ($showLoader)
         <div
@@ -158,7 +158,6 @@
                     <span data-tools-wheel-counter class="mt-3 font-folio-mono text-xs tabular-nums tracking-widest text-zinc-500">
                         01 / {{ str_pad((string) count($tools), 2, '0', STR_PAD_LEFT) }}
                     </span>
-                </div>
                 </div>
 
                 {{-- Panel de detalle al seleccionar un frasco --}}
