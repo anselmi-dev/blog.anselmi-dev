@@ -1,6 +1,6 @@
 @php(app()->setLocale(\App\Support\Localization::fromPath(request()->path())))
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-cursor="{{ \App\Support\CursorStyle::current()->value }}">
 
 <head>
     <meta charset="utf-8" />

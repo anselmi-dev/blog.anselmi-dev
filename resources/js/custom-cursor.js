@@ -1,12 +1,17 @@
 /**
  * Cursor personalizado: punto + anillo con seguimiento suave (lerp).
- * Solo en puntero fino; respeta prefers-reduced-motion.
+ * Solo en puntero fino y con el estilo "circle"; respeta prefers-reduced-motion.
  */
 let cursorEl = null;
 let cursorBound = false;
 
 export function initCustomCursor(root = document) {
     if (typeof window === 'undefined') {
+        return;
+    }
+
+    // El estilo se elige en Filament (Ajustes → Sitio → Estilo del cursor).
+    if (document.documentElement.dataset.cursor !== 'circle') {
         return;
     }
 

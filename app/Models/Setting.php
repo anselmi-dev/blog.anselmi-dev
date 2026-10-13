@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Support\CursorStyle;
 use App\Support\Localization;
+use BackedEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
@@ -107,6 +109,7 @@ class Setting extends Model
             'meta_description' => 'Desarrollador web: diseño y construyo productos digitales con foco en claridad, performance y experiencia de uso.',
             'author_name' => config('app.name', 'Sitio'),
             'tools_loader' => false,
+            'cursor_style' => CursorStyle::Circle->value,
         ];
     }
 
@@ -144,7 +147,7 @@ class Setting extends Model
     }
 
     /**
-     * @return array{meta_description: string|null, author_name: string|null, tools_loader: bool|null}
+     * @return array{meta_description: string|null, author_name: string|null, tools_loader: bool|null, cursor_style: string|null}
      */
     public static function site(): array
     {
@@ -239,6 +242,10 @@ class Setting extends Model
     {
         if ($value === null) {
             return null;
+        }
+
+        if ($value instanceof BackedEnum) {
+            return (string) $value->value;
         }
 
         if (is_bool($value) || is_int($value) || is_float($value) || is_array($value)) {

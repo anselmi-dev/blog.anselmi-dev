@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html id="top" lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+<html id="top" lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth" data-cursor="{{ \App\Support\CursorStyle::current()->value }}">
 <head>
     @include('partials.site-head')
     @stack('meta')

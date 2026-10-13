@@ -3,9 +3,11 @@
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
+use App\Support\CursorStyle;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -77,6 +79,13 @@ class ManageSettings extends Page
                                                 ->label('Pantalla de carga en Herramientas')
                                                 ->helperText('Muestra la barra de 0 a 100 % mientras cargan los frascos de /servicios/herramientas.')
                                                 ->default(false),
+                                            Select::make('site.cursor_style')
+                                                ->label('Estilo del cursor')
+                                                ->helperText('Con el cursor normal se usa el puntero del sistema, sin efectos.')
+                                                ->options(CursorStyle::class)
+                                                ->default(CursorStyle::Circle->value)
+                                                ->selectablePlaceholder(false)
+                                                ->required(),
                                         ]),
                                 ]),
                             Tab::make('Contacto')
