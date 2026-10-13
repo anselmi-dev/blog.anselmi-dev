@@ -228,11 +228,14 @@ export function initToolsWheels(root = document) {
             fillPanel(index);
             scene3d.focus(index);
             section.dataset.focused = 'true';
+            panel.getAnimations?.().forEach((animation) => animation.cancel());
             panel.hidden = false;
             footer?.classList.add('opacity-0', 'pointer-events-none');
             title?.classList.add('opacity-0');
+            // Se anima "transform" y no "translate": el panel ya usa "translate"
+            // (Tailwind -translate-y-1/2) para centrarse, y pisarlo lo hacía saltar al terminar.
             panel.animate?.(
-                [{ opacity: 0, translate: '0 16px' }, { opacity: 1, translate: '0 0' }],
+                [{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }],
                 { duration: reduced ? 1 : 450, delay: reduced ? 0 : 300, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' },
             );
             panel.querySelector('[data-tools-wheel-close]')?.focus({ preventScroll: true });
@@ -248,7 +251,25 @@ export function initToolsWheels(root = document) {
             delete section.dataset.focused;
 
             if (panel) {
-                panel.hidden = true;
+                const fadeOut = panel.animate?.(
+                    [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(8px)' }],
+                    { duration: reduced ? 1 : 200, easing: 'ease-in', fill: 'forwards' },
+                );
+
+                const hide = () => {
+                    // Si se volvió a abrir mientras se iba, queda visible.
+                    if (focusedIndex < 0) {
+                        panel.hidden = true;
+                    }
+
+                    fadeOut?.cancel();
+                };
+
+                if (fadeOut) {
+                    fadeOut.onfinish = hide;
+                } else {
+                    hide();
+                }
             }
 
             footer?.classList.remove('opacity-0', 'pointer-events-none');
