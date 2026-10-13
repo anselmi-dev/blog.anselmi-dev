@@ -1,3 +1,6 @@
+/** Escala del frasco en el modo detalle (escritorio). */
+export const FOCUS_SCALE = 1.6;
+
 /**
  * Desplazamiento de un frasco respecto a la posición actual, dando la vuelta
  * (bucle infinito). Por defecto deja ~30 % de los frascos atrás y el resto

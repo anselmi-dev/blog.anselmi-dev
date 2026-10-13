@@ -1,4 +1,4 @@
-import { wrappedOffset } from './tools-wheel-math';
+import { FOCUS_SCALE, wrappedOffset } from './tools-wheel-math';
 
 const controllers = new Set();
 
@@ -78,7 +78,7 @@ export function initToolsWheels(root = document) {
         let pendingFocus = null;
 
         // Tamaño de los frascos y alto de su centro dentro del escenario (lo usa también la escena 3D).
-        const stageLayout = { jarWidth: 150, centerY: 0 };
+        const stageLayout = { jarWidth: 150, centerY: 0, focusX: 0 };
 
         /**
          * Título arriba, frascos al medio y detalle abajo, bien juntos: los frascos
@@ -110,6 +110,15 @@ export function initToolsWheels(root = document) {
             stageLayout.jarWidth = jarWidth;
             stageLayout.centerY = titleHeight + shift + gap + jarHeight / 2;
             spacing = jarWidth * 1.5;
+
+            // Modo detalle en escritorio: frasco y panel juntos en el centro, con el
+            // panel montado un poco sobre el frasco.
+            const focusJarWidth = jarWidth * FOCUS_SCALE;
+            const panelWidth = Math.min(384, width * 0.4);
+            const overlap = focusJarWidth * 0.18;
+            const groupWidth = focusJarWidth + panelWidth - overlap;
+            stageLayout.focusX = -groupWidth / 2 + focusJarWidth / 2;
+            stage.style.setProperty('--panel-left', `${width / 2 - groupWidth / 2 + focusJarWidth - overlap}px`);
 
             stage.style.setProperty('--jar-w', `${jarWidth}px`);
             stage.style.setProperty('--jar-h', `${jarWidth * 1.45}px`);

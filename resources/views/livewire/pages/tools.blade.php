@@ -164,7 +164,7 @@
                 <div
                     data-tools-wheel-panel
                     hidden
-                    class="tools-wheel__panel absolute inset-x-4 bottom-4 z-10 rounded-2xl bg-white/85 p-6 shadow-xl ring-1 ring-zinc-900/5 backdrop-blur-md sm:inset-x-auto sm:bottom-auto sm:right-8 sm:top-1/2 sm:w-[min(24rem,40%)] sm:-translate-y-1/2 sm:p-8 lg:right-16"
+                    class="tools-wheel__panel absolute inset-x-4 bottom-4 z-10 rounded-2xl bg-white/85 p-6 shadow-xl ring-1 ring-zinc-900/5 backdrop-blur-md sm:inset-x-auto sm:bottom-auto sm:left-[var(--panel-left)] sm:top-1/2 sm:w-[min(24rem,40%)] sm:-translate-y-1/2 sm:p-8"
                     role="dialog"
                     aria-modal="false"
                     aria-labelledby="tools-wheel-panel-title"

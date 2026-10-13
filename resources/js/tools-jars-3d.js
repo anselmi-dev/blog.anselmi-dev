@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { wrappedOffset } from './tools-wheel-math';
+import { FOCUS_SCALE, wrappedOffset } from './tools-wheel-math';
 
 /**
  * Frascos 3D para la rueda de /servicios/herramientas.
@@ -457,7 +457,7 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
-    let viewport = { halfWidth: 1, halfHeight: 1, narrow: false };
+    let viewport = { halfWidth: 1, halfHeight: 1, narrow: false, focusX: 0 };
     let lead = jars.length * 0.3;
     let frame = null;
     let visible = true;
@@ -472,7 +472,7 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
         const height = container.clientHeight || 1;
         const narrow = width < 640;
         // Tamaño y alto los decide tools-wheel.js según el título y el detalle.
-        const layout = getLayout?.() ?? { jarWidth: Math.min(190, Math.max(120, width * 0.32)), centerY: height / 2 };
+        const layout = getLayout?.() ?? { jarWidth: Math.min(190, Math.max(120, width * 0.32)), centerY: height / 2, focusX: -width * 0.16 };
         const jarWidthPx = layout.jarWidth;
         const pixelsPerUnit = jarWidthPx / JAR_WIDTH;
         const halfHeight = height / 2 / pixelsPerUnit;
@@ -484,7 +484,7 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
         camera.updateProjectionMatrix();
         renderer.setSize(width, height, false);
 
-        viewport = { halfWidth: halfHeight * camera.aspect, halfHeight, narrow };
+        viewport = { halfWidth: halfHeight * camera.aspect, halfHeight, narrow, focusX: layout.focusX / pixelsPerUnit };
         fillWidth(distance);
         wheel.position.y = (height / 2 - layout.centerY) / pixelsPerUnit;
         needsRender = true;
@@ -540,9 +540,9 @@ export function createJarScene(container, jars, { getState, getLayout, reducedMo
             focus.spin += delta * 0.6;
         }
 
-        const focusX = viewport.narrow ? 0 : -viewport.halfWidth * 0.32;
-        const focusY = viewport.narrow ? viewport.halfHeight * 0.32 - wheel.position.y : -wheel.position.y * 0.6;
-        const focusScale = viewport.narrow ? 1.15 : 1.6;
+        const focusX = viewport.narrow ? 0 : viewport.focusX;
+        const focusY = viewport.narrow ? viewport.halfHeight * 0.32 - wheel.position.y : -wheel.position.y;
+        const focusScale = viewport.narrow ? 1.15 : FOCUS_SCALE;
 
         wheel.position.x = parallax / 60;
 
