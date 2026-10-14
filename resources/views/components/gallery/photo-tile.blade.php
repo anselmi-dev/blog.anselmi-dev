@@ -10,6 +10,8 @@
     'asButton' => false,
     /** Video sin portada: se muestra su primer cuadro en lugar de la imagen. */
     'videoUrl' => null,
+    /** Versiones de la imagen ("url 480w, url 1600w, …"); el navegador elige según sizes. */
+    'srcset' => null,
 ])
 
 @php
@@ -37,6 +39,10 @@
         @else
             <img
                 src="{{ $imageUrl }}"
+                @if (filled($srcset))
+                    srcset="{{ $srcset }}"
+                    sizes="{{ $wide ? '(min-width: 1024px) 66vw, (min-width: 640px) 50vw, 100vw' : '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw' }}"
+                @endif
                 alt="{{ $title }} — {{ $category }}"
                 class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]"
                 loading="lazy"

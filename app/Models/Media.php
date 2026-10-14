@@ -21,6 +21,7 @@ class Media extends Model implements Galleryable
     protected $fillable = [
         'image_path',
         'thumb_path',
+        'medium_path',
         'width',
         'height',
         'title',
@@ -51,17 +52,9 @@ class Media extends Model implements Galleryable
     protected static function booted(): void
     {
         static::saving(function (Media $media): void {
-            if (blank($media->image_path)) {
-                $media->thumb_path = null;
-
-                return;
-            }
-
-            // Se genera al cambiar la imagen y también si la miniatura falta
+            // Se generan al cambiar la imagen y también si alguna falta
             // (no se creó en su momento o se borró el archivo).
-            if ($media->isDirty('image_path') || ! $media->hasThumbnailFile()) {
-                $media->thumb_path = app(GenerateThumbnail::class)->handle($media->image_path);
-            }
+            $media->generateImageVariants(force: $media->isDirty('image_path'));
 
             if ($media->isDirty('image_path') && (blank($media->width) || blank($media->height))) {
                 $media->fillDimensionsFromImage();
@@ -107,9 +100,68 @@ class Media extends Model implements Galleryable
         return $date->format('j').' '.rtrim($date->translatedFormat('M'), '.').' '.$date->format('Y');
     }
 
+    /**
+     * Miniatura (480 px) y versión mediana (1600 px; solo si el original es
+     * más grande). Con $force se regeneran aunque ya existan.
+     */
+    public function generateImageVariants(bool $force = false): void
+    {
+        if (blank($this->image_path)) {
+            $this->thumb_path = null;
+            $this->medium_path = null;
+
+            return;
+        }
+
+        $generator = app(GenerateThumbnail::class);
+
+        if ($force || ! $this->hasVariantFile($this->thumb_path)) {
+            $this->thumb_path = $generator->handle($this->image_path);
+        }
+
+        if ($force || ! $this->hasVariantFile($this->medium_path)) {
+            $this->medium_path = $generator->handle($this->image_path, GenerateThumbnail::MEDIUM, 'medium', onlyIfSmaller: true);
+        }
+    }
+
     public function hasThumbnailFile(): bool
     {
-        return filled($this->thumb_path) && Storage::disk('public')->exists($this->thumb_path);
+        return $this->hasVariantFile($this->thumb_path);
+    }
+
+    private function hasVariantFile(?string $path): bool
+    {
+        return filled($path) && Storage::disk('public')->exists($path);
+    }
+
+    public function mediumUrl(): string
+    {
+        return $this->medium_path ? Storage::disk('public')->url($this->medium_path) : $this->imageUrl();
+    }
+
+    /**
+     * srcset con las versiones que existen (miniatura, mediana y original),
+     * para que el navegador baje la justa según el tamaño en pantalla.
+     * Null si no se conocen las medidas o no hay imagen subida.
+     */
+    public function srcset(): ?string
+    {
+        if (blank($this->image_path) || blank($this->width) || blank($this->height)) {
+            return null;
+        }
+
+        $longest = max($this->width, $this->height);
+        $widthAt = fn (int $maxDimension): int => (int) round($this->width * min(1, $maxDimension / $longest));
+
+        return collect([
+            [$this->thumb_path ? $this->thumbUrl() : null, $widthAt(GenerateThumbnail::THUMB)],
+            [$this->medium_path ? $this->mediumUrl() : null, $widthAt(GenerateThumbnail::MEDIUM)],
+            [$this->imageUrl(), $this->width],
+        ])
+            ->filter(fn (array $source): bool => $source[0] !== null)
+            ->unique(fn (array $source): int => $source[1])
+            ->map(fn (array $source): string => "{$source[0]} {$source[1]}w")
+            ->implode(', ');
     }
 
     public function imageUrl(?int $w = null, ?int $h = null): string
@@ -150,6 +202,8 @@ class Media extends Model implements Galleryable
             'category' => $this->translated('category'),
             'image_url' => $this->imageUrl($this->width, $this->height),
             'thumb_url' => $this->thumbUrl(),
+            'medium_url' => $this->mediumUrl(),
+            'srcset' => $this->srcset(),
             'w' => $this->width ?? 800,
             'h' => $this->height ?? 1200,
             'released_at' => $this->releasedOnLabel(),

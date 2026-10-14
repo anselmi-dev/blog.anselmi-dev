@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Media;
 
 use App\Actions\Media\ExtractExifData;
-use App\Actions\Media\GenerateThumbnail;
 use App\Filament\Resources\Media\Pages\CreateMedia;
 use App\Filament\Resources\Media\Pages\EditMedia;
 use App\Filament\Resources\Media\Pages\ListMedia;
@@ -62,7 +61,7 @@ class MediaResource extends Resource
                     ->schema([
                         FileUpload::make('image_path')
                             ->label('Imagen')
-                            ->helperText('Al guardar se genera la miniatura y, si están vacíos, se completan el ancho y el alto.')
+                            ->helperText('Al guardar se generan la miniatura (480 px) y una versión mediana (1600 px) y, si están vacíos, se completan el ancho y el alto.')
                             ->image()
                             ->disk('public')
                             ->directory('media')
@@ -210,9 +209,7 @@ class MediaResource extends Resource
                         ->icon(Heroicon::OutlinedPhoto)
                         ->action(function (Collection $records): void {
                             $records->each(function (MediaModel $media): void {
-                                $media->thumb_path = filled($media->image_path)
-                                    ? app(GenerateThumbnail::class)->handle($media->image_path)
-                                    : null;
+                                $media->generateImageVariants(force: true);
                                 $media->saveQuietly();
                             });
 

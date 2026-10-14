@@ -78,6 +78,10 @@
                     >
                         <img
                             src="{{ $photo['thumb_url'] ?? $photo['image_url'] }}"
+                            @if (filled($photo['srcset'] ?? null))
+                                srcset="{{ $photo['srcset'] }}"
+                                sizes="{{ str_contains($spanFor($photo), 'col-span-2') ? '(min-width: 1024px) 50vw, 100vw' : '(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw' }}"
+                            @endif
                             alt="{{ $photo['title'] ?? '' }}"
                             class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]"
                             loading="lazy"

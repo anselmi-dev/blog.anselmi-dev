@@ -64,7 +64,7 @@
                 @else
                     @php
                         $wide = ($item['span'] ?? 'tall') === 'wide';
-                        $url = $item['thumb_url'] ?? $item['image_url'] ?? sprintf(
+                        $url = $item['medium_url'] ?? $item['thumb_url'] ?? $item['image_url'] ?? sprintf(
                             'https://picsum.photos/seed/gallery-fallback/%d/%d',
                             (int) ($item['w'] ?? 800),
                             (int) ($item['h'] ?? 1200)
@@ -73,6 +73,7 @@
                     <x-gallery.photo-tile
                         data-reveal-item
                         :image-url="$url"
+                        :srcset="$item['srcset'] ?? null"
                         :category="$item['category']"
                         :title="$item['title']"
                         :featured="(bool) ($item['featured'] ?? false)"

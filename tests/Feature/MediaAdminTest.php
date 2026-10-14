@@ -67,15 +67,15 @@ test('a missing thumbnail is generated again on the next save', function () {
 
 test('thumbnails can be regenerated in bulk from the table', function () {
     actingAsAdmin();
-    $media = Media::create(['image_path' => storeImage('foto.jpg', 1200, 800)]);
-    Storage::disk('public')->delete($media->thumb_path);
+    $media = Media::create(['image_path' => storeImage('foto.jpg', 3200, 1800)]);
+    Storage::disk('public')->delete([$media->thumb_path, $media->medium_path]);
 
     Livewire::test(ListMedia::class)
         ->selectTableRecords([$media])
         ->callAction(TestAction::make('regenerateThumbnails')->table()->bulk())
         ->assertNotified('Miniaturas regeneradas');
 
-    Storage::disk('public')->assertExists($media->refresh()->thumb_path);
+    Storage::disk('public')->assertExists([$media->refresh()->thumb_path, $media->medium_path]);
 });
 
 test('admin creates a photo with a date, tags and its english texts', function () {
@@ -159,4 +159,53 @@ test('the gallery shows the date and the tags in the visitor language', function
     expect(Gallery::query()->withContent()->sole()->toViewArray())
         ->released_at->toBe('12 Mar 2025')
         ->tags->toBe(['coast']);
+});
+
+test('a big photo also gets a medium version and a srcset with the three sizes', function () {
+    $media = Media::create(['image_path' => storeImage('enorme.jpg', 3200, 1800)]);
+    $disk = Storage::disk('public');
+
+    $disk->assertExists($media->medium_path);
+    expect(getimagesize($disk->path($media->medium_path))[0])->toBe(1600)
+        ->and($media->srcset())->toBe(sprintf(
+            '%s 480w, %s 1600w, %s 3200w',
+            $disk->url($media->thumb_path),
+            $disk->url($media->medium_path),
+            $disk->url($media->image_path),
+        ));
+});
+
+test('a photo that already fits the medium size uses the original instead', function () {
+    $media = Media::create(['image_path' => storeImage('mediana.jpg', 1200, 800)]);
+
+    expect($media->medium_path)->toBeNull()
+        ->and($media->mediumUrl())->toBe($media->imageUrl())
+        ->and(substr_count((string) $media->srcset(), 'w,'))->toBe(1);
+});
+
+test('a missing medium version is generated again on the next save', function () {
+    $media = Media::create(['image_path' => storeImage('enorme.jpg', 3200, 1800)]);
+    Storage::disk('public')->delete($media->medium_path);
+
+    $media->update(['title' => 'Otro título']);
+
+    Storage::disk('public')->assertExists($media->medium_path);
+});
+
+test('the collection page serves the medium version through srcset', function () {
+    $collection = Collection::create(['name' => 'Principal', 'slug' => 'principal']);
+    $media = Media::create(['title' => 'Muelle', 'image_path' => storeImage('muelle.jpg', 3200, 1800)]);
+    Gallery::create([
+        'collection_id' => $collection->id,
+        'galleryable_type' => Media::class,
+        'galleryable_id' => $media->id,
+        'span' => 'wide',
+        'is_published' => true,
+    ]);
+
+    $this->get(route('gallery.show', ['slug' => 'principal']))
+        ->assertOk()
+        ->assertSee('src="'.$media->mediumUrl().'"', false)
+        ->assertSee('srcset="'.$media->srcset().'"', false)
+        ->assertSee('sizes="(min-width: 1024px) 66vw', false);
 });
