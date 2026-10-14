@@ -11,6 +11,8 @@ use App\Models\SiteColor;
  * Color de marca de cada página pública, elegido en Filament (Ajustes → Sitio →
  * Color por página). El layout lo aplica sobre --color-brand-lime y sus tonos
  * claros; una página con color propio (un proyecto) lo pisa con $themeColor.
+ * El color del texto va en --page-ink y tiñe los textos zinc que están sobre
+ * bg-brand-lime (ver app.css).
  */
 final class PageColor
 {
@@ -36,16 +38,39 @@ final class PageColor
     ];
 
     /**
-     * Color guardado para la ruta (en español o "en.*"), o null si no tiene.
+     * Colores rápidos para el texto, además de los del recurso Colores.
+     *
+     * @var array<string, string>
+     */
+    public const INK_PRESETS = [
+        '#FFFFFF' => 'Blanco',
+        '#18181B' => 'Negro',
+    ];
+
+    /**
+     * Color de fondo guardado para la ruta (en español o "en.*"), o null si no tiene.
      */
     public static function for(?string $routeName): ?string
+    {
+        return self::stored('page_colors', $routeName);
+    }
+
+    /**
+     * Color del texto guardado para la ruta, o null si usa el de siempre.
+     */
+    public static function inkFor(?string $routeName): ?string
+    {
+        return self::stored('page_inks', $routeName);
+    }
+
+    protected static function stored(string $settingName, ?string $routeName): ?string
     {
         if ($routeName === null) {
             return null;
         }
 
         $routeName = str_starts_with($routeName, 'en.') ? substr($routeName, 3) : $routeName;
-        $colors = Setting::site()['page_colors'] ?? [];
+        $colors = Setting::site()[$settingName] ?? [];
         $color = is_array($colors) ? ($colors[self::settingKey($routeName)] ?? null) : null;
 
         return is_string($color) ? CssColor::hexOrNull($color) : null;
@@ -87,6 +112,20 @@ final class PageColor
         return $options;
     }
 
+    /**
+     * Opciones para el color del texto: blanco, negro y los del recurso Colores.
+     *
+     * @return array<string, string>
+     */
+    public static function inkOptions(?string $current = null): array
+    {
+        $presets = collect(self::INK_PRESETS)
+            ->mapWithKeys(fn (string $name, string $hex): array => [$hex => self::optionLabel($hex, $name)])
+            ->all();
+
+        return $presets + self::options($current);
+    }
+
     protected static function optionLabel(string $hex, string $name): string
     {
         return '<span style="display:inline-flex;align-items:center;gap:.5rem">'
@@ -97,5 +136,10 @@ final class PageColor
     public static function current(): ?string
     {
         return self::for(request()->route()?->getName());
+    }
+
+    public static function currentInk(): ?string
+    {
+        return self::inkFor(request()->route()?->getName());
     }
 }

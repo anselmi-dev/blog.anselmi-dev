@@ -155,6 +155,42 @@
         display: none !important;
     }
 
+    /*
+     * Color del texto por página (Ajustes → Sitio → Color por página): el
+     * layout pone data-page-ink y --page-ink en el body. Los textos zinc sobre
+     * bg-brand-lime pasan a esa tinta; los paneles blancos de adentro (menú,
+     * botones) vuelven a los colores de siempre.
+     */
+    :root {
+        --default-zinc-400: var(--color-zinc-400);
+        --default-zinc-500: var(--color-zinc-500);
+        --default-zinc-600: var(--color-zinc-600);
+        --default-zinc-700: var(--color-zinc-700);
+        --default-zinc-800: var(--color-zinc-800);
+        --default-zinc-900: var(--color-zinc-900);
+        --default-folio-forest: var(--color-folio-forest);
+    }
+
+    [data-page-ink] .bg-brand-lime {
+        --color-zinc-400: color-mix(in srgb, var(--page-ink) 50%, transparent);
+        --color-zinc-500: color-mix(in srgb, var(--page-ink) 65%, transparent);
+        --color-zinc-600: color-mix(in srgb, var(--page-ink) 75%, transparent);
+        --color-zinc-700: color-mix(in srgb, var(--page-ink) 85%, transparent);
+        --color-zinc-800: var(--page-ink);
+        --color-zinc-900: var(--page-ink);
+        --color-folio-forest: color-mix(in srgb, var(--page-ink) 80%, transparent);
+    }
+
+    [data-page-ink] .bg-brand-lime .bg-white {
+        --color-zinc-400: var(--default-zinc-400);
+        --color-zinc-500: var(--default-zinc-500);
+        --color-zinc-600: var(--default-zinc-600);
+        --color-zinc-700: var(--default-zinc-700);
+        --color-zinc-800: var(--default-zinc-800);
+        --color-zinc-900: var(--default-zinc-900);
+        --color-folio-forest: var(--default-folio-forest);
+    }
+
     /* Custom cursor — solo desktop / puntero fino */
     @media (pointer: fine) {
         html.has-custom-cursor,

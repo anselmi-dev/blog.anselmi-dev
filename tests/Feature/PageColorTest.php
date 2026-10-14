@@ -89,3 +89,35 @@ test('the color options list the colors resource and keep a custom saved color',
         ->and($options['#E3F7FA'])->toContain('Celeste')
         ->and($options['#abcdef'])->toContain('Personalizado');
 });
+
+test('a page uses the text color chosen for its route', function () {
+    Setting::putMany('site', ['page_inks' => ['gallery' => '#ffffff']]);
+
+    $this->get(route('en.gallery'))
+        ->assertOk()
+        ->assertSee('data-page-ink', false)
+        ->assertSee('--page-ink: #ffffff;', false);
+
+    $this->get(route('about'))
+        ->assertOk()
+        ->assertDontSee('data-page-ink', false)
+        ->assertDontSee('--page-ink', false);
+});
+
+test('admin can choose the text color of a page', function () {
+    $user = User::factory()->create();
+    config(['app.admin_emails' => [strtolower($user->email)]]);
+    $this->actingAs($user);
+    Filament::setCurrentPanel('admin');
+
+    Livewire::test(ManageSettings::class)
+        ->fillForm(['site.page_inks.gallery' => '#FFFFFF'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    Setting::forgetGroupCache('site');
+
+    expect(PageColor::inkFor('en.gallery'))->toBe('#FFFFFF')
+        ->and(PageColor::inkFor('about'))->toBeNull()
+        ->and(PageColor::for('gallery'))->toBeNull();
+});
