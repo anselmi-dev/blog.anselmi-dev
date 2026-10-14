@@ -1,15 +1,22 @@
 <div class="pb-16 pt-4 sm:pb-20 sm:pt-6 lg:pb-24">
     @section('header-content')
         <x-hero-content>
-            <p class="mb-2 font-folio-mono text-xs font-medium uppercase tracking-widest text-folio-forest dark:text-folio-muted">
-                {{ __('Fotografía') }}
-            </p>
+            <a
+                href="{{ localized_route('gallery') }}"
+                wire:navigate
+                class="mb-3 inline-flex items-center gap-1.5 font-folio-mono text-xs font-medium uppercase tracking-widest text-folio-forest transition hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+            >
+                <x-icon name="arrow-left" class="size-3.5" />
+                {{ __('Colecciones') }}
+            </a>
             <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
-                {{ __('Galería') }}
+                {{ $collection['name'] }}
             </h1>
-            <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg">
-                {{ __('Serie de tomas y notas visuales: mismo criterio que en el resto del sitio — bordes finos, sombra suave, mucho aire.') }}
-            </p>
+            @if (filled($collection['description']))
+                <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg">
+                    {{ $collection['description'] }}
+                </p>
+            @endif
         </x-hero-content>
     @endsection
 

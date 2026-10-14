@@ -14,6 +14,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -70,6 +71,18 @@ class CollectionResource extends Resource
                 Toggle::make('is_published')
                     ->label('Publicada')
                     ->default(true),
+                Section::make('Inglés')
+                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
+                    ->collapsible()
+                    ->columnSpanFull()
+                    ->schema([
+                        TextInput::make('name_en')
+                            ->label('Nombre (EN)')
+                            ->maxLength(255),
+                        Textarea::make('description_en')
+                            ->label('Descripción (EN)')
+                            ->rows(3),
+                    ]),
             ]);
     }
 

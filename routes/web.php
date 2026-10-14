@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Pages\About;
+use App\Livewire\Pages\Collections;
 use App\Livewire\Pages\Colors;
 use App\Livewire\Pages\Faq;
 use App\Livewire\Pages\Fonts;
@@ -27,7 +28,8 @@ $registerSiteRoutes = function (array $paths): void {
 
     Route::livewire($paths['faq'], Faq::class)->name('faq');
 
-    Route::livewire($paths['gallery'], Gallery::class)->name('gallery');
+    Route::livewire($paths['gallery'], Collections::class)->name('gallery');
+    Route::livewire($paths['gallery'].'/{slug}', Gallery::class)->name('gallery.show');
 
     Route::livewire($paths['playlist'], Playlist::class)->name('playlist');
 

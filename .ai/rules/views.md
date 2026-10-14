@@ -13,3 +13,6 @@ El sitio público existe en español (sin prefijo) y en inglés (/en). Escribí 
 
 ## Menú del header
 Los enlaces del menú desplegable del header salen de App\Support\SiteMenu::groups(); para sumar uno, agregalo ahí con su icono de lucide. Los posts destacados se marcan en Filament con "Destacar en el menú" (se muestran los 2 más recientes).
+
+## Plurales sin trans_choice
+No uses trans_choice() ni @choice: como no hay lang/es.json, en /es cae al fallback y muestra el texto en inglés. Para singular/plural usá dos claves con __() (ej. __(':count foto') y __(':count fotos')) elegidas según el número, con su traducción en lang/en.json.

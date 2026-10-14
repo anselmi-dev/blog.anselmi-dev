@@ -5,11 +5,9 @@ namespace App\Livewire\Pages;
 use App\Models\Collection;
 use App\Models\Gallery as GalleryModel;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.site')]
-#[Title('Galería')]
 class Gallery extends Component
 {
     private const int LIGHTBOX_CLOSE_MS = 400;
@@ -28,18 +26,29 @@ class Gallery extends Component
      */
     public array $items = [];
 
-    public function mount(): void
-    {
-        $collection = Collection::query()->published()->first();
+    /**
+     * @var array{name: string, description: string|null}
+     */
+    public array $collection = ['name' => '', 'description' => null];
 
-        $this->items = $collection
-            ? $collection->items()
-                ->published()
-                ->with('galleryable')
-                ->get()
-                ->map(fn (GalleryModel $item): array => $item->toViewArray())
-                ->all()
-            : [];
+    public function mount(string $slug): void
+    {
+        $collection = Collection::query()
+            ->published()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $this->collection = [
+            'name' => (string) $collection->translated('name'),
+            'description' => $collection->translated('description'),
+        ];
+
+        $this->items = $collection->items()
+            ->published()
+            ->with('galleryable')
+            ->get()
+            ->map(fn (GalleryModel $item): array => $item->toViewArray())
+            ->all();
     }
 
     public function updatedLightboxShow(bool $value): void
@@ -158,6 +167,6 @@ class Gallery extends Component
 
     public function render()
     {
-        return view('livewire.pages.gallery');
+        return view('livewire.pages.gallery')->title($this->collection['name'].' — '.__('Galería'));
     }
 }
