@@ -45,6 +45,20 @@ class Setting extends Model
         return filled($fromEnv) ? (string) $fromEnv : null;
     }
 
+    /** Workspace de Anthropic para las claves que no pertenecen a uno (no es secreto). */
+    public const string ANTHROPIC_WORKSPACE_ID = 'ai.anthropic_workspace_id';
+
+    /**
+     * El workspace guardado en Ajustes o, si no hay, el del .env
+     * (ANTHROPIC_WORKSPACE_ID). Null si no hace falta.
+     */
+    public static function anthropicWorkspaceId(): ?string
+    {
+        $workspaceId = static::get(self::ANTHROPIC_WORKSPACE_ID) ?: config('services.anthropic.workspace_id');
+
+        return filled($workspaceId) ? trim((string) $workspaceId) : null;
+    }
+
     public static function hasStoredAnthropicApiKey(): bool
     {
         return filled(static::get(self::ANTHROPIC_API_KEY));

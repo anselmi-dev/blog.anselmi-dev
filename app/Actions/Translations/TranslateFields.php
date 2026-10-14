@@ -146,6 +146,8 @@ class TranslateFields
             // Si el modelo declina el pedido, la API lo reintenta con otro modelo.
             betas: $withFallbacks ? ['server-side-fallback-2026-07-01'] : null,
             fallbacks: $withFallbacks ? 'default' : null,
+            // Solo para claves que no pertenecen a un workspace.
+            workspaceID: Setting::anthropicWorkspaceId(),
         );
     }
 

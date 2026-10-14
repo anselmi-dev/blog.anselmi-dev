@@ -51,6 +51,10 @@ class ManageSettings extends Page
         $this->form->fill([
             'site' => Setting::site(),
             'contact' => Setting::contact(),
+            'ai' => [
+                'anthropic_api_key' => null,
+                'anthropic_workspace_id' => Setting::get(Setting::ANTHROPIC_WORKSPACE_ID),
+            ],
         ]);
     }
 
@@ -202,6 +206,12 @@ class ManageSettings extends Page
                                                 ->helperText(fn (): string => Setting::hasStoredAnthropicApiKey()
                                                     ? 'Hay una clave guardada. Dejá el campo vacío para mantenerla o pegá una nueva para reemplazarla.'
                                                     : 'Todavía no hay una clave guardada. La creás en console.anthropic.com → API keys.'),
+                                            TextInput::make('ai.anthropic_workspace_id')
+                                                ->label('Workspace ID (opcional)')
+                                                ->placeholder('wrkspc_...')
+                                                ->regex('/^wrkspc_[A-Za-z0-9]+$/')
+                                                ->validationMessages(['regex' => 'El ID del workspace empieza con "wrkspc_".'])
+                                                ->helperText('Solo hace falta si la clave no pertenece a un workspace (la API lo pide con un error 400). Lo encontrás en console.anthropic.com → Settings → Workspaces. Lo más simple es crear la clave dentro de un workspace y dejar este campo vacío.'),
                                             Actions::make([
                                                 Action::make('forgetAnthropicApiKey')
                                                     ->label('Borrar la clave guardada')
@@ -284,6 +294,8 @@ class ManageSettings extends Page
 
         Setting::putMany('site', $data['site'] ?? []);
         Setting::putMany('contact', $data['contact'] ?? []);
+
+        Setting::put(Setting::ANTHROPIC_WORKSPACE_ID, filled($data['ai']['anthropic_workspace_id'] ?? null) ? trim($data['ai']['anthropic_workspace_id']) : null);
 
         // La clave nunca se vuelve a mostrar: solo se guarda si se pegó una nueva.
         if (filled($data['ai']['anthropic_api_key'] ?? null)) {

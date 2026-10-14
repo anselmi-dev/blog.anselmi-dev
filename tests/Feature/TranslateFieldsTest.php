@@ -155,3 +155,35 @@ test('when the account cannot use the fallback beta it asks again without it', f
     expect(fn () => $translator->handle(['title' => 'Hola']))
         ->toThrow(TranslationFailed::class, 'Otro problema.');
 });
+
+test('admin sets the workspace for an api key that does not belong to one', function () {
+    $user = User::factory()->create();
+    config(['app.admin_emails' => [strtolower($user->email)]]);
+    $this->actingAs($user);
+    Filament::setCurrentPanel('admin');
+
+    Livewire::test(ManageSettings::class)
+        ->fillForm(['ai.anthropic_workspace_id' => 'no-es-un-workspace'])
+        ->call('save')
+        ->assertHasFormErrors(['ai.anthropic_workspace_id' => 'regex']);
+
+    Livewire::test(ManageSettings::class)
+        ->fillForm(['ai.anthropic_workspace_id' => 'wrkspc_011CZkZaBF1tNoB5wlCeusgy'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect(Setting::anthropicWorkspaceId())->toBe('wrkspc_011CZkZaBF1tNoB5wlCeusgy');
+
+    Livewire::test(ManageSettings::class)
+        ->assertSchemaStateSet(['ai.anthropic_workspace_id' => 'wrkspc_011CZkZaBF1tNoB5wlCeusgy'])
+        ->fillForm(['ai.anthropic_workspace_id' => ''])
+        ->call('save');
+
+    expect(Setting::anthropicWorkspaceId())->toBeNull();
+});
+
+test('the workspace falls back to the env file', function () {
+    config(['services.anthropic.workspace_id' => 'wrkspc_DelEnv']);
+
+    expect(Setting::anthropicWorkspaceId())->toBe('wrkspc_DelEnv');
+});
