@@ -152,6 +152,12 @@ test('the gallery index can be sorted by name or by last update', function () {
         ->set('sort', 'whatever')
         ->assertSet('sort', 'order');
 
+    $this->get(route('gallery'))
+        ->assertOk()
+        ->assertSee('role="listbox"', false)
+        ->assertSee("\$set('sort', 'name')", false)
+        ->assertDontSee('<select', false);
+
     expect($newer->exists)->toBeTrue();
 });
 

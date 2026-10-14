@@ -6,6 +6,7 @@ use App\Filament\Support\CompleteWithAiAction;
 use App\Filament\Support\LanguageTabs;
 use App\Models\Setting;
 use App\Support\CursorStyle;
+use App\Support\PageColor;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
@@ -17,6 +18,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Form;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
@@ -139,6 +141,30 @@ class ManageSettings extends Page
                                                 ->selectablePlaceholder(false)
                                                 ->required(),
                                         ]),
+                                    Section::make('Color por página')
+                                        ->description('Fondo y texto de cada página, elegidos entre los del recurso Colores. El fondo tiñe los acentos y sus tonos claros; el texto cambia la tinta de lo que va encima (header, portada, pie y tarjetas de color). Vacío = el de siempre. El color de un proyecto pisa el fondo de su página.')
+                                        ->collapsible()
+                                        ->schema(collect(PageColor::PAGES)
+                                            ->map(fn (string $label, string $routeName): Fieldset => Fieldset::make($label)
+                                                ->columns(2)
+                                                ->schema([
+                                                    Select::make('site.page_colors.'.PageColor::settingKey($routeName))
+                                                        ->label('Fondo')
+                                                        ->placeholder('Color por defecto')
+                                                        ->options(fn (?string $state): array => PageColor::options($state))
+                                                        ->allowHtml()
+                                                        ->searchable()
+                                                        ->native(false),
+                                                    Select::make('site.page_inks.'.PageColor::settingKey($routeName))
+                                                        ->label('Texto')
+                                                        ->placeholder('Texto por defecto')
+                                                        ->options(fn (?string $state): array => PageColor::inkOptions($state))
+                                                        ->allowHtml()
+                                                        ->searchable()
+                                                        ->native(false),
+                                                ]))
+                                            ->values()
+                                            ->all()),
                                 ]),
                             Tab::make('Contacto')
                                 ->icon(Heroicon::OutlinedEnvelope)
