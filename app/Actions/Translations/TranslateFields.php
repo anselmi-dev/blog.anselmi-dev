@@ -10,9 +10,11 @@ use Anthropic\Core\Exceptions\APIConnectionException;
 use Anthropic\Core\Exceptions\APIException;
 use Anthropic\Core\Exceptions\APIStatusException;
 use Anthropic\Core\Exceptions\AuthenticationException;
+use Anthropic\Core\Exceptions\BadRequestException;
 use Anthropic\Core\Exceptions\PermissionDeniedException;
 use Anthropic\Core\Exceptions\RateLimitException;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Traduce textos del español a los demás idiomas del sitio con Claude.
@@ -89,22 +91,17 @@ class TranslateFields
      */
     protected function send(string $apiKey, string $request, array $schema): string
     {
-        $client = new Client(apiKey: $apiKey);
-
         try {
-            $message = $client->beta->messages->create(
-                model: (string) config('services.anthropic.translation_model'),
-                maxTokens: 16000,
-                system: self::SYSTEM_PROMPT,
-                messages: [['role' => 'user', 'content' => $request]],
-                outputConfig: [
-                    'effort' => 'low',
-                    'format' => ['type' => 'json_schema', 'schema' => $schema],
-                ],
-                // Si el modelo declina el pedido, la API lo reintenta con otro modelo.
-                betas: ['server-side-fallback-2026-07-01'],
-                fallbacks: 'default',
-            );
+            try {
+                $message = $this->request($apiKey, $request, $schema, withFallbacks: true);
+            } catch (BadRequestException $exception) {
+                // Si la cuenta no tiene habilitado el fallback (beta), se pide sin él.
+                if (! $this->isAboutFallbacks($exception)) {
+                    throw $exception;
+                }
+
+                $message = $this->request($apiKey, $request, $schema, withFallbacks: false);
+            }
         } catch (AuthenticationException|PermissionDeniedException) {
             throw new TranslationFailed('Anthropic rechazó la API key. Revisala en Ajustes → IA.');
         } catch (RateLimitException) {
@@ -112,12 +109,61 @@ class TranslateFields
         } catch (APIConnectionException) {
             throw new TranslationFailed('No se pudo conectar con la API de Anthropic. Probá de nuevo en un rato.');
         } catch (APIStatusException $exception) {
-            throw new TranslationFailed("La API de Anthropic devolvió un error ({$exception->status}). Probá de nuevo.");
+            $reason = $this->apiErrorMessage($exception);
+
+            Log::warning('La traducción con Claude falló', [
+                'status' => $exception->status,
+                'error' => $reason,
+                'request_id' => $exception->response?->getHeaderLine('request-id'),
+            ]);
+
+            throw new TranslationFailed(
+                "La API de Anthropic devolvió un error ({$exception->status})".($reason !== null ? ": {$reason}" : '.')
+            );
         } catch (APIException) {
             throw new TranslationFailed('La traducción falló. Probá de nuevo.');
         }
 
         return $this->textOf($message);
+    }
+
+    /**
+     * @param  array<string, mixed>  $schema
+     */
+    protected function request(string $apiKey, string $request, array $schema, bool $withFallbacks): BetaMessage
+    {
+        $client = new Client(apiKey: $apiKey);
+
+        return $client->beta->messages->create(
+            model: (string) config('services.anthropic.translation_model'),
+            maxTokens: 16000,
+            system: self::SYSTEM_PROMPT,
+            messages: [['role' => 'user', 'content' => $request]],
+            outputConfig: [
+                'effort' => 'low',
+                'format' => ['type' => 'json_schema', 'schema' => $schema],
+            ],
+            // Si el modelo declina el pedido, la API lo reintenta con otro modelo.
+            betas: $withFallbacks ? ['server-side-fallback-2026-07-01'] : null,
+            fallbacks: $withFallbacks ? 'default' : null,
+        );
+    }
+
+    /**
+     * El motivo que da la API ("error.message" del cuerpo de la respuesta).
+     */
+    private function apiErrorMessage(APIStatusException $exception): ?string
+    {
+        $message = is_array($exception->body) ? ($exception->body['error']['message'] ?? null) : null;
+
+        return is_string($message) && $message !== '' ? $message : null;
+    }
+
+    private function isAboutFallbacks(BadRequestException $exception): bool
+    {
+        $message = (string) $this->apiErrorMessage($exception);
+
+        return str_contains($message, 'anthropic-beta') || str_contains($message, 'fallback');
     }
 
     /**

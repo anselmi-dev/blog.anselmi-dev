@@ -1,5 +1,6 @@
 <?php
 
+use Anthropic\Core\Exceptions\APIStatusException;
 use App\Actions\Translations\TranslateFields;
 use App\Actions\Translations\TranslationFailed;
 use App\Filament\Pages\ManageSettings;
@@ -7,8 +8,11 @@ use App\Models\Setting;
 use App\Models\User;
 use Filament\Actions\Testing\TestAction;
 use Filament\Facades\Filament;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
@@ -106,4 +110,48 @@ test('admin saves the api key from the settings without ever seeing it again', f
         ->assertNotified('Clave borrada');
 
     expect(Setting::hasStoredAnthropicApiKey())->toBeFalse();
+});
+
+/**
+ * Error 400 como lo devuelve la API de Anthropic.
+ */
+function badRequest(string $message): APIStatusException
+{
+    return APIStatusException::from(
+        new Request('POST', 'https://api.anthropic.com/v1/messages'),
+        new Response(400, ['Content-Type' => 'application/json', 'request-id' => 'req_test'], json_encode([
+            'type' => 'error',
+            'error' => ['type' => 'invalid_request_error', 'message' => $message],
+        ])),
+    );
+}
+
+test('a 400 error shows the reason given by the api', function () {
+    Setting::storeAnthropicApiKey('sk-ant-guardada');
+    Log::spy();
+
+    $translator = Mockery::mock(TranslateFields::class)->makePartial()->shouldAllowMockingProtectedMethods();
+    $translator->shouldReceive('request')->once()->andThrow(badRequest('Your credit balance is too low to access the Anthropic API.'));
+
+    expect(fn () => $translator->handle(['title' => 'Hola']))
+        ->toThrow(TranslationFailed::class, 'La API de Anthropic devolvió un error (400): Your credit balance is too low to access the Anthropic API.');
+
+    Log::shouldHaveReceived('warning')->once()->withArgs(fn (string $message, array $context): bool => $context['request_id'] === 'req_test');
+});
+
+test('when the account cannot use the fallback beta it asks again without it', function () {
+    Setting::storeAnthropicApiKey('sk-ant-guardada');
+
+    $translator = Mockery::mock(TranslateFields::class)->makePartial()->shouldAllowMockingProtectedMethods();
+    $translator->shouldReceive('request')
+        ->once()
+        ->withArgs(fn (string $key, string $request, array $schema, bool $withFallbacks): bool => $withFallbacks)
+        ->andThrow(badRequest('Unexpected value(s) `server-side-fallback-2026-07-01` for the `anthropic-beta` header.'));
+    $translator->shouldReceive('request')
+        ->once()
+        ->withArgs(fn (string $key, string $request, array $schema, bool $withFallbacks): bool => ! $withFallbacks)
+        ->andThrow(badRequest('Otro problema.'));
+
+    expect(fn () => $translator->handle(['title' => 'Hola']))
+        ->toThrow(TranslationFailed::class, 'Otro problema.');
 });
