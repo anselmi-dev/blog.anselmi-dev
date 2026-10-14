@@ -4,6 +4,7 @@ import { initCustomCursor } from './custom-cursor';
 import { initLogoAnimation } from './logo-animation';
 import { initMotion } from './motion';
 import { initPageLoaders } from './page-loader';
+import { initPageTransition } from './page-transition';
 import { initToolsWheels } from './tools-wheel';
 
 /**
@@ -30,6 +31,8 @@ function boot(root = document) {
     initPageLoaders(root);
     initToolsWheels(root);
 }
+
+initPageTransition();
 
 document.addEventListener('DOMContentLoaded', () => boot());
 

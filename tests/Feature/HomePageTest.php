@@ -99,3 +99,9 @@ test('admin can set the opacity and speed of the rising squares', function () {
         ->background_squares_opacity->toEqual(30)
         ->background_squares_speed->toEqual(1.5);
 });
+
+test('the page content is marked for the navigation transition', function () {
+    $content = $this->get(localized_route('home'))->assertOk()->getContent();
+
+    expect($content)->toContain('<main class="flex-1" data-page-transition>');
+});

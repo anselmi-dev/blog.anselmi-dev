@@ -133,6 +133,8 @@
     </header>
 
     <div data-reveal-item>
-        @yield('header-content')
+        <div data-page-transition>
+            @yield('header-content')
+        </div>
     </div>
 </x-site-frame>

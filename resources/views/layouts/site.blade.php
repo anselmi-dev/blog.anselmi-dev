@@ -31,7 +31,7 @@
     <div class="flex flex-col min-h-screen px-4 pt-6 pb-4 sm:px-6 sm:pt-8 lg:px-8 lg:pt-10">
         <x-site-header/>
 
-        <main class="flex-1">
+        <main class="flex-1" data-page-transition>
             {{ $slot }}
         </main>
 
