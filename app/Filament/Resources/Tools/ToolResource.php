@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Tools;
 use App\Filament\Resources\Tools\Pages\CreateTool;
 use App\Filament\Resources\Tools\Pages\EditTool;
 use App\Filament\Resources\Tools\Pages\ListTools;
+use App\Filament\Support\CompleteWithAiAction;
 use App\Filament\Support\LanguageTabs;
 use App\Models\Tool;
 use App\Support\JarShape;
@@ -79,6 +80,16 @@ class ToolResource extends Resource
                         ],
                     ],
                     translatableFields: ['tagline', 'category', 'description'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'una herramienta o tecnología que uso para trabajar como desarrollador web (sale dentro de un frasco en /servicios/herramientas)',
+                        guidance: [
+                            'tagline' => 'Qué es, en 2 a 6 palabras (ej. "Backend & estructura de la app").',
+                            'category' => 'Rubro en 1 o 2 palabras: Backend, Frontend, Base de datos, Infraestructura, Diseño, Herramientas…',
+                            'description' => 'Qué es y para qué sirve en un proyecto web, en 1 o 2 oraciones (máximo 260 caracteres).',
+                        ],
+                        context: ['name' => 'Nombre', 'url' => 'Sitio web'],
+                        webSearch: true,
+                    ),
                 ),
                 TextInput::make('url')
                     ->label('URL')

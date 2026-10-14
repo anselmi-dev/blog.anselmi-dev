@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Support;
 
+use Filament\Actions\Action;
 use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Tabs;
@@ -11,7 +12,8 @@ use Filament\Schemas\Components\Tabs\Tab;
 
 /**
  * Pestañas por idioma para los textos traducibles de un formulario: español
- * primero y luego una por cada otro idioma, con el botón para traducir con IA.
+ * primero (con el botón opcional "Completar con IA") y luego una por cada otro
+ * idioma, con el botón para traducir con IA.
  */
 class LanguageTabs
 {
@@ -20,9 +22,19 @@ class LanguageTabs
      * @param  array<string, array<int, Component>>  $translations  Idioma => campos "{campo}_{idioma}".
      * @param  list<string>  $translatableFields  Campos en español que se traducen con el botón.
      * @param  string|null  $key  Para usar más de un grupo de pestañas en el mismo formulario.
+     * @param  Action|null  $completion  Botón "Completar con IA" (CompleteWithAiAction) para la pestaña Español.
      */
-    public static function make(array $spanish, array $translations, array $translatableFields, ?string $key = null): Tabs
+    public static function make(array $spanish, array $translations, array $translatableFields, ?string $key = null, ?Action $completion = null): Tabs
     {
+        if ($completion !== null) {
+            $spanish = [
+                Actions::make([$completion])
+                    ->key('es-completar')
+                    ->columnSpanFull(),
+                ...$spanish,
+            ];
+        }
+
         $tabs = [
             Tab::make('Español')
                 ->icon('heroicon-o-language')

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Support\CompleteWithAiAction;
 use App\Filament\Support\LanguageTabs;
 use App\Models\Setting;
 use App\Support\CursorStyle;
@@ -94,6 +95,13 @@ class ManageSettings extends Page
                                                     ],
                                                 ],
                                                 translatableFields: ['site.meta_description'],
+                                                completion: CompleteWithAiAction::make(
+                                                    about: 'la descripción por defecto del sitio para buscadores y redes sociales',
+                                                    guidance: [
+                                                        'site.meta_description' => 'Meta description de 140 a 160 caracteres que presente el sitio: portfolio de desarrollo web, fotografía y blog.',
+                                                    ],
+                                                    context: ['site.author_name' => 'Nombre / autor'],
+                                                ),
                                             ),
                                         ]),
                                     Section::make('Animaciones')
@@ -270,6 +278,23 @@ class ManageSettings extends Page
                                             'contact.success_title',
                                             'contact.success_description',
                                         ],
+                                        completion: CompleteWithAiAction::make(
+                                            about: 'los textos del bloque de contacto del sitio (formulario para escribirme y datos de contacto)',
+                                            guidance: [
+                                                'contact.email_label' => 'Título corto para el correo (2 a 4 palabras).',
+                                                'contact.email_description' => 'Una oración corta sobre escribir por correo.',
+                                                'contact.location_label' => 'Título corto para la ubicación.',
+                                                'contact.location_description' => 'Una oración corta sobre desde dónde trabajo, sin inventar datos que no estén en el contexto.',
+                                                'contact.schedule_label' => 'Título corto para el horario.',
+                                                'contact.schedule_description' => 'Una oración corta sobre el horario, sin inventar horarios que no estén en el contexto.',
+                                                'contact.form_title' => 'Título del formulario de contacto, corto y cercano.',
+                                                'contact.form_description' => 'Una oración que invite a contar el proyecto.',
+                                                'contact.submit_label' => 'Texto del botón de enviar (1 a 3 palabras).',
+                                                'contact.success_title' => 'Título corto cuando el mensaje se envió.',
+                                                'contact.success_description' => 'Una oración de agradecimiento después de enviar.',
+                                            ],
+                                            context: ['contact.email' => 'Email'],
+                                        ),
                                     ),
                                     Section::make('Redes sociales')
                                         ->schema([

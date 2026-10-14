@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Fonts;
 use App\Filament\Resources\Fonts\Pages\CreateFont;
 use App\Filament\Resources\Fonts\Pages\EditFont;
 use App\Filament\Resources\Fonts\Pages\ListFonts;
+use App\Filament\Support\CompleteWithAiAction;
 use App\Filament\Support\LanguageTabs;
 use App\Models\Font;
 use BackedEnum;
@@ -94,6 +95,16 @@ class FontResource extends Resource
                         ],
                     ],
                     translatableFields: ['category', 'sample', 'note'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'una tipografía de la sección /servicios/fuentes, donde muestro las fuentes que uso',
+                        guidance: [
+                            'category' => 'Clasificación de la fuente: Sans-serif, Serif, Monoespaciada, Display, Manuscrita…',
+                            'sample' => 'Frase corta para mostrar cómo se ve la letra (máximo 40 caracteres).',
+                            'note' => 'Quién la diseñó o de dónde viene y para qué funciona bien, en 1 o 2 oraciones (máximo 220 caracteres).',
+                        ],
+                        context: ['name' => 'Nombre', 'family' => 'CSS family', 'weights' => 'Pesos'],
+                        webSearch: true,
+                    ),
                 ),
                 TextInput::make('weights')
                     ->label('Pesos')

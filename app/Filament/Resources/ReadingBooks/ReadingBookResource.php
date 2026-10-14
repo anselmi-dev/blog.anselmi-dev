@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ReadingBooks;
 use App\Filament\Resources\ReadingBooks\Pages\CreateReadingBook;
 use App\Filament\Resources\ReadingBooks\Pages\EditReadingBook;
 use App\Filament\Resources\ReadingBooks\Pages\ListReadingBooks;
+use App\Filament\Support\CompleteWithAiAction;
 use App\Filament\Support\LanguageTabs;
 use App\Models\ReadingBook;
 use BackedEnum;
@@ -67,6 +68,14 @@ class ReadingBookResource extends Resource
                         ],
                     ],
                     translatableFields: ['title', 'author'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'un libro que estoy leyendo o leí (sale en la home). En inglés, el título es el de la edición en inglés si existe',
+                        guidance: [
+                            'title' => 'Título del libro tal como se publicó en español.',
+                            'author' => 'Nombre completo del autor o la autora.',
+                        ],
+                        webSearch: true,
+                    ),
                 ),
                 FileUpload::make('image_path')
                     ->label('Portada')

@@ -25,7 +25,7 @@ uses(RefreshDatabase::class);
 function translatorReturning(string $json, ?Closure $inspect = null): TranslateFields
 {
     $askClaude = Mockery::mock(AskClaude::class)->makePartial()->shouldAllowMockingProtectedMethods();
-    $askClaude->shouldReceive('send')->andReturnUsing(function (string $apiKey, string $system, string $request, array $schema, int $webSearches) use ($json, $inspect): string {
+    $askClaude->shouldReceive('send')->andReturnUsing(function (string $apiKey, string $system, string|array $request, array $schema, int $webSearches) use ($json, $inspect): string {
         $inspect?->__invoke($apiKey, $request, $schema, $webSearches);
 
         return $json;

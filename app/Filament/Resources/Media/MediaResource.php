@@ -7,6 +7,7 @@ use App\Filament\Resources\Media\Pages\CreateMedia;
 use App\Filament\Resources\Media\Pages\EditMedia;
 use App\Filament\Resources\Media\Pages\ListMedia;
 use App\Filament\Resources\Tags\TagResource;
+use App\Filament\Support\CompleteWithAiAction;
 use App\Filament\Support\LanguageTabs;
 use App\Models\Media as MediaModel;
 use App\Models\Tag;
@@ -114,6 +115,17 @@ class MediaResource extends Resource
                         ],
                     ],
                     translatableFields: ['title', 'category', 'description', 'location'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'una foto de mi galería de fotografía (la imagen va adjunta)',
+                        guidance: [
+                            'title' => 'Título corto y evocador (máximo 60 caracteres).',
+                            'category' => 'Rubro de la foto en 1 o 2 palabras: Paisaje, Calles, Retrato, Arquitectura, Naturaleza…',
+                            'description' => 'Una o dos oraciones sobre lo que muestra la foto, sin inventar cómo ni por qué la saqué.',
+                            'location' => 'Lugar donde se tomó. Solo si está en el contexto o se reconoce sin duda en la imagen; si no, dejalo vacío.',
+                        ],
+                        context: ['released_on' => 'Fecha', 'camera' => 'Cámara'],
+                        image: 'image_path',
+                    ),
                 ),
                 Section::make('Datos EXIF / cámara')
                     ->columns(3)

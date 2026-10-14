@@ -5,6 +5,7 @@ namespace App\Filament\Resources\SiteColors;
 use App\Filament\Resources\SiteColors\Pages\CreateSiteColor;
 use App\Filament\Resources\SiteColors\Pages\EditSiteColor;
 use App\Filament\Resources\SiteColors\Pages\ListSiteColors;
+use App\Filament\Support\CompleteWithAiAction;
 use App\Filament\Support\LanguageTabs;
 use App\Models\SiteColor;
 use BackedEnum;
@@ -60,6 +61,13 @@ class SiteColorResource extends Resource
                         ],
                     ],
                     translatableFields: ['name'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'un color de la paleta del sitio (sección /servicios/colores)',
+                        guidance: [
+                            'name' => 'Nombre evocador y corto para el color, de 1 a 3 palabras (ej. "Arena mojada").',
+                        ],
+                        context: ['hex' => 'Código hex'],
+                    ),
                 ),
                 ColorPicker::make('hex')
                     ->label('Hex')

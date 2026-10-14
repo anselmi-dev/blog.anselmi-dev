@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Posts;
 use App\Filament\Resources\Posts\Pages\CreatePost;
 use App\Filament\Resources\Posts\Pages\EditPost;
 use App\Filament\Resources\Posts\Pages\ListPosts;
+use App\Filament\Support\CompleteWithAiAction;
 use App\Filament\Support\LanguageTabs;
 use App\Models\Post;
 use BackedEnum;
@@ -145,6 +146,18 @@ class PostResource extends Resource
                         ],
                     ],
                     translatableFields: ['title', 'kicker', 'excerpt', 'body', 'caption', 'alt'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'un post o una nota del blog',
+                        guidance: [
+                            'title' => 'Título corto y concreto.',
+                            'kicker' => 'Línea corta sobre el título con mes, año y tema, con el formato "Mar 2025 · proceso".',
+                            'excerpt' => 'Resumen del post en 1 o 2 oraciones (máximo 200 caracteres).',
+                            'caption' => ['Pie de la imagen en una oración.', fn (Get $get): bool => $get('kind') === 'image'],
+                            'alt' => ['Texto alternativo que describa la imagen para lectores de pantalla (máximo 120 caracteres).', fn (Get $get): bool => $get('kind') === 'image'],
+                        ],
+                        context: ['body' => 'Texto del post', 'published_at' => 'Fecha de publicación'],
+                        image: 'image_path',
+                    ),
                 ),
                 Section::make('Bento / listado')
                     ->columns(2)

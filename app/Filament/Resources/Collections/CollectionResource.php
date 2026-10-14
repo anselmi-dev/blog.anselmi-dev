@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Collections;
 use App\Filament\Resources\Collections\Pages\CreateCollection;
 use App\Filament\Resources\Collections\Pages\EditCollection;
 use App\Filament\Resources\Collections\Pages\ListCollections;
+use App\Filament\Support\CompleteWithAiAction;
 use App\Filament\Support\LanguageTabs;
 use App\Models\Collection;
 use BackedEnum;
@@ -75,6 +76,13 @@ class CollectionResource extends Resource
                         ],
                     ],
                     translatableFields: ['name', 'description'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'una colección de la galería de fotos (agrupa fotos, videos y citas)',
+                        guidance: [
+                            'name' => 'Nombre corto de la colección.',
+                            'description' => 'Una o dos oraciones que presenten la colección, sin inventar lugares, fechas ni historias que no estén en el contexto.',
+                        ],
+                    ),
                 ),
                 TextInput::make('slug')
                     ->required()

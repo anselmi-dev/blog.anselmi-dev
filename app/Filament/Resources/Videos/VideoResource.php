@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Videos;
 use App\Filament\Resources\Videos\Pages\CreateVideo;
 use App\Filament\Resources\Videos\Pages\EditVideo;
 use App\Filament\Resources\Videos\Pages\ListVideos;
+use App\Filament\Support\CompleteWithAiAction;
 use App\Filament\Support\LanguageTabs;
 use App\Models\Video;
 use BackedEnum;
@@ -108,6 +109,17 @@ class VideoResource extends Resource
                         ],
                     ],
                     translatableFields: ['title', 'category', 'description', 'location'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'un video de mi galería (va adjunta su portada, si tiene)',
+                        guidance: [
+                            'title' => 'Título corto y evocador (máximo 60 caracteres).',
+                            'category' => 'Rubro en 1 o 2 palabras: Paisaje, Calles, Viajes, Naturaleza…',
+                            'description' => 'Una o dos oraciones sobre el video, sin inventar lo que no se ve en la portada ni está en el contexto.',
+                            'location' => 'Lugar donde se grabó. Solo si está en el contexto o se reconoce sin duda en la portada; si no, dejalo vacío.',
+                        ],
+                        context: ['released_at' => 'Fecha'],
+                        image: 'poster_path',
+                    ),
                 ),
             ]);
     }

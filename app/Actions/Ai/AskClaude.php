@@ -27,13 +27,14 @@ class AskClaude
     private const int MAX_RESUMES = 2;
 
     /**
+     * @param  string|list<array<string, mixed>>  $prompt  Texto o bloques de contenido (p. ej. una imagen y un texto).
      * @param  array<string, mixed>  $schema  JSON schema de la respuesta.
      * @param  int  $webSearches  Búsquedas web que puede hacer (0 = sin búsqueda).
      * @return array<string, mixed>
      *
      * @throws ClaudeRequestFailed
      */
-    public function handle(string $system, string $prompt, array $schema, int $webSearches = 0): array
+    public function handle(string $system, string|array $prompt, array $schema, int $webSearches = 0): array
     {
         $apiKey = Setting::anthropicApiKey()
             ?? throw new ClaudeRequestFailed('Falta la API key de Anthropic: cargala en Ajustes → IA.');
@@ -50,11 +51,12 @@ class AskClaude
     /**
      * Hace el pedido (retomándolo si la búsqueda lo dejó en pausa) y devuelve el JSON de la respuesta.
      *
+     * @param  string|list<array<string, mixed>>  $prompt
      * @param  array<string, mixed>  $schema
      *
      * @throws ClaudeRequestFailed
      */
-    protected function send(string $apiKey, string $system, string $prompt, array $schema, int $webSearches): string
+    protected function send(string $apiKey, string $system, string|array $prompt, array $schema, int $webSearches): string
     {
         $messages = [['role' => 'user', 'content' => $prompt]];
         $withFallbacks = $this->modelHasFallbacks();
