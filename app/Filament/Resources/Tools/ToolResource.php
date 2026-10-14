@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Tools;
 use App\Filament\Resources\Tools\Pages\CreateTool;
 use App\Filament\Resources\Tools\Pages\EditTool;
 use App\Filament\Resources\Tools\Pages\ListTools;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Tool;
 use App\Support\JarShape;
 use BackedEnum;
@@ -17,7 +18,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ColorColumn;
@@ -51,20 +51,39 @@ class ToolResource extends Resource
                 TextInput::make('name')
                     ->label('Nombre')
                     ->required(),
-                TextInput::make('tagline')
-                    ->label('Descripción corta'),
-                Textarea::make('description')
-                    ->label('Descripción')
-                    ->helperText('Se muestra al abrir el frasco en detalle: qué es y para qué la usás.')
-                    ->rows(4)
-                    ->columnSpanFull(),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('tagline')
+                            ->label('Descripción corta'),
+                        TextInput::make('category')
+                            ->label('Categoría')
+                            ->placeholder('Backend'),
+                        Textarea::make('description')
+                            ->label('Descripción')
+                            ->helperText('Se muestra al abrir el frasco en detalle: qué es y para qué la usás.')
+                            ->rows(4)
+                            ->columnSpanFull(),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('tagline_en')
+                                ->label('Short description')
+                                ->maxLength(255),
+                            TextInput::make('category_en')
+                                ->label('Category')
+                                ->maxLength(255),
+                            Textarea::make('description_en')
+                                ->label('Description')
+                                ->rows(4)
+                                ->columnSpanFull(),
+                        ],
+                    ],
+                    translatableFields: ['tagline', 'category', 'description'],
+                ),
                 TextInput::make('url')
                     ->label('URL')
                     ->url()
                     ->required(),
-                TextInput::make('category')
-                    ->label('Categoría')
-                    ->placeholder('Backend'),
                 TextInput::make('icon')
                     ->label('Icono Simple Icons')
                     ->helperText('Slug de https://simpleicons.org (ej: laravel, livewire)'),
@@ -86,23 +105,6 @@ class ToolResource extends Resource
                 Toggle::make('is_published')
                     ->label('Publicado')
                     ->default(true),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->schema([
-                        TextInput::make('tagline_en')
-                            ->label('Descripción corta (EN)')
-                            ->maxLength(255),
-                        TextInput::make('category_en')
-                            ->label('Categoría (EN)')
-                            ->maxLength(255),
-                        Textarea::make('description_en')
-                            ->label('Descripción (EN)')
-                            ->rows(4)
-                            ->columnSpanFull(),
-                    ]),
             ]);
     }
 

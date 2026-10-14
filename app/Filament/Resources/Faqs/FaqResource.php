@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Faqs;
 use App\Filament\Resources\Faqs\Pages\CreateFaq;
 use App\Filament\Resources\Faqs\Pages\EditFaq;
 use App\Filament\Resources\Faqs\Pages\ListFaqs;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Faq;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -14,7 +15,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -44,15 +44,30 @@ class FaqResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('question')
-                    ->label('Pregunta')
-                    ->required()
-                    ->columnSpanFull(),
-                Textarea::make('answer')
-                    ->label('Respuesta')
-                    ->required()
-                    ->rows(5)
-                    ->columnSpanFull(),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('question')
+                            ->label('Pregunta')
+                            ->required()
+                            ->columnSpanFull(),
+                        Textarea::make('answer')
+                            ->label('Respuesta')
+                            ->required()
+                            ->rows(5)
+                            ->columnSpanFull(),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('question_en')
+                                ->label('Question')
+                                ->maxLength(255),
+                            Textarea::make('answer_en')
+                                ->label('Answer')
+                                ->rows(4),
+                        ],
+                    ],
+                    translatableFields: ['question', 'answer'],
+                ),
                 TextInput::make('sort_order')
                     ->label('Orden')
                     ->numeric()
@@ -60,19 +75,6 @@ class FaqResource extends Resource
                 Toggle::make('is_published')
                     ->label('Publicado')
                     ->default(true),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->schema([
-                        TextInput::make('question_en')
-                            ->label('Pregunta (EN)')
-                            ->maxLength(255),
-                        Textarea::make('answer_en')
-                            ->label('Respuesta (EN)')
-                            ->rows(4),
-                    ]),
             ]);
     }
 

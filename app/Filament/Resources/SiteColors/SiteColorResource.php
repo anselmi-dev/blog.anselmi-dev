@@ -5,6 +5,7 @@ namespace App\Filament\Resources\SiteColors;
 use App\Filament\Resources\SiteColors\Pages\CreateSiteColor;
 use App\Filament\Resources\SiteColors\Pages\EditSiteColor;
 use App\Filament\Resources\SiteColors\Pages\ListSiteColors;
+use App\Filament\Support\LanguageTabs;
 use App\Models\SiteColor;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -15,7 +16,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ColorColumn;
@@ -46,9 +46,21 @@ class SiteColorResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Nombre')
-                    ->required(),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('name')
+                            ->label('Nombre')
+                            ->required(),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('name_en')
+                                ->label('Name')
+                                ->maxLength(255),
+                        ],
+                    ],
+                    translatableFields: ['name'],
+                ),
                 ColorPicker::make('hex')
                     ->label('Hex')
                     ->required(),
@@ -85,16 +97,6 @@ class SiteColorResource extends Resource
                 Toggle::make('is_published')
                     ->label('Publicado')
                     ->default(true),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->schema([
-                        TextInput::make('name_en')
-                            ->label('Nombre (EN)')
-                            ->maxLength(255),
-                    ]),
             ]);
     }
 

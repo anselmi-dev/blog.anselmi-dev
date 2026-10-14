@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Quotes;
 use App\Filament\Resources\Quotes\Pages\CreateQuote;
 use App\Filament\Resources\Quotes\Pages\EditQuote;
 use App\Filament\Resources\Quotes\Pages\ListQuotes;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Quote;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -13,7 +14,6 @@ use Filament\Actions\EditAction;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -43,26 +43,28 @@ class QuoteResource extends Resource
     {
         return $schema
             ->components([
-                Textarea::make('quote')
-                    ->label('Cita')
-                    ->required()
-                    ->rows(3)
-                    ->columnSpanFull(),
-                TextInput::make('attribution')
-                    ->label('Atribución'),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->schema([
-                        Textarea::make('quote_en')
-                            ->label('Cita (EN)')
-                            ->rows(3),
-                        TextInput::make('attribution_en')
-                            ->label('Atribución (EN)')
-                            ->maxLength(255),
-                    ]),
+                LanguageTabs::make(
+                    spanish: [
+                        Textarea::make('quote')
+                            ->label('Cita')
+                            ->required()
+                            ->rows(3)
+                            ->columnSpanFull(),
+                        TextInput::make('attribution')
+                            ->label('Atribución'),
+                    ],
+                    translations: [
+                        'en' => [
+                            Textarea::make('quote_en')
+                                ->label('Quote')
+                                ->rows(3),
+                            TextInput::make('attribution_en')
+                                ->label('Attribution')
+                                ->maxLength(255),
+                        ],
+                    ],
+                    translatableFields: ['quote', 'attribution'],
+                ),
             ]);
     }
 

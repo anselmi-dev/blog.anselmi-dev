@@ -19,8 +19,9 @@ class LanguageTabs
      * @param  array<int, Component>  $spanish  Campos en español.
      * @param  array<string, array<int, Component>>  $translations  Idioma => campos "{campo}_{idioma}".
      * @param  list<string>  $translatableFields  Campos en español que se traducen con el botón.
+     * @param  string|null  $key  Para usar más de un grupo de pestañas en el mismo formulario.
      */
-    public static function make(array $spanish, array $translations, array $translatableFields): Tabs
+    public static function make(array $spanish, array $translations, array $translatableFields, ?string $key = null): Tabs
     {
         $tabs = [
             Tab::make('Español')
@@ -35,14 +36,17 @@ class LanguageTabs
                 ->badge(strtoupper($locale))
                 ->schema([
                     Actions::make([TranslateFromSpanishAction::make($translatableFields)])
+                        ->key("{$locale}-traducir")
                         ->columnSpanFull(),
                     ...$components,
                 ]);
         }
 
-        return Tabs::make('Idiomas')
+        $tabs = Tabs::make('Idiomas')
             ->tabs($tabs)
             ->columnSpanFull();
+
+        return $key !== null ? $tabs->key($key) : $tabs;
     }
 
     private static function label(string $locale): string

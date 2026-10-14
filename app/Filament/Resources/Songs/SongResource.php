@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Songs;
 use App\Filament\Resources\Songs\Pages\CreateSong;
 use App\Filament\Resources\Songs\Pages\EditSong;
 use App\Filament\Resources\Songs\Pages\ListSongs;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Song;
 use App\Support\SpotifyEmbed;
 use BackedEnum;
@@ -17,7 +18,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -79,11 +79,23 @@ class SongResource extends Resource
                     ->visibility('public')
                     ->imageEditor()
                     ->columnSpanFull(),
-                Textarea::make('note')
-                    ->label('Nota')
-                    ->helperText('Opcional: por qué te gusta, cuándo la escuchás…')
-                    ->rows(3)
-                    ->columnSpanFull(),
+                LanguageTabs::make(
+                    spanish: [
+                        Textarea::make('note')
+                            ->label('Nota')
+                            ->helperText('Opcional: por qué te gusta, cuándo la escuchás…')
+                            ->rows(3)
+                            ->columnSpanFull(),
+                    ],
+                    translations: [
+                        'en' => [
+                            Textarea::make('note_en')
+                                ->label('Note')
+                                ->rows(3),
+                        ],
+                    ],
+                    translatableFields: ['note'],
+                ),
                 TextInput::make('sort_order')
                     ->label('Orden')
                     ->numeric()
@@ -91,16 +103,6 @@ class SongResource extends Resource
                 Toggle::make('is_published')
                     ->label('Publicado')
                     ->default(true),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->schema([
-                        Textarea::make('note_en')
-                            ->label('Nota (EN)')
-                            ->rows(3),
-                    ]),
             ]);
     }
 

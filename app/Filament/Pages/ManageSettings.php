@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Support\LanguageTabs;
 use App\Models\Setting;
 use App\Support\CursorStyle;
 use BackedEnum;
@@ -74,10 +75,26 @@ class ManageSettings extends Page
                                             TextInput::make('site.author_name')
                                                 ->label('Nombre / autor')
                                                 ->maxLength(120),
-                                            Textarea::make('site.meta_description')
-                                                ->label('Meta description')
-                                                ->rows(3)
-                                                ->helperText('Descripción por defecto para SEO y redes.'),
+                                            LanguageTabs::make(
+                                                key: 'seo-idiomas',
+                                                spanish: [
+                                                    Textarea::make('site.meta_description')
+                                                        ->label('Meta description')
+                                                        ->rows(3)
+                                                        ->helperText('Descripción por defecto para SEO y redes.')
+                                                        ->columnSpanFull(),
+                                                ],
+                                                translations: [
+                                                    'en' => [
+                                                        Textarea::make('site.meta_description_en')
+                                                            ->label('Meta description')
+                                                            ->rows(3)
+                                                            ->helperText('Si queda vacía, se usa la traducción del texto por defecto o el texto en español.')
+                                                            ->columnSpanFull(),
+                                                    ],
+                                                ],
+                                                translatableFields: ['site.meta_description'],
+                                            ),
                                         ]),
                                     Section::make('Animaciones')
                                         ->schema([
@@ -119,57 +136,141 @@ class ManageSettings extends Page
                                 ->icon(Heroicon::OutlinedEnvelope)
                                 ->schema([
                                     Section::make('Correo')
-                                        ->columns(2)
                                         ->schema([
                                             TextInput::make('contact.email')
                                                 ->label('Email')
                                                 ->email()
                                                 ->required()
                                                 ->maxLength(255),
-                                            TextInput::make('contact.email_label')
-                                                ->label('Título')
-                                                ->maxLength(120),
-                                            Textarea::make('contact.email_description')
-                                                ->label('Descripción')
-                                                ->rows(2)
-                                                ->columnSpanFull(),
                                         ]),
-                                    Section::make('Ubicación')
-                                        ->schema([
-                                            TextInput::make('contact.location_label')
-                                                ->label('Título')
-                                                ->maxLength(120),
-                                            Textarea::make('contact.location_description')
-                                                ->label('Descripción')
-                                                ->rows(2),
-                                        ]),
-                                    Section::make('Horario')
-                                        ->schema([
-                                            TextInput::make('contact.schedule_label')
-                                                ->label('Título')
-                                                ->maxLength(120),
-                                            Textarea::make('contact.schedule_description')
-                                                ->label('Descripción')
-                                                ->rows(2),
-                                        ]),
-                                    Section::make('Formulario')
-                                        ->schema([
-                                            TextInput::make('contact.form_title')
-                                                ->label('Título')
-                                                ->maxLength(200),
-                                            Textarea::make('contact.form_description')
-                                                ->label('Descripción')
-                                                ->rows(2),
-                                            TextInput::make('contact.submit_label')
-                                                ->label('Texto del botón')
-                                                ->maxLength(80),
-                                            TextInput::make('contact.success_title')
-                                                ->label('Título de éxito')
-                                                ->maxLength(120),
-                                            Textarea::make('contact.success_description')
-                                                ->label('Mensaje de éxito')
-                                                ->rows(2),
-                                        ]),
+                                    LanguageTabs::make(
+                                        key: 'contacto-idiomas',
+                                        spanish: [
+                                            Section::make('Correo')
+                                                ->columns(2)
+                                                ->columnSpanFull()
+                                                ->schema([
+                                                    TextInput::make('contact.email_label')
+                                                        ->label('Título')
+                                                        ->maxLength(120),
+                                                    Textarea::make('contact.email_description')
+                                                        ->label('Descripción')
+                                                        ->rows(2),
+                                                ]),
+                                            Section::make('Ubicación')
+                                                ->columns(2)
+                                                ->columnSpanFull()
+                                                ->schema([
+                                                    TextInput::make('contact.location_label')
+                                                        ->label('Título')
+                                                        ->maxLength(120),
+                                                    Textarea::make('contact.location_description')
+                                                        ->label('Descripción')
+                                                        ->rows(2),
+                                                ]),
+                                            Section::make('Horario')
+                                                ->columns(2)
+                                                ->columnSpanFull()
+                                                ->schema([
+                                                    TextInput::make('contact.schedule_label')
+                                                        ->label('Título')
+                                                        ->maxLength(120),
+                                                    Textarea::make('contact.schedule_description')
+                                                        ->label('Descripción')
+                                                        ->rows(2),
+                                                ]),
+                                            Section::make('Formulario')
+                                                ->columns(2)
+                                                ->columnSpanFull()
+                                                ->schema([
+                                                    TextInput::make('contact.form_title')
+                                                        ->label('Título')
+                                                        ->maxLength(200),
+                                                    Textarea::make('contact.form_description')
+                                                        ->label('Descripción')
+                                                        ->rows(2),
+                                                    TextInput::make('contact.submit_label')
+                                                        ->label('Texto del botón')
+                                                        ->maxLength(80),
+                                                    TextInput::make('contact.success_title')
+                                                        ->label('Título de éxito')
+                                                        ->maxLength(120),
+                                                    Textarea::make('contact.success_description')
+                                                        ->label('Mensaje de éxito')
+                                                        ->rows(2),
+                                                ]),
+                                        ],
+                                        translations: [
+                                            'en' => [
+                                                Section::make('Email')
+                                                    ->columns(2)
+                                                    ->columnSpanFull()
+                                                    ->schema([
+                                                        TextInput::make('contact.email_label_en')
+                                                            ->label('Title')
+                                                            ->maxLength(120),
+                                                        Textarea::make('contact.email_description_en')
+                                                            ->label('Description')
+                                                            ->rows(2),
+                                                    ]),
+                                                Section::make('Location')
+                                                    ->columns(2)
+                                                    ->columnSpanFull()
+                                                    ->schema([
+                                                        TextInput::make('contact.location_label_en')
+                                                            ->label('Title')
+                                                            ->maxLength(120),
+                                                        Textarea::make('contact.location_description_en')
+                                                            ->label('Description')
+                                                            ->rows(2),
+                                                    ]),
+                                                Section::make('Schedule')
+                                                    ->columns(2)
+                                                    ->columnSpanFull()
+                                                    ->schema([
+                                                        TextInput::make('contact.schedule_label_en')
+                                                            ->label('Title')
+                                                            ->maxLength(120),
+                                                        Textarea::make('contact.schedule_description_en')
+                                                            ->label('Description')
+                                                            ->rows(2),
+                                                    ]),
+                                                Section::make('Form')
+                                                    ->columns(2)
+                                                    ->columnSpanFull()
+                                                    ->schema([
+                                                        TextInput::make('contact.form_title_en')
+                                                            ->label('Title')
+                                                            ->maxLength(200),
+                                                        Textarea::make('contact.form_description_en')
+                                                            ->label('Description')
+                                                            ->rows(2),
+                                                        TextInput::make('contact.submit_label_en')
+                                                            ->label('Button text')
+                                                            ->maxLength(80),
+                                                        TextInput::make('contact.success_title_en')
+                                                            ->label('Success title')
+                                                            ->maxLength(120),
+                                                        Textarea::make('contact.success_description_en')
+                                                            ->label('Success message')
+                                                            ->rows(2),
+                                                    ]),
+                                            ],
+                                        ],
+                                        translatableFields: [
+                                            'contact.email_label',
+                                            'contact.email_description',
+                                            'contact.location_label',
+                                            'contact.location_description',
+                                            'contact.schedule_label',
+                                            'contact.schedule_description',
+                                            'contact.form_title',
+                                            'contact.form_description',
+                                            'contact.submit_label',
+                                            'contact.success_title',
+                                            'contact.success_description',
+                                        ],
+                                    ),
                                     Section::make('Redes sociales')
                                         ->schema([
                                             Repeater::make('contact.social_links')
@@ -225,52 +326,6 @@ class ManageSettings extends Page
                                                         Notification::make()->success()->title('Clave borrada')->send();
                                                     }),
                                             ]),
-                                        ]),
-                                ]),
-                            Tab::make('Inglés')
-                                ->icon(Heroicon::OutlinedLanguage)
-                                ->schema([
-                                    Section::make('Versión en inglés (/en)')
-                                        ->description('Si dejás un campo vacío, se usa la traducción del texto por defecto o el texto en español.')
-                                        ->columns(2)
-                                        ->schema([
-                                            Textarea::make('site.meta_description_en')
-                                                ->label('Meta description')
-                                                ->rows(3)
-                                                ->columnSpanFull(),
-                                            TextInput::make('contact.email_label_en')
-                                                ->label('Correo — título')
-                                                ->maxLength(120),
-                                            Textarea::make('contact.email_description_en')
-                                                ->label('Correo — descripción')
-                                                ->rows(2),
-                                            TextInput::make('contact.location_label_en')
-                                                ->label('Ubicación — título')
-                                                ->maxLength(120),
-                                            Textarea::make('contact.location_description_en')
-                                                ->label('Ubicación — descripción')
-                                                ->rows(2),
-                                            TextInput::make('contact.schedule_label_en')
-                                                ->label('Horario — título')
-                                                ->maxLength(120),
-                                            Textarea::make('contact.schedule_description_en')
-                                                ->label('Horario — descripción')
-                                                ->rows(2),
-                                            TextInput::make('contact.form_title_en')
-                                                ->label('Formulario — título')
-                                                ->maxLength(200),
-                                            Textarea::make('contact.form_description_en')
-                                                ->label('Formulario — descripción')
-                                                ->rows(2),
-                                            TextInput::make('contact.submit_label_en')
-                                                ->label('Texto del botón')
-                                                ->maxLength(80),
-                                            TextInput::make('contact.success_title_en')
-                                                ->label('Título de éxito')
-                                                ->maxLength(120),
-                                            Textarea::make('contact.success_description_en')
-                                                ->label('Mensaje de éxito')
-                                                ->rows(2),
                                         ]),
                                 ]),
                         ]),

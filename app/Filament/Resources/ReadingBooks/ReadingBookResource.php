@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ReadingBooks;
 use App\Filament\Resources\ReadingBooks\Pages\CreateReadingBook;
 use App\Filament\Resources\ReadingBooks\Pages\EditReadingBook;
 use App\Filament\Resources\ReadingBooks\Pages\ListReadingBooks;
+use App\Filament\Support\LanguageTabs;
 use App\Models\ReadingBook;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -14,7 +15,6 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -45,14 +45,29 @@ class ReadingBookResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('title')
-                    ->label('Título')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('author')
-                    ->label('Autor')
-                    ->required()
-                    ->maxLength(255),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('title')
+                            ->label('Título')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('author')
+                            ->label('Autor')
+                            ->required()
+                            ->maxLength(255),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('title_en')
+                                ->label('Title')
+                                ->maxLength(255),
+                            TextInput::make('author_en')
+                                ->label('Author')
+                                ->maxLength(255),
+                        ],
+                    ],
+                    translatableFields: ['title', 'author'],
+                ),
                 FileUpload::make('image_path')
                     ->label('Portada')
                     ->image()
@@ -68,19 +83,6 @@ class ReadingBookResource extends Resource
                 Toggle::make('is_published')
                     ->label('Publicado')
                     ->default(true),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->schema([
-                        TextInput::make('title_en')
-                            ->label('Título (EN)')
-                            ->maxLength(255),
-                        TextInput::make('author_en')
-                            ->label('Autor (EN)')
-                            ->maxLength(255),
-                    ]),
             ]);
     }
 

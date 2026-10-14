@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Fonts;
 use App\Filament\Resources\Fonts\Pages\CreateFont;
 use App\Filament\Resources\Fonts\Pages\EditFont;
 use App\Filament\Resources\Fonts\Pages\ListFonts;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Font;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -14,7 +15,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -67,15 +67,37 @@ class FontResource extends Resource
                 TextInput::make('tailwind')
                     ->label('Clase Tailwind')
                     ->placeholder('font-sans'),
-                TextInput::make('category')
-                    ->label('Categoría')
-                    ->placeholder('Sans-serif'),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('category')
+                            ->label('Categoría')
+                            ->placeholder('Sans-serif'),
+                        TextInput::make('sample')
+                            ->label('Texto de muestra')
+                            ->default('Hakuna Matata'),
+                        Textarea::make('note')
+                            ->label('Nota')
+                            ->rows(2)
+                            ->columnSpanFull(),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('category_en')
+                                ->label('Category')
+                                ->maxLength(255),
+                            TextInput::make('sample_en')
+                                ->label('Sample text')
+                                ->maxLength(255),
+                            Textarea::make('note_en')
+                                ->label('Note')
+                                ->rows(3),
+                        ],
+                    ],
+                    translatableFields: ['category', 'sample', 'note'],
+                ),
                 TextInput::make('weights')
                     ->label('Pesos')
                     ->placeholder('400, 500, 600, 700'),
-                TextInput::make('sample')
-                    ->label('Texto de muestra')
-                    ->default('Hakuna Matata'),
                 TextInput::make('google_url')
                     ->label('URL Google Fonts')
                     ->url(),
@@ -85,10 +107,6 @@ class FontResource extends Resource
                 TextInput::make('css')
                     ->label('Snippet CSS')
                     ->placeholder("font-family: 'Plus Jakarta Sans', sans-serif;"),
-                Textarea::make('note')
-                    ->label('Nota')
-                    ->rows(2)
-                    ->columnSpanFull(),
                 TextInput::make('sort_order')
                     ->label('Orden')
                     ->numeric()
@@ -96,22 +114,6 @@ class FontResource extends Resource
                 Toggle::make('is_published')
                     ->label('Publicado')
                     ->default(true),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->schema([
-                        TextInput::make('category_en')
-                            ->label('Categoría (EN)')
-                            ->maxLength(255),
-                        TextInput::make('sample_en')
-                            ->label('Texto de muestra (EN)')
-                            ->maxLength(255),
-                        Textarea::make('note_en')
-                            ->label('Nota (EN)')
-                            ->rows(3),
-                    ]),
             ]);
     }
 

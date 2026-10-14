@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Support\LanguageTabs;
 use App\Models\HomeSnapshot;
 use App\Support\SpotifyEmbed;
 use BackedEnum;
@@ -64,14 +65,23 @@ class ManageHomeSnapshot extends Page
                                 ->label('URL de Google Maps')
                                 ->url()
                                 ->maxLength(500),
-                            TextInput::make('map_label')
-                                ->label('Etiqueta')
-                                ->placeholder('MONTEVIDEO · URUGUAY')
-                                ->maxLength(120),
-                            TextInput::make('map_label_en')
-                                ->label('Etiqueta (EN)')
-                                ->helperText('Para la versión en inglés. Si queda vacío, se usa la etiqueta en español.')
-                                ->maxLength(120),
+                            LanguageTabs::make(
+                                spanish: [
+                                    TextInput::make('map_label')
+                                        ->label('Etiqueta')
+                                        ->placeholder('MONTEVIDEO · URUGUAY')
+                                        ->maxLength(120),
+                                ],
+                                translations: [
+                                    'en' => [
+                                        TextInput::make('map_label_en')
+                                            ->label('Label')
+                                            ->helperText('Si queda vacío, se usa la etiqueta en español.')
+                                            ->maxLength(120),
+                                    ],
+                                ],
+                                translatableFields: ['map_label'],
+                            ),
                         ]),
                     Section::make('Música')
                         ->schema([

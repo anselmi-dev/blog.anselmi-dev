@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Videos;
 use App\Filament\Resources\Videos\Pages\CreateVideo;
 use App\Filament\Resources\Videos\Pages\EditVideo;
 use App\Filament\Resources\Videos\Pages\ListVideos;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Video;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -48,10 +49,6 @@ class VideoResource extends Resource
                     ->columns(2)
                     ->columnSpanFull()
                     ->schema([
-                        TextInput::make('title')
-                            ->label('Título'),
-                        TextInput::make('category')
-                            ->label('Categoría'),
                         FileUpload::make('video_path')
                             ->label('Archivo de video')
                             ->helperText('MP4 o WebM (hasta 100 MB). MP4 en H.264 es el que mejor se ve en todos los navegadores.')
@@ -70,12 +67,6 @@ class VideoResource extends Resource
                             ->directory('videos/posters')
                             ->visibility('public')
                             ->columnSpanFull(),
-                        Textarea::make('description')
-                            ->label('Descripción')
-                            ->rows(3)
-                            ->columnSpanFull(),
-                        TextInput::make('location')
-                            ->label('Lugar'),
                         TextInput::make('released_at')
                             ->label('Fecha (texto)')
                             ->placeholder('12 mar 2025'),
@@ -86,25 +77,38 @@ class VideoResource extends Resource
                             ->label('Alto px')
                             ->numeric(),
                     ]),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->schema([
-                        TextInput::make('title_en')
-                            ->label('Título (EN)')
-                            ->maxLength(255),
-                        TextInput::make('category_en')
-                            ->label('Categoría (EN)')
-                            ->maxLength(255),
-                        Textarea::make('description_en')
-                            ->label('Descripción (EN)')
-                            ->rows(3),
-                        TextInput::make('location_en')
-                            ->label('Ubicación (EN)')
-                            ->maxLength(255),
-                    ]),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('title')
+                            ->label('Título'),
+                        TextInput::make('category')
+                            ->label('Categoría'),
+                        Textarea::make('description')
+                            ->label('Descripción')
+                            ->rows(3)
+                            ->columnSpanFull(),
+                        TextInput::make('location')
+                            ->label('Lugar'),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('title_en')
+                                ->label('Title')
+                                ->maxLength(255),
+                            TextInput::make('category_en')
+                                ->label('Category')
+                                ->maxLength(255),
+                            Textarea::make('description_en')
+                                ->label('Description')
+                                ->rows(3)
+                                ->columnSpanFull(),
+                            TextInput::make('location_en')
+                                ->label('Location')
+                                ->maxLength(255),
+                        ],
+                    ],
+                    translatableFields: ['title', 'category', 'description', 'location'],
+                ),
             ]);
     }
 

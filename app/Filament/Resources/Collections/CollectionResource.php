@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Collections;
 use App\Filament\Resources\Collections\Pages\CreateCollection;
 use App\Filament\Resources\Collections\Pages\EditCollection;
 use App\Filament\Resources\Collections\Pages\ListCollections;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Collection;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -14,7 +15,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -47,23 +47,38 @@ class CollectionResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Nombre')
-                    ->required()
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (Set $set, ?string $state, ?string $old, Get $get): void {
-                        if (filled($get('slug')) && $get('slug') !== Str::slug((string) $old)) {
-                            return;
-                        }
-                        $set('slug', Str::slug((string) $state));
-                    }),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('name')
+                            ->label('Nombre')
+                            ->required()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (Set $set, ?string $state, ?string $old, Get $get): void {
+                                if (filled($get('slug')) && $get('slug') !== Str::slug((string) $old)) {
+                                    return;
+                                }
+                                $set('slug', Str::slug((string) $state));
+                            }),
+                        Textarea::make('description')
+                            ->label('Descripción')
+                            ->rows(3)
+                            ->columnSpanFull(),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('name_en')
+                                ->label('Name')
+                                ->maxLength(255),
+                            Textarea::make('description_en')
+                                ->label('Description')
+                                ->rows(3),
+                        ],
+                    ],
+                    translatableFields: ['name', 'description'],
+                ),
                 TextInput::make('slug')
                     ->required()
                     ->unique(ignoreRecord: true),
-                Textarea::make('description')
-                    ->label('Descripción')
-                    ->rows(3)
-                    ->columnSpanFull(),
                 TextInput::make('sort_order')
                     ->label('Orden')
                     ->numeric()
@@ -71,18 +86,6 @@ class CollectionResource extends Resource
                 Toggle::make('is_published')
                     ->label('Publicada')
                     ->default(true),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columnSpanFull()
-                    ->schema([
-                        TextInput::make('name_en')
-                            ->label('Nombre (EN)')
-                            ->maxLength(255),
-                        Textarea::make('description_en')
-                            ->label('Descripción (EN)')
-                            ->rows(3),
-                    ]),
             ]);
     }
 

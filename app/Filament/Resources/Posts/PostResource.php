@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Posts;
 use App\Filament\Resources\Posts\Pages\CreatePost;
 use App\Filament\Resources\Posts\Pages\EditPost;
 use App\Filament\Resources\Posts\Pages\ListPosts;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Post;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -55,6 +56,7 @@ class PostResource extends Resource
             ->components([
                 Section::make('Contenido')
                     ->columns(2)
+                    ->columnSpanFull()
                     ->schema([
                         Select::make('kind')
                             ->label('Tipo')
@@ -65,6 +67,22 @@ class PostResource extends Resource
                             ->required()
                             ->live()
                             ->default('note'),
+                        TextInput::make('slug')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->helperText('URL: /blog/{slug}'),
+                        FileUpload::make('image_path')
+                            ->label('Imagen')
+                            ->image()
+                            ->disk('public')
+                            ->directory('posts')
+                            ->visibility('public')
+                            ->imageEditor()
+                            ->visible(fn (Get $get): bool => $get('kind') === 'image')
+                            ->columnSpanFull(),
+                    ]),
+                LanguageTabs::make(
+                    spanish: [
                         TextInput::make('title')
                             ->label('Título')
                             ->required()
@@ -75,10 +93,6 @@ class PostResource extends Resource
                                 }
                                 $set('slug', Str::slug((string) $state));
                             }),
-                        TextInput::make('slug')
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->helperText('URL: /blog/{slug}'),
                         TextInput::make('kicker')
                             ->label('Kicker')
                             ->placeholder('Mar 2025 · proceso'),
@@ -97,21 +111,44 @@ class PostResource extends Resource
                             ->rows(2)
                             ->visible(fn (Get $get): bool => $get('kind') === 'image')
                             ->columnSpanFull(),
-                        FileUpload::make('image_path')
-                            ->label('Imagen')
-                            ->image()
-                            ->disk('public')
-                            ->directory('posts')
-                            ->visibility('public')
-                            ->imageEditor()
-                            ->visible(fn (Get $get): bool => $get('kind') === 'image')
-                            ->columnSpanFull(),
                         TextInput::make('alt')
                             ->label('Texto alt')
                             ->visible(fn (Get $get): bool => $get('kind') === 'image'),
-                    ]),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('title_en')
+                                ->label('Title')
+                                ->maxLength(255),
+                            TextInput::make('kicker_en')
+                                ->label('Kicker')
+                                ->maxLength(255),
+                            Textarea::make('excerpt_en')
+                                ->label('Excerpt')
+                                ->rows(3)
+                                ->columnSpanFull(),
+                            Repeater::make('body_en')
+                                ->label('Paragraphs')
+                                ->simple(Textarea::make('paragraph')->rows(3))
+                                ->defaultItems(0)
+                                ->columnSpanFull()
+                                ->addActionLabel('Add paragraph'),
+                            Textarea::make('caption_en')
+                                ->label('Image caption')
+                                ->rows(2)
+                                ->visible(fn (Get $get): bool => $get('kind') === 'image')
+                                ->columnSpanFull(),
+                            TextInput::make('alt_en')
+                                ->label('Alt text')
+                                ->maxLength(255)
+                                ->visible(fn (Get $get): bool => $get('kind') === 'image'),
+                        ],
+                    ],
+                    translatableFields: ['title', 'kicker', 'excerpt', 'body', 'caption', 'alt'],
+                ),
                 Section::make('Bento / listado')
                     ->columns(2)
+                    ->columnSpanFull()
                     ->collapsed()
                     ->schema([
                         Toggle::make('featured_in_menu')
@@ -148,33 +185,6 @@ class PostResource extends Resource
                             ->default(true),
                         DateTimePicker::make('published_at')
                             ->label('Fecha de publicación'),
-                    ]),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->schema([
-                        TextInput::make('title_en')
-                            ->label('Título (EN)')
-                            ->maxLength(255),
-                        TextInput::make('kicker_en')
-                            ->label('Kicker (EN)')
-                            ->maxLength(255),
-                        Textarea::make('excerpt_en')
-                            ->label('Extracto (EN)')
-                            ->rows(3),
-                        Repeater::make('body_en')
-                            ->label('Cuerpo (EN)')
-                            ->simple(Textarea::make('paragraph')->rows(3))
-                            ->defaultItems(0)
-                            ->columnSpanFull(),
-                        Textarea::make('caption_en')
-                            ->label('Pie de imagen (EN)')
-                            ->rows(3),
-                        TextInput::make('alt_en')
-                            ->label('Texto alternativo (EN)')
-                            ->maxLength(255),
                     ]),
             ]);
     }
