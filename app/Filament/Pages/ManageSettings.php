@@ -5,8 +5,10 @@ namespace App\Filament\Pages;
 use App\Filament\Support\LanguageTabs;
 use App\Models\Setting;
 use App\Support\CursorStyle;
+use App\Support\PageColor;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Slider;
@@ -131,6 +133,16 @@ class ManageSettings extends Page
                                                 ->selectablePlaceholder(false)
                                                 ->required(),
                                         ]),
+                                    Section::make('Color por página')
+                                        ->description('Color de marca de cada página: tiñe los acentos y sus tonos claros. Vacío = el color por defecto. El color de un proyecto pisa el de su página.')
+                                        ->columns(2)
+                                        ->collapsible()
+                                        ->schema(collect(PageColor::PAGES)
+                                            ->map(fn (string $label, string $routeName): ColorPicker => ColorPicker::make('site.page_colors.'.PageColor::settingKey($routeName))
+                                                ->label($label)
+                                                ->regex('/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/'))
+                                            ->values()
+                                            ->all()),
                                 ]),
                             Tab::make('Contacto')
                                 ->icon(Heroicon::OutlinedEnvelope)

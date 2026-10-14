@@ -10,7 +10,7 @@
     x-on:contact-modal-open.window="contactModalOpen = true"
     x-on:contact-modal-close.window="contactModalOpen = false"
     x-bind:class="{ 'overflow-hidden': contactModalOpen }"
-    @php($safeThemeColor = \App\Support\CssColor::hexOrNull($themeColor ?? null))
+    @php($safeThemeColor = \App\Support\CssColor::hexOrNull($themeColor ?? null) ?? \App\Support\PageColor::current())
     @if ($safeThemeColor)
         style="--color-brand-lime: {{ $safeThemeColor }}; --color-brand-lime-50: color-mix(in srgb, {{ $safeThemeColor }} 35%, white); --color-brand-lime-100: color-mix(in srgb, {{ $safeThemeColor }} 65%, white); --color-brand-lime-200: color-mix(in srgb, {{ $safeThemeColor }} 80%, white);"
     @endif
