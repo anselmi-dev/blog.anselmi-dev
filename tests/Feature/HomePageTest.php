@@ -1,7 +1,12 @@
 <?php
 
+use App\Filament\Pages\ManageSettings;
+use App\Models\Setting;
+use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Blade;
+use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
@@ -33,4 +38,34 @@ test('the logo is static when it is not animated', function () {
     expect($html)->not->toContain('data-animated-logo')
         ->not->toContain('data-logo-stroke')
         ->toContain('data-logo-fill');
+});
+
+test('the rising squares background is shown by default', function () {
+    $content = $this->get(route('home'))->assertOk()->getContent();
+
+    expect($content)->toContain('data-rising-squares')
+        ->and(substr_count($content, '--duration:'))->toBe(10);
+});
+
+test('the rising squares background can be turned off in the settings', function () {
+    Setting::putMany('site', ['background_squares' => false]);
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertDontSee('data-rising-squares', false);
+});
+
+test('admin can turn off the rising squares background', function () {
+    $user = User::factory()->create();
+    config(['app.admin_emails' => [strtolower($user->email)]]);
+    $this->actingAs($user);
+    Filament::setCurrentPanel('admin');
+
+    Livewire::test(ManageSettings::class)
+        ->assertSchemaStateSet(['site.background_squares' => true])
+        ->fillForm(['site.background_squares' => false])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect(Setting::site()['background_squares'])->toBeFalse();
 });

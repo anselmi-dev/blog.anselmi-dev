@@ -79,6 +79,10 @@ class ManageSettings extends Page
                                                 ->label('Pantalla de carga en Herramientas')
                                                 ->helperText('Muestra la barra de 0 a 100 % mientras cargan los frascos de /servicios/herramientas.')
                                                 ->default(false),
+                                            Toggle::make('site.background_squares')
+                                                ->label('Cuadrados animados de fondo')
+                                                ->helperText('Cuadrados que suben girando detrás del contenido de todas las páginas.')
+                                                ->default(true),
                                             Select::make('site.cursor_style')
                                                 ->label('Estilo del cursor')
                                                 ->helperText('Con el cursor normal se usa el puntero del sistema, sin efectos.')

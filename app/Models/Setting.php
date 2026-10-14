@@ -110,6 +110,7 @@ class Setting extends Model
             'author_name' => config('app.name', 'Sitio'),
             'tools_loader' => false,
             'cursor_style' => CursorStyle::Circle->value,
+            'background_squares' => true,
         ];
     }
 
@@ -147,7 +148,7 @@ class Setting extends Model
     }
 
     /**
-     * @return array{meta_description: string|null, author_name: string|null, tools_loader: bool|null, cursor_style: string|null}
+     * @return array{meta_description: string|null, author_name: string|null, tools_loader: bool|null, cursor_style: string|null, background_squares: bool|null}
      */
     public static function site(): array
     {

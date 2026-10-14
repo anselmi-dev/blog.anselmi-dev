@@ -514,3 +514,43 @@ body:has([data-tools-wheel]) {
     opacity: 0;
     visibility: hidden;
 }
+
+/* Fondo de cuadrados que suben (components/rising-squares.blade.php). */
+.rising-squares {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.rising-squares span {
+    position: absolute;
+    bottom: -160px;
+    left: var(--left);
+    display: block;
+    width: var(--size);
+    height: var(--size);
+    background: color-mix(in srgb, var(--color-brand-lime) 75%, transparent);
+    animation: rising-squares var(--duration) linear var(--delay) infinite;
+}
+
+@keyframes rising-squares {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+    }
+
+    100% {
+        transform: translateY(calc(-100vh - 320px)) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rising-squares {
+        display: none;
+    }
+}

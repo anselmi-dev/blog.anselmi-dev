@@ -15,6 +15,11 @@
         style="--color-brand-lime: {{ $safeThemeColor }}; --color-brand-lime-50: color-mix(in srgb, {{ $safeThemeColor }} 35%, white); --color-brand-lime-100: color-mix(in srgb, {{ $safeThemeColor }} 65%, white); --color-brand-lime-200: color-mix(in srgb, {{ $safeThemeColor }} 80%, white);"
     @endif
 >
+    @if (\App\Models\Setting::site()['background_squares'] ?? true)
+        @persist('rising-squares')
+            <x-rising-squares />
+        @endpersist
+    @endif
 
     <div class="flex flex-col min-h-screen px-4 pt-6 pb-4 sm:px-6 sm:pt-8 lg:px-8 lg:pt-10">
         <x-site-header/>
