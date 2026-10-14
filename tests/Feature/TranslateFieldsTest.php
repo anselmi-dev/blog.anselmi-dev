@@ -1,6 +1,7 @@
 <?php
 
 use Anthropic\Core\Exceptions\APIStatusException;
+use App\Actions\Ai\AskClaude;
 use App\Actions\Translations\TranslateFields;
 use App\Actions\Translations\TranslationFailed;
 use App\Filament\Pages\ManageSettings;
@@ -14,22 +15,35 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Livewire\Livewire;
+use Mockery\MockInterface;
 
 uses(RefreshDatabase::class);
 
 /**
- * TranslateFields sin llamar a la API: send() devuelve el JSON que daría Claude.
+ * AskClaude sin llamar a la API: send() devuelve el JSON que daría Claude.
  */
 function translatorReturning(string $json, ?Closure $inspect = null): TranslateFields
 {
-    $translator = Mockery::mock(TranslateFields::class)->makePartial()->shouldAllowMockingProtectedMethods();
-    $translator->shouldReceive('send')->andReturnUsing(function (string $apiKey, string $request, array $schema) use ($json, $inspect): string {
-        $inspect?->__invoke($apiKey, $request, $schema);
+    $askClaude = Mockery::mock(AskClaude::class)->makePartial()->shouldAllowMockingProtectedMethods();
+    $askClaude->shouldReceive('send')->andReturnUsing(function (string $apiKey, string $system, string $request, array $schema, int $webSearches) use ($json, $inspect): string {
+        $inspect?->__invoke($apiKey, $request, $schema, $webSearches);
 
         return $json;
     });
+    app()->instance(AskClaude::class, $askClaude);
 
-    return $translator;
+    return app(TranslateFields::class);
+}
+
+/**
+ * AskClaude con request() simulado (el pedido HTTP a la API).
+ */
+function askClaudeWithRequest(): MockInterface
+{
+    $askClaude = Mockery::mock(AskClaude::class)->makePartial()->shouldAllowMockingProtectedMethods();
+    app()->instance(AskClaude::class, $askClaude);
+
+    return $askClaude;
 }
 
 test('it sends only the fields with text and returns their translations', function () {
@@ -37,8 +51,9 @@ test('it sends only the fields with text and returns their translations', functi
 
     $translator = translatorReturning(
         json_encode(['en' => ['title' => 'Low tide', 'category' => 'Coast']]),
-        function (string $apiKey, string $request, array $schema): void {
+        function (string $apiKey, string $request, array $schema, int $webSearches): void {
             expect($apiKey)->toBe('sk-ant-guardada')
+                ->and($webSearches)->toBe(0)
                 ->and($request)->toContain('"title": "Marea baja"')->not->toContain('location')
                 ->and($schema['properties']['en']['required'])->toBe(['title', 'category'])
                 ->and($schema['properties']['en']['additionalProperties'])->toBeFalse();
@@ -50,10 +65,9 @@ test('it sends only the fields with text and returns their translations', functi
 });
 
 test('it does not call the api when there is nothing to translate', function () {
-    $translator = Mockery::mock(TranslateFields::class)->makePartial()->shouldAllowMockingProtectedMethods();
-    $translator->shouldNotReceive('send');
+    askClaudeWithRequest()->shouldNotReceive('send');
 
-    expect($translator->handle(['title' => null, 'category' => '']))->toBe([]);
+    expect(app(TranslateFields::class)->handle(['title' => null, 'category' => '']))->toBe([]);
 });
 
 test('it explains that the api key is missing', function () {
@@ -130,30 +144,29 @@ test('a 400 error shows the reason given by the api', function () {
     Setting::storeAnthropicApiKey('sk-ant-guardada');
     Log::spy();
 
-    $translator = Mockery::mock(TranslateFields::class)->makePartial()->shouldAllowMockingProtectedMethods();
-    $translator->shouldReceive('request')->once()->andThrow(badRequest('Your credit balance is too low to access the Anthropic API.'));
+    askClaudeWithRequest()->shouldReceive('request')->once()->andThrow(badRequest('Your credit balance is too low to access the Anthropic API.'));
 
-    expect(fn () => $translator->handle(['title' => 'Hola']))
+    expect(fn () => app(TranslateFields::class)->handle(['title' => 'Hola']))
         ->toThrow(TranslationFailed::class, 'La API de Anthropic devolvió un error (400): Your credit balance is too low to access the Anthropic API.');
 
     Log::shouldHaveReceived('warning')->once()->withArgs(fn (string $message, array $context): bool => $context['request_id'] === 'req_test');
 });
 
 test('when the account cannot use the fallback beta it asks again without it', function () {
-    config(['services.anthropic.translation_model' => 'claude-opus-5-5']);
+    config(['services.anthropic.model' => 'claude-opus-5-5']);
     Setting::storeAnthropicApiKey('sk-ant-guardada');
 
-    $translator = Mockery::mock(TranslateFields::class)->makePartial()->shouldAllowMockingProtectedMethods();
-    $translator->shouldReceive('request')
+    $askClaude = askClaudeWithRequest();
+    $askClaude->shouldReceive('request')
         ->once()
-        ->withArgs(fn (string $key, string $request, array $schema, bool $withFallbacks): bool => $withFallbacks)
+        ->withArgs(fn (string $key, string $system, array $messages, array $schema, int $webSearches, bool $withFallbacks): bool => $withFallbacks)
         ->andThrow(badRequest('Unexpected value(s) `server-side-fallback-2026-07-01` for the `anthropic-beta` header.'));
-    $translator->shouldReceive('request')
+    $askClaude->shouldReceive('request')
         ->once()
-        ->withArgs(fn (string $key, string $request, array $schema, bool $withFallbacks): bool => ! $withFallbacks)
+        ->withArgs(fn (string $key, string $system, array $messages, array $schema, int $webSearches, bool $withFallbacks): bool => ! $withFallbacks)
         ->andThrow(badRequest('Otro problema.'));
 
-    expect(fn () => $translator->handle(['title' => 'Hola']))
+    expect(fn () => app(TranslateFields::class)->handle(['title' => 'Hola']))
         ->toThrow(TranslationFailed::class, 'Otro problema.');
 });
 
@@ -192,13 +205,12 @@ test('the workspace falls back to the env file', function () {
 test('by default it uses the cheapest model, which has no server-side fallback', function () {
     Setting::storeAnthropicApiKey('sk-ant-guardada');
 
-    expect(config('services.anthropic.translation_model'))->toBe('claude-haiku-5-5');
+    expect(config('services.anthropic.model'))->toBe('claude-haiku-5-5');
 
-    $translator = Mockery::mock(TranslateFields::class)->makePartial()->shouldAllowMockingProtectedMethods();
-    $translator->shouldReceive('request')
+    askClaudeWithRequest()->shouldReceive('request')
         ->once()
-        ->withArgs(fn (string $key, string $request, array $schema, bool $withFallbacks): bool => ! $withFallbacks)
+        ->withArgs(fn (string $key, string $system, array $messages, array $schema, int $webSearches, bool $withFallbacks): bool => ! $withFallbacks)
         ->andThrow(badRequest('Unexpected value(s) for the `anthropic-beta` header.'));
 
-    expect(fn () => $translator->handle(['title' => 'Hola']))->toThrow(TranslationFailed::class);
+    expect(fn () => app(TranslateFields::class)->handle(['title' => 'Hola']))->toThrow(TranslationFailed::class);
 });

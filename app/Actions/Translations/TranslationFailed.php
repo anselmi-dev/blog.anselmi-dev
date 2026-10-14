@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Actions\Translations;
 
-use RuntimeException;
+use App\Actions\Ai\ClaudeRequestFailed;
 
 /**
  * La traducción no se pudo hacer; el mensaje se muestra tal cual en el panel.
  */
-class TranslationFailed extends RuntimeException {}
+class TranslationFailed extends ClaudeRequestFailed {}
