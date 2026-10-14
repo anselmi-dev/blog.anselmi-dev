@@ -1,12 +1,19 @@
 <?php
 
+use App\Filament\Resources\Videos\Pages\CreateVideo;
 use App\Livewire\Pages\Collections;
+use App\Livewire\Pages\Gallery as GalleryPage;
 use App\Models\Collection;
 use App\Models\Gallery;
 use App\Models\Media;
 use App\Models\Quote;
+use App\Models\User;
+use App\Models\Video;
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
@@ -177,4 +184,74 @@ test('the collection counts are translated under /en', function () {
     $this->get(localized_route('gallery', [], 'en'))
         ->assertOk()
         ->assertSee('1 photo · 2 quotes');
+});
+
+test('videos show up in their collection and open in the viewer', function () {
+    $collection = Collection::create(['name' => 'Movimiento', 'slug' => 'movimiento']);
+    $video = Video::factory()->withPoster()->create(['title' => 'Olas en la rambla']);
+    addToCollection($collection, Media::create(['title' => 'Faro']), 0);
+    addToCollection($collection, $video, 1);
+    addToCollection($collection, Quote::create(['quote' => 'Sin play.']), 2);
+
+    $this->get(route('gallery.show', ['slug' => 'movimiento']))
+        ->assertOk()
+        ->assertSee('Olas en la rambla')
+        ->assertSee($video->posterUrl(), false);
+
+    Livewire::test(GalleryPage::class, ['slug' => 'movimiento'])
+        ->call('openLightbox', 1)
+        ->assertSet('lightboxIndex', 1)
+        ->assertSeeHtml('<video')
+        ->assertSeeHtml('src="'.$video->videoUrl().'"')
+        ->call('lightboxPrev')
+        ->assertSet('lightboxIndex', 0)
+        ->call('lightboxPrev')
+        ->assertSet('lightboxIndex', 1);
+});
+
+test('a video without a poster shows its first frame', function () {
+    $collection = Collection::create(['name' => 'Movimiento', 'slug' => 'movimiento']);
+    $video = Video::factory()->create(['poster_path' => null]);
+    addToCollection($collection, $video, 0);
+
+    $this->get(route('gallery.show', ['slug' => 'movimiento']))
+        ->assertOk()
+        ->assertSee($video->videoUrl().'#t=0.1', false);
+
+    $this->get(route('gallery'))
+        ->assertOk()
+        ->assertSee($video->videoUrl().'#t=0.1', false);
+});
+
+test('the gallery index counts videos', function () {
+    $collection = Collection::create(['name' => 'Mixta', 'slug' => 'mixta']);
+    addToCollection($collection, Media::create(['title' => 'Una']), 0);
+    addToCollection($collection, Video::factory()->create(), 1);
+    addToCollection($collection, Video::factory()->create(), 2);
+    addToCollection($collection, Quote::create(['quote' => 'Nota.']), 3);
+
+    $this->get(route('gallery'))
+        ->assertOk()
+        ->assertSee('1 foto · 2 videos · 1 cita');
+});
+
+test('admin can upload a video', function () {
+    Storage::fake('public');
+    $user = User::factory()->create();
+    config(['app.admin_emails' => [strtolower($user->email)]]);
+    $this->actingAs($user);
+    Filament::setCurrentPanel('admin');
+
+    Livewire::test(CreateVideo::class)
+        ->fillForm([
+            'title' => 'Atardecer',
+            'video_path' => UploadedFile::fake()->create('atardecer.mp4', 2048, 'video/mp4'),
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    $video = Video::query()->sole();
+
+    expect($video->title)->toBe('Atardecer');
+    Storage::disk('public')->assertExists($video->video_path);
 });

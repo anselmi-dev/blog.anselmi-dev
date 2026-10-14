@@ -8,6 +8,8 @@
     'wide' => false,
     /** Si es true, el tile es un <button> (p. ej. abrir lightbox con wire:click). */
     'asButton' => false,
+    /** Video sin portada: se muestra su primer cuadro en lugar de la imagen. */
+    'videoUrl' => null,
 ])
 
 @php
@@ -23,13 +25,24 @@
     <a href="{{ $href }}" {{ $attributes->class([$shell, 'block']) }}>
 @endif
     <div class="{{ $frame }}">
-        <img
-            src="{{ $imageUrl }}"
-            alt="{{ $title }} — {{ $category }}"
-            class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]"
-            loading="lazy"
-            decoding="async"
-        />
+        @if (blank($imageUrl) && filled($videoUrl))
+            <video
+                src="{{ $videoUrl }}#t=0.1"
+                class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                preload="metadata"
+                muted
+                playsinline
+                aria-label="{{ $title }}"
+            ></video>
+        @else
+            <img
+                src="{{ $imageUrl }}"
+                alt="{{ $title }} — {{ $category }}"
+                class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                loading="lazy"
+                decoding="async"
+            />
+        @endif
         <div
             class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/10 dark:from-black/85 dark:via-black/35"
             aria-hidden="true"

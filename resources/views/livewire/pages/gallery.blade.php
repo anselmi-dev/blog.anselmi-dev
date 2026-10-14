@@ -40,6 +40,27 @@
                             'lg:col-span-1' => ($item['span'] ?? 'tall') !== 'wide',
                         ])
                     />
+                @elseif ($item['kind'] === 'video')
+                    @php
+                        $wide = ($item['span'] ?? 'tall') === 'wide';
+                    @endphp
+                    <x-gallery.photo-tile
+                        data-reveal-item
+                        :image-url="$item['poster_url']"
+                        :video-url="$item['video_url']"
+                        :category="$item['category']"
+                        :title="$item['title']"
+                        :featured="(bool) ($item['featured'] ?? false)"
+                        show-play
+                        :wide="$wide"
+                        as-button
+                        wire:click.prevent="openLightbox({{ $index }})"
+                        wire:key="gallery-thumb-{{ $index }}"
+                        @class([
+                            'lg:col-span-2' => $wide,
+                            'lg:col-span-1' => ! $wide,
+                        ])
+                    />
                 @else
                     @php
                         $wide = ($item['span'] ?? 'tall') === 'wide';

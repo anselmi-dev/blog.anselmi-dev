@@ -12,6 +12,9 @@ class Gallery extends Component
 {
     private const int LIGHTBOX_CLOSE_MS = 400;
 
+    /** Tipos de ítem que se abren en el visor (las citas no). */
+    private const array VIEWER_KINDS = ['photo', 'video'];
+
     public bool $lightboxShow = false;
 
     public bool $lightboxLeaving = false;
@@ -60,7 +63,7 @@ class Gallery extends Component
 
     public function openLightbox(int $index): void
     {
-        if (! isset($this->items[$index]) || ($this->items[$index]['kind'] ?? '') !== 'photo') {
+        if (! isset($this->items[$index]) || ! in_array($this->items[$index]['kind'] ?? '', self::VIEWER_KINDS, true)) {
             return;
         }
 
@@ -101,11 +104,11 @@ class Gallery extends Component
     /**
      * @return list<int>
      */
-    public function photoOnlyIndices(): array
+    public function viewerIndices(): array
     {
         $out = [];
         foreach ($this->items as $i => $item) {
-            if (($item['kind'] ?? '') === 'photo') {
+            if (in_array($item['kind'] ?? '', self::VIEWER_KINDS, true)) {
                 $out[] = $i;
             }
         }
@@ -119,7 +122,7 @@ class Gallery extends Component
             return;
         }
 
-        $photos = $this->photoOnlyIndices();
+        $photos = $this->viewerIndices();
         $pos = array_search($this->lightboxIndex, $photos, true);
         if ($pos === false) {
             return;
@@ -134,7 +137,7 @@ class Gallery extends Component
             return;
         }
 
-        $photos = $this->photoOnlyIndices();
+        $photos = $this->viewerIndices();
         $pos = array_search($this->lightboxIndex, $photos, true);
         if ($pos === false) {
             return;

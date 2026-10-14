@@ -1,8 +1,9 @@
-@if ($lightboxShow && $lightboxIndex !== null && ($items[$lightboxIndex]['kind'] ?? '') === 'photo')
+@if ($lightboxShow && $lightboxIndex !== null && in_array($items[$lightboxIndex]['kind'] ?? '', ['photo', 'video'], true))
     @php
         $lb = $items[$lightboxIndex];
-        $lbUrl = $this->lightboxImageUrl($lb);
-        $photoCount = count($this->photoOnlyIndices());
+        $lbIsVideo = $lb['kind'] === 'video';
+        $lbUrl = $lbIsVideo ? null : $this->lightboxImageUrl($lb);
+        $photoCount = count($this->viewerIndices());
     @endphp
 
     <div
@@ -10,7 +11,7 @@
         role="dialog"
         aria-modal="true"
         @if ($lightboxImageOnly)
-            aria-label="{{ __('Foto') }}: {{ $lb['title'] }}"
+            aria-label="{{ $lbIsVideo ? __('Video') : __('Foto') }}: {{ $lb['title'] }}"
         @else
             aria-labelledby="gallery-lightbox-title"
         @endif
@@ -44,7 +45,7 @@
                         type="button"
                         class="inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/95 text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:bg-white hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 dark:border-zinc-700 dark:bg-zinc-900/95 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-900"
                         wire:click="lightboxPrev"
-                        aria-label="{{ __('Foto anterior') }}"
+                        aria-label="{{ __('Anterior') }}"
                     >
                         <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
@@ -54,7 +55,7 @@
                         type="button"
                         class="inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/95 text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:bg-white hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 dark:border-zinc-700 dark:bg-zinc-900/95 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-900"
                         wire:click="lightboxNext"
-                        aria-label="{{ __('Foto siguiente') }}"
+                        aria-label="{{ __('Siguiente') }}"
                     >
                         <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
@@ -107,16 +108,34 @@
                         'flex max-h-[min(88vh,85dvh)] min-h-0 flex-1 items-center justify-center px-2 pb-2 pt-14 sm:px-4 sm:pb-4' => $lightboxImageOnly,
                     ])
                 >
-                    <img
-                        wire:key="lightbox-img-{{ $lightboxIndex }}"
-                        src="{{ $lbUrl }}"
-                        alt="{{ $lb['title'] }} — {{ $lb['category'] }}"
-                        @class([
-                            'mx-auto block h-full w-full object-contain',
-                            'max-h-[min(48vh,22rem)] sm:max-h-[min(52vh,26rem)]' => ! $lightboxImageOnly,
-                            'max-h-[min(82vh,80dvh)] max-w-full' => $lightboxImageOnly,
-                        ])
-                    />
+                    @if ($lbIsVideo)
+                        <video
+                            wire:key="lightbox-video-{{ $lightboxIndex }}"
+                            src="{{ $lb['video_url'] }}"
+                            @if (filled($lb['poster_url'] ?? null)) poster="{{ $lb['poster_url'] }}" @endif
+                            controls
+                            autoplay
+                            playsinline
+                            preload="metadata"
+                            aria-label="{{ $lb['title'] }}"
+                            @class([
+                                'mx-auto block h-full w-full bg-black object-contain',
+                                'max-h-[min(48vh,22rem)] sm:max-h-[min(52vh,26rem)]' => ! $lightboxImageOnly,
+                                'max-h-[min(82vh,80dvh)] max-w-full' => $lightboxImageOnly,
+                            ])
+                        ></video>
+                    @else
+                        <img
+                            wire:key="lightbox-img-{{ $lightboxIndex }}"
+                            src="{{ $lbUrl }}"
+                            alt="{{ $lb['title'] }} — {{ $lb['category'] }}"
+                            @class([
+                                'mx-auto block h-full w-full object-contain',
+                                'max-h-[min(48vh,22rem)] sm:max-h-[min(52vh,26rem)]' => ! $lightboxImageOnly,
+                                'max-h-[min(82vh,80dvh)] max-w-full' => $lightboxImageOnly,
+                            ])
+                        />
+                    @endif
                 </div>
             </div>
 

@@ -15,6 +15,7 @@
     $summary = collect([
         // trans_choice() caería al inglés en /es (no hay es.json), por eso singular y plural por separado.
         'photo' => fn (int $count): string => $count === 1 ? __(':count foto', ['count' => $count]) : __(':count fotos', ['count' => $count]),
+        'video' => fn (int $count): string => $count === 1 ? __(':count video', ['count' => $count]) : __(':count videos', ['count' => $count]),
         'quote' => fn (int $count): string => $count === 1 ? __(':count cita', ['count' => $count]) : __(':count citas', ['count' => $count]),
     ])
         ->filter(fn (callable $label, string $kind): bool => ($entry['counts'][$kind] ?? 0) > 0)
@@ -50,19 +51,28 @@
                             </p>
                         @endif
                     </div>
+                @elseif (($item['kind'] ?? null) === 'video' && blank($item['poster_url'] ?? null))
+                    <video
+                        src="{{ $item['video_url'] }}#t=0.1"
+                        class="size-full object-cover"
+                        preload="metadata"
+                        muted
+                        playsinline
+                        aria-hidden="true"
+                    ></video>
                 @else
                     <img
-                        src="{{ $item['thumb_url'] ?? $item['image_url'] ?? '' }}"
+                        src="{{ $item['poster_url'] ?? $item['thumb_url'] ?? $item['image_url'] ?? '' }}"
                         alt="{{ $index === 0 ? ($item['title'] ?? '') : '' }}"
                         class="size-full object-cover"
                         loading="lazy"
                         decoding="async"
                     />
-                    @if ($index === 0)
-                        <span class="absolute bottom-2 right-2 inline-flex size-6 items-center justify-center rounded-md bg-white/90 text-zinc-700 shadow-sm" aria-hidden="true">
-                            <x-icon name="camera" class="size-3.5" />
-                        </span>
-                    @endif
+                @endif
+                @if ($index === 0 && in_array($item['kind'] ?? null, ['photo', 'video'], true))
+                    <span class="absolute bottom-2 right-2 inline-flex size-6 items-center justify-center rounded-md bg-white/90 text-zinc-700 shadow-sm" aria-hidden="true">
+                        <x-icon :name="$item['kind'] === 'video' ? 'video' : 'camera'" class="size-3.5" />
+                    </span>
                 @endif
             </div>
         @empty

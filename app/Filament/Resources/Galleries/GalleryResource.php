@@ -8,6 +8,7 @@ use App\Filament\Resources\Galleries\Pages\ListGalleries;
 use App\Models\Gallery;
 use App\Models\Media;
 use App\Models\Quote;
+use App\Models\Video;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -59,6 +60,9 @@ class GalleryResource extends Resource
                         Type::make(Media::class)
                             ->titleColumnName('title')
                             ->getOptionLabelFromRecordUsing(fn (Media $record): string => $record->title ?: "Foto #{$record->id}"),
+                        Type::make(Video::class)
+                            ->titleColumnName('title')
+                            ->getOptionLabelFromRecordUsing(fn (Video $record): string => $record->title ?: "Video #{$record->id}"),
                         Type::make(Quote::class)
                             ->titleColumnName('quote')
                             ->getOptionLabelFromRecordUsing(fn (Quote $record): string => Str::limit($record->quote, 40)),
@@ -102,7 +106,11 @@ class GalleryResource extends Resource
                 TextColumn::make('galleryable_type')
                     ->label('Tipo')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => $state === Media::class ? 'Foto' : 'Cita'),
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        Media::class => 'Foto',
+                        Video::class => 'Video',
+                        default => 'Cita',
+                    }),
                 TextColumn::make('preview')
                     ->label('Contenido')
                     ->getStateUsing(function (Gallery $record): string {
@@ -110,6 +118,7 @@ class GalleryResource extends Resource
 
                         return match (true) {
                             $item instanceof Media => $item->title ?: "Foto #{$item->id}",
+                            $item instanceof Video => $item->title ?: "Video #{$item->id}",
                             $item instanceof Quote => Str::limit($item->quote, 50),
                             default => '—',
                         };
