@@ -531,8 +531,8 @@ body:has([data-tools-wheel]) {
     display: block;
     width: var(--size);
     height: var(--size);
-    background: color-mix(in srgb, var(--color-brand-lime) 75%, transparent);
-    animation: rising-squares var(--duration) linear var(--delay) infinite;
+    background: color-mix(in srgb, var(--color-brand-lime) var(--squares-opacity, 75%), transparent);
+    animation: rising-squares calc(var(--duration) / var(--squares-speed, 1)) linear calc(var(--delay) / var(--squares-speed, 1)) infinite;
 }
 
 @keyframes rising-squares {

@@ -17,7 +17,10 @@
 >
     @if (\App\Models\Setting::site()['background_squares'] ?? true)
         @persist('rising-squares')
-            <x-rising-squares />
+            <x-rising-squares
+                :opacity="\App\Models\Setting::site()['background_squares_opacity'] ?? 75"
+                :speed="\App\Models\Setting::site()['background_squares_speed'] ?? 1"
+            />
         @endpersist
     @endif
 

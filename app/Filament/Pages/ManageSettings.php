@@ -8,6 +8,7 @@ use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Slider;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -18,6 +19,7 @@ use Filament\Schemas\Components\Form;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use UnitEnum;
@@ -82,7 +84,24 @@ class ManageSettings extends Page
                                             Toggle::make('site.background_squares')
                                                 ->label('Cuadrados animados de fondo')
                                                 ->helperText('Cuadrados que suben girando detrás del contenido de todas las páginas.')
-                                                ->default(true),
+                                                ->default(true)
+                                                ->live(),
+                                            Slider::make('site.background_squares_opacity')
+                                                ->label('Opacidad de los cuadrados (%)')
+                                                ->range(10, 100)
+                                                ->step(5)
+                                                ->tooltips()
+                                                ->default(75)
+                                                ->visible(fn (Get $get): bool => (bool) $get('site.background_squares')),
+                                            Slider::make('site.background_squares_speed')
+                                                ->label('Velocidad de los cuadrados')
+                                                ->helperText('1 es la velocidad original; 2 va el doble de rápido y 0,5 a la mitad.')
+                                                ->range(0.25, 3)
+                                                ->step(0.25)
+                                                ->decimalPlaces(2)
+                                                ->tooltips()
+                                                ->default(1)
+                                                ->visible(fn (Get $get): bool => (bool) $get('site.background_squares')),
                                             Select::make('site.cursor_style')
                                                 ->label('Estilo del cursor')
                                                 ->helperText('Con el cursor normal se usa el puntero del sistema, sin efectos.')

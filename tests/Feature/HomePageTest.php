@@ -69,3 +69,33 @@ test('admin can turn off the rising squares background', function () {
 
     expect(Setting::site()['background_squares'])->toBeFalse();
 });
+
+test('the rising squares use the opacity and speed from the settings', function () {
+    Setting::putMany('site', ['background_squares_opacity' => 40, 'background_squares_speed' => 2]);
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee('--squares-opacity: 40%; --squares-speed: 2;', false);
+});
+
+test('the rising squares keep the opacity and speed within range', function () {
+    $html = Blade::render('<x-rising-squares :opacity="500" :speed="0" />');
+
+    expect($html)->toContain('--squares-opacity: 100%; --squares-speed: 0.25;');
+});
+
+test('admin can set the opacity and speed of the rising squares', function () {
+    $user = User::factory()->create();
+    config(['app.admin_emails' => [strtolower($user->email)]]);
+    $this->actingAs($user);
+    Filament::setCurrentPanel('admin');
+
+    Livewire::test(ManageSettings::class)
+        ->fillForm(['site.background_squares_opacity' => 30, 'site.background_squares_speed' => 1.5])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect(Setting::site())
+        ->background_squares_opacity->toEqual(30)
+        ->background_squares_speed->toEqual(1.5);
+});

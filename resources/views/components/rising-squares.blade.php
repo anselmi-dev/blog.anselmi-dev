@@ -3,7 +3,17 @@
     codepen.io/mohaiman/pen/MQqMyo). Va fijo detrás de todo el contenido; se
     activa en Filament (Ajustes → Sitio → Animaciones). Estilos en app.css.
 --}}
+@props([
+    /** Opacidad de los cuadrados, de 10 a 100 (%). */
+    'opacity' => 75,
+    /** Multiplicador de velocidad: 1 es la original, 2 el doble de rápido. */
+    'speed' => 1,
+])
+
 @php
+    $opacity = is_numeric($opacity) ? max(10, min(100, (float) $opacity)) : 75;
+    $speed = is_numeric($speed) ? max(0.25, min(3, (float) $speed)) : 1;
+
     /** @var list<array{left: string, size: string, delay: string, duration: string}> $squares */
     $squares = [
         ['left' => '25%', 'size' => '80px', 'delay' => '0s', 'duration' => '25s'],
@@ -19,7 +29,7 @@
     ];
 @endphp
 
-<div data-rising-squares class="rising-squares" aria-hidden="true">
+<div data-rising-squares class="rising-squares" style="--squares-opacity: {{ $opacity }}%; --squares-speed: {{ $speed }};" aria-hidden="true">
     @foreach ($squares as $square)
         <span style="--left: {{ $square['left'] }}; --size: {{ $square['size'] }}; --delay: {{ $square['delay'] }}; --duration: {{ $square['duration'] }};"></span>
     @endforeach

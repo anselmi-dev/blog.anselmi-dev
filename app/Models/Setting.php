@@ -111,6 +111,8 @@ class Setting extends Model
             'tools_loader' => false,
             'cursor_style' => CursorStyle::Circle->value,
             'background_squares' => true,
+            'background_squares_opacity' => 75,
+            'background_squares_speed' => 1,
         ];
     }
 
@@ -148,7 +150,7 @@ class Setting extends Model
     }
 
     /**
-     * @return array{meta_description: string|null, author_name: string|null, tools_loader: bool|null, cursor_style: string|null, background_squares: bool|null}
+     * @return array{meta_description: string|null, author_name: string|null, tools_loader: bool|null, cursor_style: string|null, background_squares: bool|null, background_squares_opacity: int|float|null, background_squares_speed: int|float|null}
      */
     public static function site(): array
     {
