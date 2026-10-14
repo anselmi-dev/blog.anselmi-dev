@@ -8,7 +8,6 @@ use App\Support\CursorStyle;
 use App\Support\PageColor;
 use BackedEnum;
 use Filament\Actions\Action;
-use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Slider;
@@ -134,13 +133,17 @@ class ManageSettings extends Page
                                                 ->required(),
                                         ]),
                                     Section::make('Color por página')
-                                        ->description('Color de marca de cada página: tiñe los acentos y sus tonos claros. Vacío = el color por defecto. El color de un proyecto pisa el de su página.')
+                                        ->description('Color de marca de cada página, elegido entre los del recurso Colores: tiñe los acentos y sus tonos claros. Vacío = el color por defecto. El color de un proyecto pisa el de su página.')
                                         ->columns(2)
                                         ->collapsible()
                                         ->schema(collect(PageColor::PAGES)
-                                            ->map(fn (string $label, string $routeName): ColorPicker => ColorPicker::make('site.page_colors.'.PageColor::settingKey($routeName))
+                                            ->map(fn (string $label, string $routeName): Select => Select::make('site.page_colors.'.PageColor::settingKey($routeName))
                                                 ->label($label)
-                                                ->regex('/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/'))
+                                                ->placeholder('Color por defecto')
+                                                ->options(fn (?string $state): array => PageColor::options($state))
+                                                ->allowHtml()
+                                                ->searchable()
+                                                ->native(false))
                                             ->values()
                                             ->all()),
                                 ]),
