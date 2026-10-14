@@ -16,18 +16,14 @@
     <div class="mx-auto mt-10 max-w-8xl sm:mt-12">
         @if (count($entries) > 0)
             <div class="flex justify-end">
-                <label class="inline-flex items-center gap-2 rounded-lg bg-zinc-100 px-3 py-1.5 text-sm">
-                    <span class="text-zinc-400">{{ __('Ordenar') }}</span>
-                    <select
-                        wire:model.live="sort"
-                        class="cursor-pointer appearance-none bg-transparent pr-1 font-medium text-zinc-900 focus:outline-none"
-                    >
-                        <option value="order">{{ __('Destacadas') }}</option>
-                        <option value="recent">{{ __('Recientes') }}</option>
-                        <option value="name">{{ __('Nombre') }}</option>
-                    </select>
-                    <x-icon name="chevron-down" class="pointer-events-none size-4 text-zinc-500" />
-                </label>
+                <x-sort-menu
+                    :value="$sort"
+                    :options="[
+                        'order' => __('Destacadas'),
+                        'recent' => __('Recientes'),
+                        'name' => __('Nombre'),
+                    ]"
+                />
             </div>
 
             <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
