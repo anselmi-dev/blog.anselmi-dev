@@ -56,6 +56,15 @@ class Gallery extends Model
     }
 
     /**
+     * Carga el contenido de cada entrada (y las etiquetas de las fotos) en
+     * pocas consultas.
+     */
+    public function scopeWithContent(Builder $query): Builder
+    {
+        return $query->with(['galleryable' => fn (MorphTo $morphTo) => $morphTo->morphWith([Media::class => ['tags']])]);
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function toViewArray(): array

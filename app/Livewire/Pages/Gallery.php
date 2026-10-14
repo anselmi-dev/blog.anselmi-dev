@@ -48,7 +48,7 @@ class Gallery extends Component
 
         $this->items = $collection->items()
             ->published()
-            ->with('galleryable')
+            ->withContent()
             ->get()
             ->map(fn (GalleryModel $item): array => $item->toViewArray())
             ->all();

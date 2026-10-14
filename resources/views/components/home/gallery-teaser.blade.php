@@ -17,7 +17,7 @@
         ?->items()
         ->published()
         ->where('galleryable_type', Media::class)
-        ->with('galleryable')
+        ->withContent()
         ->take(12)
         ->get()
         ->map(fn (Gallery $item): array => $item->toViewArray())

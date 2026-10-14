@@ -28,6 +28,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    /*
+     * Claude (Anthropic) para traducir contenido desde el panel. La clave se
+     * carga en Ajustes → IA (cifrada); esta del .env queda como alternativa.
+     */
+    'anthropic' => [
+        'key' => env('ANTHROPIC_API_KEY'),
+        'translation_model' => env('ANTHROPIC_TRANSLATION_MODEL', 'claude-opus-5-5'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

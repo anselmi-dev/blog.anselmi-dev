@@ -7,8 +7,10 @@ namespace App\Models;
 use App\Support\CursorStyle;
 use App\Support\Localization;
 use BackedEnum;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
 
 class Setting extends Model
 {
@@ -17,6 +19,44 @@ class Setting extends Model
         'key',
         'value',
     ];
+
+    /** Clave de la API de Anthropic (Claude), guardada cifrada con APP_KEY. */
+    public const string ANTHROPIC_API_KEY = 'ai.anthropic_api_key';
+
+    /**
+     * La clave guardada en Ajustes (descifrada) o, si no hay, la del .env
+     * (ANTHROPIC_API_KEY). Null si no hay ninguna o no se puede descifrar
+     * (por ejemplo, si cambió APP_KEY).
+     */
+    public static function anthropicApiKey(): ?string
+    {
+        $encrypted = static::get(self::ANTHROPIC_API_KEY);
+
+        if (filled($encrypted)) {
+            try {
+                return Crypt::decryptString((string) $encrypted);
+            } catch (DecryptException) {
+                return null;
+            }
+        }
+
+        $fromEnv = config('services.anthropic.key');
+
+        return filled($fromEnv) ? (string) $fromEnv : null;
+    }
+
+    public static function hasStoredAnthropicApiKey(): bool
+    {
+        return filled(static::get(self::ANTHROPIC_API_KEY));
+    }
+
+    /**
+     * Guarda la clave cifrada; con null o vacío la borra.
+     */
+    public static function storeAnthropicApiKey(?string $apiKey): void
+    {
+        static::put(self::ANTHROPIC_API_KEY, filled($apiKey) ? Crypt::encryptString(trim((string) $apiKey)) : null);
+    }
 
     public static function get(string $key, mixed $default = null): mixed
     {

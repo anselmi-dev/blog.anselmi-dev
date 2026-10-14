@@ -3,16 +3,22 @@
 namespace App\Filament\Resources\Media;
 
 use App\Actions\Media\ExtractExifData;
+use App\Actions\Media\GenerateThumbnail;
 use App\Filament\Resources\Media\Pages\CreateMedia;
 use App\Filament\Resources\Media\Pages\EditMedia;
 use App\Filament\Resources\Media\Pages\ListMedia;
+use App\Filament\Resources\Tags\TagResource;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Media as MediaModel;
+use App\Models\Tag;
 use BackedEnum;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -24,6 +30,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use UnitEnum;
 
@@ -51,34 +58,67 @@ class MediaResource extends Resource
             ->components([
                 Section::make('Foto')
                     ->columns(2)
+                    ->columnSpanFull()
                     ->schema([
-                        TextInput::make('title')
-                            ->label('Título'),
-                        TextInput::make('category')
-                            ->label('Categoría'),
                         FileUpload::make('image_path')
                             ->label('Imagen')
+                            ->helperText('Al guardar se genera la miniatura y, si están vacíos, se completan el ancho y el alto.')
                             ->image()
                             ->disk('public')
                             ->directory('media')
                             ->visibility('public')
                             ->imageEditor()
                             ->columnSpanFull(),
+                        DatePicker::make('released_on')
+                            ->label('Fecha')
+                            ->native(false)
+                            ->displayFormat('j M Y')
+                            ->closeOnDateSelection(),
+                        Select::make('tags')
+                            ->label('Etiquetas')
+                            ->relationship('tags', 'name')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->getOptionLabelFromRecordUsing(fn (Tag $record): string => filled($record->name_en) ? "{$record->name} · {$record->name_en}" : $record->name)
+                            ->createOptionForm(TagResource::fields())
+                            ->createOptionModalHeading('Nueva etiqueta'),
+                    ]),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('title')
+                            ->label('Título'),
+                        TextInput::make('category')
+                            ->label('Categoría'),
                         Textarea::make('description')
                             ->label('Descripción')
                             ->rows(3)
                             ->columnSpanFull(),
                         TextInput::make('location')
                             ->label('Lugar'),
-                        TextInput::make('released_at')
-                            ->label('Fecha (texto)')
-                            ->placeholder('12 mar 2025'),
-                        TagsInput::make('tags')
-                            ->label('Tags')
-                            ->columnSpanFull(),
-                    ]),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('title_en')
+                                ->label('Title')
+                                ->maxLength(255),
+                            TextInput::make('category_en')
+                                ->label('Category')
+                                ->maxLength(255),
+                            Textarea::make('description_en')
+                                ->label('Description')
+                                ->rows(3)
+                                ->columnSpanFull(),
+                            TextInput::make('location_en')
+                                ->label('Location')
+                                ->maxLength(255),
+                        ],
+                    ],
+                    translatableFields: ['title', 'category', 'description', 'location'],
+                ),
                 Section::make('Datos EXIF / cámara')
                     ->columns(3)
+                    ->columnSpanFull()
                     ->collapsed()
                     ->schema([
                         FileUpload::make('exif_source')
@@ -124,27 +164,6 @@ class MediaResource extends Resource
                         TextInput::make('width')->label('Ancho px')->numeric(),
                         TextInput::make('height')->label('Alto px')->numeric(),
                     ]),
-                Section::make('Inglés')
-                    ->description('Textos para la versión en inglés del sitio (/en). Si dejás un campo vacío, se muestra el texto en español.')
-                    ->collapsible()
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->schema([
-                        TextInput::make('title_en')
-                            ->label('Título (EN)')
-                            ->maxLength(255),
-                        TextInput::make('category_en')
-                            ->label('Categoría (EN)')
-                            ->maxLength(255),
-                        Textarea::make('description_en')
-                            ->label('Descripción (EN)')
-                            ->rows(3),
-                        TextInput::make('location_en')
-                            ->label('Ubicación (EN)')
-                            ->maxLength(255),
-                        TagsInput::make('tags_en')
-                            ->label('Etiquetas (EN)'),
-                    ]),
             ]);
     }
 
@@ -164,9 +183,18 @@ class MediaResource extends Resource
                 TextColumn::make('category')
                     ->label('Categoría')
                     ->toggleable(),
+                TextColumn::make('tags.name')
+                    ->label('Etiquetas')
+                    ->badge()
+                    ->toggleable(),
+                TextColumn::make('released_on')
+                    ->label('Fecha')
+                    ->date('j M Y')
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('camera')
                     ->label('Cámara')
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->label('Creada')
                     ->dateTime()
@@ -177,6 +205,23 @@ class MediaResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('regenerateThumbnails')
+                        ->label('Regenerar miniaturas')
+                        ->icon(Heroicon::OutlinedPhoto)
+                        ->action(function (Collection $records): void {
+                            $records->each(function (MediaModel $media): void {
+                                $media->thumb_path = filled($media->image_path)
+                                    ? app(GenerateThumbnail::class)->handle($media->image_path)
+                                    : null;
+                                $media->saveQuietly();
+                            });
+
+                            Notification::make()
+                                ->success()
+                                ->title('Miniaturas regeneradas')
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     DeleteBulkAction::make(),
                 ]),
             ]);

@@ -15,7 +15,8 @@ class GenerateThumbnail
     /**
      * Generates a resized JPEG copy of the given image (stored on the `public`
      * disk) and returns its relative path, or null if no thumbnail was made
-     * (missing/unsupported file, or the source is already small enough).
+     * (missing or unsupported file). Images already smaller than the maximum
+     * keep their size: they are only re-encoded, never upscaled.
      */
     public function handle(string $imagePath): ?string
     {
@@ -33,13 +34,7 @@ class GenerateThumbnail
 
         $width = imagesx($source);
         $height = imagesy($source);
-        $scale = self::MAX_DIMENSION / max($width, $height);
-
-        if ($scale >= 1) {
-            imagedestroy($source);
-
-            return null;
-        }
+        $scale = min(1, self::MAX_DIMENSION / max($width, $height));
 
         $thumbWidth = max(1, (int) round($width * $scale));
         $thumbHeight = max(1, (int) round($height * $scale));

@@ -187,6 +187,36 @@ class ManageSettings extends Page
                                                 ->collapsible(),
                                         ]),
                                 ]),
+                            Tab::make('IA')
+                                ->icon(Heroicon::OutlinedSparkles)
+                                ->schema([
+                                    Section::make('Traducciones con Claude')
+                                        ->description('La clave de la API de Anthropic se usa para el botón "Traducir desde español" de los formularios. Se guarda cifrada con la APP_KEY de la aplicación: con solo una copia de la base de datos no se puede leer.')
+                                        ->schema([
+                                            TextInput::make('ai.anthropic_api_key')
+                                                ->label('API key de Anthropic')
+                                                ->password()
+                                                ->revealable()
+                                                ->autocomplete('off')
+                                                ->placeholder(fn (): string => Setting::hasStoredAnthropicApiKey() ? '•••••••• guardada' : 'sk-ant-...')
+                                                ->helperText(fn (): string => Setting::hasStoredAnthropicApiKey()
+                                                    ? 'Hay una clave guardada. Dejá el campo vacío para mantenerla o pegá una nueva para reemplazarla.'
+                                                    : 'Todavía no hay una clave guardada. La creás en console.anthropic.com → API keys.'),
+                                            Actions::make([
+                                                Action::make('forgetAnthropicApiKey')
+                                                    ->label('Borrar la clave guardada')
+                                                    ->color('danger')
+                                                    ->link()
+                                                    ->requiresConfirmation()
+                                                    ->visible(fn (): bool => Setting::hasStoredAnthropicApiKey())
+                                                    ->action(function (): void {
+                                                        Setting::storeAnthropicApiKey(null);
+
+                                                        Notification::make()->success()->title('Clave borrada')->send();
+                                                    }),
+                                            ]),
+                                        ]),
+                                ]),
                             Tab::make('Inglés')
                                 ->icon(Heroicon::OutlinedLanguage)
                                 ->schema([
@@ -254,6 +284,12 @@ class ManageSettings extends Page
 
         Setting::putMany('site', $data['site'] ?? []);
         Setting::putMany('contact', $data['contact'] ?? []);
+
+        // La clave nunca se vuelve a mostrar: solo se guarda si se pegó una nueva.
+        if (filled($data['ai']['anthropic_api_key'] ?? null)) {
+            Setting::storeAnthropicApiKey($data['ai']['anthropic_api_key']);
+            $this->data['ai']['anthropic_api_key'] = null;
+        }
 
         Notification::make()
             ->success()

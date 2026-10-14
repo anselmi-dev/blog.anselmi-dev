@@ -3,6 +3,7 @@
 namespace App\Livewire\Pages;
 
 use App\Models\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -35,7 +36,7 @@ class Collections extends Component
     {
         $entries = Collection::query()
             ->published()
-            ->with('publishedItems.galleryable')
+            ->with(['publishedItems' => fn (HasMany $items) => $items->withContent()])
             ->get()
             ->map(fn (Collection $collection): array => $collection->toEntryArray());
 
