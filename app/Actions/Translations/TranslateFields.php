@@ -93,10 +93,10 @@ class TranslateFields
     {
         try {
             try {
-                $message = $this->request($apiKey, $request, $schema, withFallbacks: true);
+                $message = $this->request($apiKey, $request, $schema, withFallbacks: $this->modelHasFallbacks());
             } catch (BadRequestException $exception) {
                 // Si la cuenta no tiene habilitado el fallback (beta), se pide sin él.
-                if (! $this->isAboutFallbacks($exception)) {
+                if (! $this->modelHasFallbacks() || ! $this->isAboutFallbacks($exception)) {
                     throw $exception;
                 }
 
@@ -135,7 +135,7 @@ class TranslateFields
         $client = new Client(apiKey: $apiKey);
 
         return $client->beta->messages->create(
-            model: (string) config('services.anthropic.translation_model'),
+            model: $this->model(),
             maxTokens: 16000,
             system: self::SYSTEM_PROMPT,
             messages: [['role' => 'user', 'content' => $request]],
@@ -143,12 +143,26 @@ class TranslateFields
                 'effort' => 'low',
                 'format' => ['type' => 'json_schema', 'schema' => $schema],
             ],
-            // Si el modelo declina el pedido, la API lo reintenta con otro modelo.
+            // Si el modelo declina el pedido, la API lo reintenta con otro modelo
+            // (solo en los modelos que lo permiten; Haiku no).
             betas: $withFallbacks ? ['server-side-fallback-2026-07-01'] : null,
             fallbacks: $withFallbacks ? 'default' : null,
             // Solo para claves que no pertenecen a un workspace.
             workspaceID: Setting::anthropicWorkspaceId(),
         );
+    }
+
+    private function model(): string
+    {
+        return (string) config('services.anthropic.translation_model');
+    }
+
+    /**
+     * Haiku no tiene fallback del lado del servidor: con él no se envía.
+     */
+    private function modelHasFallbacks(): bool
+    {
+        return ! str_starts_with($this->model(), 'claude-haiku-');
     }
 
     /**

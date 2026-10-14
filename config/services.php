@@ -35,7 +35,8 @@ return [
     'anthropic' => [
         'key' => env('ANTHROPIC_API_KEY'),
         'workspace_id' => env('ANTHROPIC_WORKSPACE_ID'),
-        'translation_model' => env('ANTHROPIC_TRANSLATION_MODEL', 'claude-opus-5-5'),
+        // El más barato por defecto; para más matiz: claude-sonnet-5-5 o claude-opus-5-5.
+        'translation_model' => env('ANTHROPIC_TRANSLATION_MODEL', 'claude-haiku-5-5'),
     ],
 
     'slack' => [

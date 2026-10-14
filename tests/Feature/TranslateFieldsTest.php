@@ -140,6 +140,7 @@ test('a 400 error shows the reason given by the api', function () {
 });
 
 test('when the account cannot use the fallback beta it asks again without it', function () {
+    config(['services.anthropic.translation_model' => 'claude-opus-5-5']);
     Setting::storeAnthropicApiKey('sk-ant-guardada');
 
     $translator = Mockery::mock(TranslateFields::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -186,4 +187,18 @@ test('the workspace falls back to the env file', function () {
     config(['services.anthropic.workspace_id' => 'wrkspc_DelEnv']);
 
     expect(Setting::anthropicWorkspaceId())->toBe('wrkspc_DelEnv');
+});
+
+test('by default it uses the cheapest model, which has no server-side fallback', function () {
+    Setting::storeAnthropicApiKey('sk-ant-guardada');
+
+    expect(config('services.anthropic.translation_model'))->toBe('claude-haiku-5-5');
+
+    $translator = Mockery::mock(TranslateFields::class)->makePartial()->shouldAllowMockingProtectedMethods();
+    $translator->shouldReceive('request')
+        ->once()
+        ->withArgs(fn (string $key, string $request, array $schema, bool $withFallbacks): bool => ! $withFallbacks)
+        ->andThrow(badRequest('Unexpected value(s) for the `anthropic-beta` header.'));
+
+    expect(fn () => $translator->handle(['title' => 'Hola']))->toThrow(TranslationFailed::class);
 });
