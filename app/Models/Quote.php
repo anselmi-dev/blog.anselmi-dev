@@ -6,11 +6,12 @@ namespace App\Models;
 
 use App\Contracts\Galleryable;
 use App\Models\Concerns\HasEnglishTranslations;
+use App\Models\Concerns\RemovesGalleryEntries;
 use Illuminate\Database\Eloquent\Model;
 
 class Quote extends Model implements Galleryable
 {
-    use HasEnglishTranslations;
+    use HasEnglishTranslations, RemovesGalleryEntries;
 
     protected $fillable = [
         'quote',

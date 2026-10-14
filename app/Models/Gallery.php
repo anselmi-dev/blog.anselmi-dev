@@ -43,9 +43,16 @@ class Gallery extends Model
         return $this->morphTo();
     }
 
+    /**
+     * Publicados y con su contenido todavía existente: una entrada cuya foto,
+     * video o cita se borró no se muestra (y no rompe la vista).
+     */
     public function scopePublished(Builder $query): Builder
     {
-        return $query->where('is_published', true)->orderBy('sort_order');
+        return $query
+            ->where('is_published', true)
+            ->whereHasMorph('galleryable', '*')
+            ->orderBy('sort_order');
     }
 
     /**

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Contracts\Galleryable;
 use App\Models\Concerns\HasEnglishTranslations;
+use App\Models\Concerns\RemovesGalleryEntries;
 use Database\Factories\VideoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 class Video extends Model implements Galleryable
 {
     /** @use HasFactory<VideoFactory> */
-    use HasEnglishTranslations, HasFactory;
+    use HasEnglishTranslations, HasFactory, RemovesGalleryEntries;
 
     protected $fillable = [
         'video_path',

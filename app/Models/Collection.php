@@ -39,7 +39,7 @@ class Collection extends Model
 
     public function publishedItems(): HasMany
     {
-        return $this->items()->where('is_published', true);
+        return $this->items()->published();
     }
 
     public function scopePublished(Builder $query): Builder

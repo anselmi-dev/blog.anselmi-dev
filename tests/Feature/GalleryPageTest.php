@@ -255,3 +255,34 @@ test('admin can upload a video', function () {
     expect($video->title)->toBe('Atardecer');
     Storage::disk('public')->assertExists($video->video_path);
 });
+
+test('entries whose photo was deleted do not break the home or the collection page', function () {
+    $collection = Collection::create(['name' => 'Principal', 'slug' => 'principal']);
+    $kept = Media::create(['title' => 'Sigue estando']);
+    addToCollection($collection, $kept, 0);
+    addToCollection($collection, Media::create(['title' => 'Borrada']), 1);
+
+    // Simula una entrada huérfana de antes (la foto se borró sin tocar la galería).
+    Media::query()->where('title', 'Borrada')->delete();
+
+    $this->get(route('home'))->assertOk()->assertSee('Sigue estando');
+    $this->get(route('gallery.show', ['slug' => 'principal']))->assertOk()->assertSee('Sigue estando');
+    $this->get(route('gallery'))->assertOk()->assertSee('1 foto');
+});
+
+test('deleting a photo, video or quote removes it from its collections', function () {
+    $collection = Collection::create(['name' => 'Principal', 'slug' => 'principal']);
+    $photo = Media::create(['title' => 'Foto']);
+    $video = Video::factory()->create();
+    $quote = Quote::create(['quote' => 'Cita.']);
+
+    foreach ([$photo, $video, $quote] as $index => $galleryable) {
+        addToCollection($collection, $galleryable, $index);
+    }
+
+    $photo->delete();
+    $video->delete();
+    $quote->delete();
+
+    expect(Gallery::query()->count())->toBe(0);
+});
