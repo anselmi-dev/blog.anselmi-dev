@@ -16,3 +16,6 @@ Los enlaces del menú desplegable del header salen de App\Support\SiteMenu::grou
 
 ## Plurales sin trans_choice
 No uses trans_choice() ni @choice: como no hay lang/es.json, en /es cae al fallback y muestra el texto en inglés. Para singular/plural usá dos claves con __() (ej. __(':count foto') y __(':count fotos')) elegidas según el número, con su traducción en lang/en.json.
+
+## Estilos del panel Filament
+El panel tiene tema propio (resources/css/filament/admin/theme.css, compilado por Vite; requiere npm run build). Los colores van como variables --panel-* (con su versión .dark) y las reglas sobre clases fi-* se escriben fuera de @layer para ganarle a Filament. Las vistas en resources/views/filament/** pueden usar clases de Tailwind; las de resources/views/components/admin siguen con estilos en línea porque no están en @source.

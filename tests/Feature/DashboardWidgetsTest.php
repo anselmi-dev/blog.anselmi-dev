@@ -79,3 +79,15 @@ test('the pending widget says when everything is done', function () {
         ->assertSeeInOrder(['Sin traducir al inglés', '0', 'Todo traducido'])
         ->assertSeeInOrder(['Vitrina de la home', 'Completa']);
 });
+
+test('the dashboard greets by first name with the date and a summary of the day', function () {
+    auth()->user()->update(['name' => 'Carlos Anselmi']);
+    ContactMessage::query()->create(['name' => 'Ana', 'email' => 'ana@example.com', 'message' => 'Hola']);
+
+    $this->get('/admin')
+        ->assertOk()
+        ->assertSee('Hola, Carlos')
+        ->assertSee(now()->locale('es')->translatedFormat('l, j \d\e F'))
+        ->assertSee('0 visitas hoy · 1 mensaje sin leer')
+        ->assertSee('Escribir un post');
+});

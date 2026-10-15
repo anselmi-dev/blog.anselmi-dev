@@ -1,7 +1,7 @@
 {{--
-    Desglose de visitas: listas con barra proporcional (un solo color: la barra
-    es cantidad). Estilos en línea con las variables de Filament: el panel no
-    compila las clases de Tailwind de vistas propias (no tiene tema).
+    Desglose de visitas: cada lista muestra el nombre, la cantidad y su parte
+    del total, con una barra fina debajo (un solo color: la barra es cantidad,
+    medida contra el primero de la lista).
 --}}
 @php
     $sections = $this->getSections();
@@ -20,25 +20,33 @@
             </x-filament::input.wrapper>
         </x-slot>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1.5rem;">
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             @foreach ($sections as $key => $section)
                 @php
                     $max = max(1, collect($section['rows'])->max('total') ?? 1);
                 @endphp
-                <div wire:key="visits-{{ $key }}">
-                    <h3 style="margin:0 0 0.5rem;font-size:0.875rem;font-weight:600;">{{ $section['title'] }}</h3>
+
+                <div wire:key="visits-{{ $key }}" class="rounded-2xl bg-(--panel-row) p-5">
+                    <h3 class="mb-4 text-sm font-medium text-(--panel-ink)">{{ $section['title'] }}</h3>
 
                     @if ($section['rows'] === [])
-                        <p style="margin:0;font-size:0.875rem;opacity:0.6;">
+                        <p class="text-sm text-(--panel-muted)">
                             {{ $key === 'cities' ? 'Activá los headers de ubicación en Cloudflare para ver ciudades.' : 'Sin visitas todavía.' }}
                         </p>
                     @else
-                        <ul style="margin:0;padding:0;list-style:none;display:grid;gap:4px;">
+                        <ul class="grid gap-3.5">
                             @foreach ($section['rows'] as $row)
-                                <li style="position:relative;display:flex;justify-content:space-between;gap:0.75rem;padding:0.25rem 0.5rem;font-size:0.875rem;border-radius:4px;" title="{{ $row['label'] }}: {{ $row['total'] }}">
-                                    <span aria-hidden="true" style="position:absolute;inset:0 auto 0 0;width:{{ round($row['total'] / $max * 100, 1) }}%;border-radius:4px;background:color-mix(in oklab, var(--primary-500) 18%, transparent);"></span>
-                                    <span style="position:relative;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $row['label'] }}</span>
-                                    <span style="position:relative;font-variant-numeric:tabular-nums;opacity:0.75;">{{ number_format($row['total'], 0, ',', '.') }}</span>
+                                <li title="{{ $row['label'] }}: {{ $row['total'] }}">
+                                    <div class="flex items-baseline justify-between gap-3 text-sm">
+                                        <span class="truncate text-(--panel-ink)/80">{{ $row['label'] }}</span>
+                                        <span class="shrink-0 tabular-nums text-(--panel-ink)">
+                                            {{ number_format($row['total'], 0, ',', '.') }}
+                                            <span class="ms-1 text-xs text-(--panel-muted)">{{ $total > 0 ? round($row['total'] / $total * 100) : 0 }}%</span>
+                                        </span>
+                                    </div>
+                                    <div class="mt-1.5 h-1.5 rounded-full bg-(--panel-line)">
+                                        <div class="h-full rounded-full bg-primary-400" style="width: {{ round($row['total'] / $max * 100, 1) }}%"></div>
+                                    </div>
                                 </li>
                             @endforeach
                         </ul>
