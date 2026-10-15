@@ -202,5 +202,8 @@
     "Copiado al portapapeles": "Copied to clipboard",
     "Pegalo en tu configuración de Tailwind.": "Paste it into your Tailwind config.",
     "No se pudo copiar": "Couldn't copy",
-    "Tu navegador bloqueó el portapapeles. Seleccioná el código y copialo a mano.": "Your browser blocked the clipboard. Select the code and copy it manually."
+    "Tu navegador bloqueó el portapapeles. Seleccioná el código y copialo a mano.": "Your browser blocked the clipboard. Select the code and copy it manually.",
+    "En construcción": "Under construction",
+    "Sitio en construcción": "Site under construction",
+    "Estoy renovando algunas secciones, así que puede que encuentres cosas a medio terminar.": "I'm reworking a few sections, so you might run into some unfinished bits."
 }

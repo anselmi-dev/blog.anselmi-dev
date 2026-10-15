@@ -167,6 +167,9 @@ class Setting extends Model
             'background_squares' => true,
             'background_squares_opacity' => 75,
             'background_squares_speed' => 1,
+            'under_construction' => false,
+            'under_construction_title' => 'Sitio en construcción',
+            'under_construction_message' => 'Estoy renovando algunas secciones, así que puede que encuentres cosas a medio terminar.',
         ];
     }
 
@@ -204,7 +207,7 @@ class Setting extends Model
     }
 
     /**
-     * @return array{meta_description: string|null, author_name: string|null, tools_loader: bool|null, cursor_style: string|null, background_squares: bool|null, background_squares_opacity: int|float|null, background_squares_speed: int|float|null}
+     * @return array{meta_description: string|null, author_name: string|null, tools_loader: bool|null, cursor_style: string|null, background_squares: bool|null, background_squares_opacity: int|float|null, background_squares_speed: int|float|null, under_construction: bool|null, under_construction_title: string|null, under_construction_message: string|null}
      */
     public static function site(): array
     {
@@ -247,7 +250,7 @@ class Setting extends Model
      */
     public static function localizedSite(): array
     {
-        return static::localize(static::site(), ['meta_description']);
+        return static::localize(static::site(), ['meta_description', 'under_construction_title', 'under_construction_message']);
     }
 
     /**

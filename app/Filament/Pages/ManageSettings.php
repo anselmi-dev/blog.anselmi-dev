@@ -73,6 +73,48 @@ class ManageSettings extends Page
                             Tab::make('Sitio')
                                 ->icon(Heroicon::OutlinedGlobeAlt)
                                 ->schema([
+                                    Section::make('Sitio en construcción')
+                                        ->description('Muestra un aviso en todas las páginas del sitio. Cada visitante puede cerrarlo y no le vuelve a aparecer mientras navega.')
+                                        ->schema([
+                                            Toggle::make('site.under_construction')
+                                                ->label('Mostrar el aviso de sitio en construcción')
+                                                ->default(false)
+                                                ->live(),
+                                            LanguageTabs::make(
+                                                key: 'construccion-idiomas',
+                                                spanish: [
+                                                    TextInput::make('site.under_construction_title')
+                                                        ->label('Título')
+                                                        ->maxLength(80)
+                                                        ->required(fn (Get $get): bool => (bool) $get('site.under_construction')),
+                                                    Textarea::make('site.under_construction_message')
+                                                        ->label('Mensaje')
+                                                        ->rows(2)
+                                                        ->maxLength(240),
+                                                ],
+                                                translations: [
+                                                    'en' => [
+                                                        TextInput::make('site.under_construction_title_en')
+                                                            ->label('Title')
+                                                            ->maxLength(80),
+                                                        Textarea::make('site.under_construction_message_en')
+                                                            ->label('Message')
+                                                            ->rows(2)
+                                                            ->maxLength(240),
+                                                    ],
+                                                ],
+                                                translatableFields: ['site.under_construction_title', 'site.under_construction_message'],
+                                                completion: CompleteWithAiAction::make(
+                                                    about: 'el aviso flotante que avisa que el sitio está en construcción',
+                                                    guidance: [
+                                                        'site.under_construction_title' => 'Título corto (máximo 5 palabras).',
+                                                        'site.under_construction_message' => 'Una o dos frases cálidas que expliquen que el sitio se está renovando.',
+                                                    ],
+                                                    context: ['site.author_name' => 'Nombre / autor'],
+                                                ),
+                                            )
+                                                ->visible(fn (Get $get): bool => (bool) $get('site.under_construction')),
+                                        ]),
                                     Section::make('SEO y marca')
                                         ->schema([
                                             TextInput::make('site.author_name')

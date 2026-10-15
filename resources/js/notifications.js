@@ -11,7 +11,8 @@
  * Opciones: variant (pending | warning | success | error | neutral), title,
  * message, badge (texto, o false para ocultarla), actions ([{ label, href,
  * event, primary, dismiss }]), duration (ms; null = hasta cerrarla),
- * dismissible y key (si ya hay una con la misma key, la reemplaza).
+ * dismissible, key (si ya hay una con la misma key, la reemplaza) y once
+ * (clave para sessionStorage: una vez cerrada no vuelve a salir en la visita).
  */
 
 const VARIANTS = ['pending', 'warning', 'success', 'error', 'neutral'];
@@ -139,6 +140,10 @@ function createStore() {
                 return;
             }
 
+            if (item.once) {
+                rememberDismissed(item.once);
+            }
+
             clearTimeout(this.timers[id]);
             item.leaving = true;
 
@@ -163,8 +168,28 @@ function createStore() {
     };
 }
 
+function wasDismissed(once) {
+    try {
+        return sessionStorage.getItem(`notification:${once}`) === '1';
+    } catch (_) {
+        return false;
+    }
+}
+
+function rememberDismissed(once) {
+    try {
+        sessionStorage.setItem(`notification:${once}`, '1');
+    } catch (_) {
+        // Sin sessionStorage (modo privado estricto) vuelve a salir: no es grave.
+    }
+}
+
 export function notify(options = {}) {
     const id = nextId++;
+
+    if (options.once && wasDismissed(options.once)) {
+        return { id, update: () => {}, dismiss: () => {} };
+    }
 
     if (store) {
         store.push(id, options);

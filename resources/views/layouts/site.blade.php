@@ -42,6 +42,7 @@
 
     @persist('notifications')
         <x-notification.stack />
+        <x-notification.under-construction />
     @endpersist
 
     @livewireScripts
