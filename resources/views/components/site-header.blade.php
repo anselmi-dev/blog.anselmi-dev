@@ -14,6 +14,9 @@
     $navLinks[] = ['label' => __('Sobre mí'), 'href' => localized_route('about')];
 
     $alternateLocale = Localization::isEnglish() ? 'es' : 'en';
+
+    $adminPanel = filament()->getPanel('admin');
+    $canOpenAdminPanel = auth()->user()?->canAccessPanel($adminPanel) ?? false;
 @endphp
 
 <x-site-frame
@@ -76,6 +79,18 @@
             </nav>
 
             <div class="flex items-center gap-2 sm:gap-3" data-reveal-item>
+                @if ($canOpenAdminPanel)
+                    <a
+                        href="{{ $adminPanel->getUrl() }}"
+                        data-admin-panel-link
+                        class="inline-flex size-11 items-center justify-center rounded-full border border-zinc-900 text-zinc-900 transition hover:bg-zinc-900/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 sm:size-12"
+                        aria-label="{{ __('Ir al panel') }}"
+                        title="{{ __('Ir al panel') }}"
+                    >
+                        <x-icon name="layout-dashboard" class="size-5" />
+                    </a>
+                @endif
+
                 <a
                     href="{{ Localization::switchUrl($alternateLocale) }}"
                     hreflang="{{ $alternateLocale }}"
