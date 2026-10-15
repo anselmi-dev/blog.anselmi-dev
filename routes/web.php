@@ -44,7 +44,7 @@ $registerSiteRoutes = function (array $paths): void {
     Route::livewire($paths['tools'], Tools::class)->name('services.tools');
 };
 
-Route::middleware('locale:es')->group(fn () => $registerSiteRoutes([
+Route::middleware(['locale:es', 'track'])->group(fn () => $registerSiteRoutes([
     'home' => '/',
     'about' => '/sobre-mi',
     'faq' => '/faq',
@@ -57,7 +57,7 @@ Route::middleware('locale:es')->group(fn () => $registerSiteRoutes([
     'tools' => '/servicios/herramientas',
 ]));
 
-Route::prefix('en')->name('en.')->middleware('locale:en')->group(fn () => $registerSiteRoutes([
+Route::prefix('en')->name('en.')->middleware(['locale:en', 'track'])->group(fn () => $registerSiteRoutes([
     'home' => '/',
     'about' => '/about',
     'faq' => '/faq',
