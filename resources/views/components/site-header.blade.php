@@ -85,7 +85,9 @@
                         data-admin-panel-link
                         class="inline-flex size-11 items-center justify-center rounded-full border border-zinc-900 text-zinc-900 transition hover:bg-zinc-900/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 sm:size-12"
                         aria-label="{{ __('Ir al panel') }}"
-                        title="{{ __('Ir al panel') }}"
+                        data-tooltip="{{ __('Ir al panel') }}"
+                        data-tooltip-theme="dark"
+                        data-tooltip-placement="bottom"
                     >
                         <x-icon name="layout-dashboard" class="size-5" />
                     </a>
@@ -97,6 +99,8 @@
                     lang="{{ $alternateLocale }}"
                     class="inline-flex size-11 items-center justify-center rounded-full border border-zinc-900 text-xs font-semibold uppercase tracking-wide text-zinc-900 transition hover:bg-zinc-900/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 sm:size-12 sm:text-sm"
                     aria-label="{{ $alternateLocale === 'en' ? 'View this page in English' : 'Ver esta página en español' }}"
+                    data-tooltip="{{ $alternateLocale === 'en' ? 'View this page in English' : 'Ver esta página en español' }}"
+                    data-tooltip-placement="bottom"
                 >
                     {{ $alternateLocale }}
                 </a>

@@ -7,6 +7,7 @@ import { initNotifications } from './notifications';
 import { initPageLoaders } from './page-loader';
 import { initPageTransition } from './page-transition';
 import { initToolsWheels } from './tools-wheel';
+import { initTooltips } from './tooltips';
 
 /**
  * Reemplaza nodos `<i data-lucide="nombre">` por SVG de Lucide.
@@ -35,6 +36,7 @@ function boot(root = document) {
 
 initPageTransition();
 initNotifications();
+initTooltips();
 
 document.addEventListener('DOMContentLoaded', () => boot());
 

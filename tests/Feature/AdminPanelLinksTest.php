@@ -47,3 +47,16 @@ test('the panel has a link to the public site', function () {
         ->assertSee('Ver el sitio')
         ->assertSee('href="'.route('home').'"', escape: false);
 });
+
+test('the header buttons explain themselves with tooltips', function () {
+    $this->get('/')
+        ->assertOk()
+        ->assertSee('data-tooltip="View this page in English"', escape: false);
+
+    $user = User::factory()->create();
+    config(['app.admin_emails' => [strtolower($user->email)]]);
+
+    $this->actingAs($user)
+        ->get('/')
+        ->assertSee('data-tooltip="Ir al panel"', escape: false);
+});
