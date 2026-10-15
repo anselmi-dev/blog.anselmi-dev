@@ -366,8 +366,20 @@ Alpine.data('colorExportModal', (columns) => ({
             this.copied = true;
             clearTimeout(this._copyTimer);
             this._copyTimer = setTimeout(() => { this.copied = false; }, 1600);
+            window.notify?.({
+                key: 'color-export',
+                variant: 'success',
+                title: @js(__('Copiado al portapapeles')),
+                message: @js(__('Pegalo en tu configuración de Tailwind.')),
+                duration: 3000,
+            });
         } catch (_) {
-            // ignore clipboard failures (permissions / insecure context)
+            window.notify?.({
+                key: 'color-export',
+                variant: 'error',
+                title: @js(__('No se pudo copiar')),
+                message: @js(__('Tu navegador bloqueó el portapapeles. Seleccioná el código y copialo a mano.')),
+            });
         }
     },
 }));

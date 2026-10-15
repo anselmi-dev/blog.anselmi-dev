@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Actions\Contact\SubmitContactMessage;
+use App\Livewire\Concerns\SendsNotifications;
 use App\Models\Setting;
+use App\Support\NotificationVariant;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\On;
@@ -11,6 +13,8 @@ use Livewire\Component;
 
 class ContactModal extends Component
 {
+    use SendsNotifications;
+
     private const int CLOSE_MS = 400;
 
     public bool $show = false;
@@ -99,6 +103,13 @@ class ContactModal extends Component
 
         if (! $executed) {
             $seconds = RateLimiter::availableIn($key);
+
+            $this->notify(
+                NotificationVariant::Warning,
+                __('Muchos mensajes seguidos'),
+                __('Esperá :seconds segundos y volvé a enviarlo.', ['seconds' => $seconds]),
+                key: 'contact',
+            );
 
             throw ValidationException::withMessages([
                 'email' => __('Demasiados mensajes. Probá de nuevo en :seconds segundos.', ['seconds' => $seconds]),

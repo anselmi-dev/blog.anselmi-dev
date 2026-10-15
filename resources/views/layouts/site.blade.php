@@ -40,6 +40,10 @@
 
     <livewire:contact-modal />
 
+    @persist('notifications')
+        <x-notification.stack />
+    @endpersist
+
     @livewireScripts
 </body>
 </html>

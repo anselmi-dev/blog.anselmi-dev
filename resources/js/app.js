@@ -3,6 +3,7 @@ import { initBookCarousels } from './book-carousel';
 import { initCustomCursor } from './custom-cursor';
 import { initLogoAnimation } from './logo-animation';
 import { initMotion } from './motion';
+import { initNotifications } from './notifications';
 import { initPageLoaders } from './page-loader';
 import { initPageTransition } from './page-transition';
 import { initToolsWheels } from './tools-wheel';
@@ -33,6 +34,7 @@ function boot(root = document) {
 }
 
 initPageTransition();
+initNotifications();
 
 document.addEventListener('DOMContentLoaded', () => boot());
 

@@ -190,5 +190,17 @@
     "¿Querés encargar sesión o licencia de uso?": "Want to book a session or license a photo?",
     "¿Qué escucho?": "What am I listening to?",
     "¿Seguís con dudas?": "Still have questions?",
-    "Ir al panel": "Go to admin panel"
+    "Ir al panel": "Go to admin panel",
+    "Pendiente": "Pending",
+    "Atención": "Warning",
+    "Listo": "Done",
+    "Error": "Error",
+    "Notificaciones": "Notifications",
+    "Cerrar notificación": "Dismiss notification",
+    "Muchos mensajes seguidos": "Too many messages in a row",
+    "Esperá :seconds segundos y volvé a enviarlo.": "Wait :seconds seconds and send it again.",
+    "Copiado al portapapeles": "Copied to clipboard",
+    "Pegalo en tu configuración de Tailwind.": "Paste it into your Tailwind config.",
+    "No se pudo copiar": "Couldn't copy",
+    "Tu navegador bloqueó el portapapeles. Seleccioná el código y copialo a mano.": "Your browser blocked the clipboard. Select the code and copy it manually."
 }
