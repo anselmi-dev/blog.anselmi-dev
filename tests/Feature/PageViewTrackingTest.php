@@ -69,13 +69,23 @@ test('the same visitor gets the same hash during the day and another one the nex
         ->and($hashes[2])->not->toBe($hashes[0]);
 });
 
-test('bots, logged in users, prefetches and internal referrers are not counted as visits', function () {
+test('bots, admins, prefetches and internal referrers are not counted as visits', function () {
     $this->withHeaders(['User-Agent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'])->get('/');
     $this->withHeaders(['User-Agent' => DESKTOP_CHROME, 'Sec-Purpose' => 'prefetch'])->get('/');
     $this->withHeaders(['User-Agent' => ''])->get('/');
-    $this->actingAs(User::factory()->create())->withHeaders(['User-Agent' => DESKTOP_CHROME])->get('/');
+    $admin = User::factory()->create();
+    config(['app.admin_emails' => [strtolower($admin->email)]]);
+    $this->actingAs($admin)->withHeaders(['User-Agent' => DESKTOP_CHROME])->get('/')->assertOk();
 
     expect(PageView::query()->count())->toBe(0);
+});
+
+test('logged in users without panel access are counted as visits', function () {
+    config(['app.admin_emails' => ['otra@example.com']]);
+
+    $this->actingAs(User::factory()->create())->withHeaders(['User-Agent' => DESKTOP_CHROME])->get('/')->assertOk();
+
+    expect(PageView::query()->count())->toBe(1);
 });
 
 test('missing pages are not recorded', function () {

@@ -16,7 +16,7 @@ class VisitsOverview extends StatsOverviewWidget
 
     protected ?string $heading = 'Visitas';
 
-    protected ?string $description = 'Páginas vistas del sitio público (sin contarme a mí ni a los bots).';
+    protected ?string $description = 'Páginas vistas del sitio público (sin contar a quienes administran el sitio ni a los bots).';
 
     protected ?string $pollingInterval = null;
 

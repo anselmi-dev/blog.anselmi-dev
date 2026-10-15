@@ -7,6 +7,7 @@ namespace App\Http\Middleware;
 use App\Actions\Analytics\RecordPageView;
 use App\Support\UserAgent;
 use Closure;
+use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,16 +38,24 @@ class TrackPageView
     }
 
     /**
-     * Solo páginas HTML que respondieron bien, vistas por personas que no soy yo.
+     * Solo páginas HTML que respondieron bien, vistas por personas que no
+     * administran el sitio (quien puede entrar al panel no suma visitas).
      */
     private function shouldRecord(Request $request, Response $response): bool
     {
         return $request->isMethod('GET')
             && $response->getStatusCode() === 200
             && str_contains((string) $response->headers->get('Content-Type'), 'text/html')
-            && $request->user() === null
+            && ! $this->isAdmin($request)
             && ! $this->isPrefetch($request)
             && ! UserAgent::isBot($request->userAgent());
+    }
+
+    private function isAdmin(Request $request): bool
+    {
+        $user = $request->user();
+
+        return $user instanceof FilamentUser && $user->canAccessPanel(filament()->getPanel('admin'));
     }
 
     private function isPrefetch(Request $request): bool
