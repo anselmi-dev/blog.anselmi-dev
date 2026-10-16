@@ -314,6 +314,8 @@ test('a photo in the viewer can be shared or downloaded as an image card', funct
         ->assertSeeHtml('photoShare(')
         ->assertSee('Descargar imagen')
         ->assertSee('Compartir')
+        ->assertSee('Historia')
+        ->assertSeeHtml('typographyNote')
         ->assertSeeHtml('Muelle de la Islita')
         ->assertSeeHtml('ISO 100')
         ->assertSeeHtml('NIKON Z50_2')

@@ -229,6 +229,33 @@
                                 'site' => \Illuminate\Support\Str::after((string) parse_url(config('app.url'), PHP_URL_HOST), 'www.'),
                                 'label' => trim(__('Galería').(filled($lb['category'] ?? null) ? ' · '.$lb['category'] : '')),
                             ];
+
+                            $author = \App\Models\Setting::site()['author_name'] ?? null;
+                            $dateParts = explode(' ', (string) ($lb['released_at'] ?? ''), 2);
+                            $shareCard['story'] = [
+                                'kicker' => $lb['location'] ?? ($lb['category'] ?? null),
+                                'description' => $lb['description'] ?? null,
+                                'place' => filled($lb['location'] ?? null) ? trim(\Illuminate\Support\Str::before($lb['location'], ',')) : ($lb['category'] ?? null),
+                                'camera' => $lb['camera'] ?? null,
+                                'aperture' => $lb['aperture'] ?? null,
+                                'focal' => $lb['focal_length'] ?? null,
+                                'iso' => filled($lb['iso'] ?? null) ? 'ISO '.$lb['iso'] : null,
+                                'technique' => implode(' · ', array_filter([$lb['shutter'] ?? null, $lb['focal_length'] ?? null])),
+                                'day' => $dateParts[0] ?? null,
+                                'month' => $dateParts[1] ?? null,
+                                'tags' => array_values($lb['tags'] ?? []),
+                                'credit' => filled($author) ? __('por :author', ['author' => $author]) : $shareCard['site'],
+                                'labels' => [
+                                    'color' => __('Color'),
+                                    'typography' => __('Tipografía'),
+                                    'typographyNote' => __('La letra del sitio'),
+                                    'page' => __('Galería'),
+                                    'button' => __('ver galería'),
+                                    'nav' => [__('INICIO'), __('SOBRE MÍ'), __('GALERÍA'), __('CONTACTO')],
+                                    'original' => __('foto original'),
+                                    'thanks' => __('Gracias por ver'),
+                                ],
+                            ];
                         @endphp
 
                         <div
@@ -238,9 +265,28 @@
                                 'failed' => __('No se pudo generar la imagen'),
                                 'failedHint' => __('Probá de nuevo en unos segundos.'),
                             ]))"
-                            class="flex flex-wrap gap-2 border-t border-zinc-200/90 pt-4"
+                            class="flex flex-wrap items-center gap-2 border-t border-zinc-200/90 pt-4"
                             data-photo-share
                         >
+                            <div class="me-1 inline-flex rounded-full bg-zinc-100 p-1 text-xs font-semibold" role="radiogroup" aria-label="{{ __('Formato de la imagen') }}">
+                                <button
+                                    type="button"
+                                    role="radio"
+                                    x-on:click="format = 'story'"
+                                    x-bind:aria-checked="format === 'story'"
+                                    x-bind:class="format === 'story' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-500 hover:text-zinc-800'"
+                                    class="cursor-pointer rounded-full px-3 py-1.5 transition"
+                                >{{ __('Historia') }}</button>
+                                <button
+                                    type="button"
+                                    role="radio"
+                                    x-on:click="format = 'post'"
+                                    x-bind:aria-checked="format === 'post'"
+                                    x-bind:class="format === 'post' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-500 hover:text-zinc-800'"
+                                    class="cursor-pointer rounded-full px-3 py-1.5 transition"
+                                >{{ __('Post') }}</button>
+                            </div>
+
                             <button
                                 type="button"
                                 x-show="canShare"

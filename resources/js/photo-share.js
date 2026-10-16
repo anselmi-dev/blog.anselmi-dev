@@ -4,9 +4,14 @@
  * en un <canvas>, sin librerías, y la comparte con el menú del sistema o la
  * descarga como PNG.
  *
- * Uso (Alpine): x-data="photoShare(@js($datos))", con
- *   { image, title, date, location, camera, technique: [], url, site, label }
+ * Dos formatos: "post" (1080 × 1350) y "story" (historia, 1080 × 1920,
+ * ver photo-story.js).
+ *
+ * Uso (Alpine): x-data="photoShare(@js($datos), @js($mensajes))", con
+ *   { image, title, date, location, camera, technique: [], url, site, label, story: {...} }
  */
+
+import { renderStoryCard } from './photo-story';
 
 const WIDTH = 1080;
 const HEIGHT = 1350;
@@ -20,7 +25,7 @@ const COLORS = {
     line: 'rgba(24, 24, 27, 0.12)',
 };
 
-function fontFamily() {
+export function fontFamily() {
     return getComputedStyle(document.body).fontFamily || 'system-ui, sans-serif';
 }
 
@@ -39,7 +44,7 @@ function sameOriginUrl(src) {
     return url.href;
 }
 
-async function loadImage(src) {
+export async function loadImage(src) {
     const response = await fetch(sameOriginUrl(src), { credentials: 'same-origin' });
 
     if (! response.ok) {
@@ -49,12 +54,12 @@ async function loadImage(src) {
     return createImageBitmap(await response.blob());
 }
 
-function roundedRect(context, x, y, width, height, radius) {
+export function roundedRect(context, x, y, width, height, radius) {
     context.beginPath();
     context.roundRect(x, y, width, height, radius);
 }
 
-function wrapLines(context, text, maxWidth, maxLines) {
+export function wrapLines(context, text, maxWidth, maxLines) {
     const words = String(text).split(/\s+/).filter(Boolean);
     const lines = [];
     let current = '';
@@ -93,15 +98,15 @@ function wrapLines(context, text, maxWidth, maxLines) {
 /**
  * Dibuja la foto recortada (cover) dentro de un rectángulo redondeado.
  */
-function drawPhoto(context, bitmap, x, y, width, height) {
+export function drawPhoto(context, bitmap, x, y, width, height, radius = 36, focusY = 0.5) {
     const scale = Math.max(width / bitmap.width, height / bitmap.height);
     const sourceWidth = width / scale;
     const sourceHeight = height / scale;
     const sourceX = (bitmap.width - sourceWidth) / 2;
-    const sourceY = (bitmap.height - sourceHeight) / 2;
+    const sourceY = (bitmap.height - sourceHeight) * focusY;
 
     context.save();
-    roundedRect(context, x, y, width, height, 36);
+    roundedRect(context, x, y, width, height, radius);
     context.clip();
     context.drawImage(bitmap, sourceX, sourceY, sourceWidth, sourceHeight, x, y, width, height);
     context.restore();
@@ -227,7 +232,7 @@ export async function renderPhotoCard(data) {
     });
 }
 
-function fileName(title) {
+function fileName(title, suffix = '') {
     const slug = String(title || 'foto')
         .normalize('NFD')
         .replace(/[̀-ͯ]/g, '')
@@ -235,7 +240,7 @@ function fileName(title) {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
 
-    return `${slug || 'foto'}.png`;
+    return `${slug || 'foto'}${suffix}.png`;
 }
 
 function download(blob, name) {
@@ -254,6 +259,7 @@ export function initPhotoShare() {
         window.Alpine.data('photoShare', (data, messages = {}) => ({
             busy: false,
             canShare: false,
+            format: 'story',
 
             init() {
                 try {
@@ -265,9 +271,12 @@ export function initPhotoShare() {
             },
 
             async build() {
-                const blob = await renderPhotoCard(data);
+                const isStory = this.format === 'story';
+                const blob = isStory
+                    ? await renderStoryCard({ image: data.image, title: data.title, ...data.story })
+                    : await renderPhotoCard(data);
 
-                return new File([blob], fileName(data.title), { type: 'image/png' });
+                return new File([blob], fileName(data.title, isStory ? '-historia' : ''), { type: 'image/png' });
             },
 
             async share() {

@@ -211,5 +211,19 @@
     "Generando…": "Generating…",
     "Imagen descargada": "Image downloaded",
     "No se pudo generar la imagen": "Couldn't create the image",
-    "Probá de nuevo en unos segundos.": "Try again in a few seconds."
+    "Probá de nuevo en unos segundos.": "Try again in a few seconds.",
+    "por :author": "by :author",
+    "Color": "Color",
+    "Tipografía": "Typography",
+    "La letra del sitio": "The site's typeface",
+    "ver galería": "see gallery",
+    "INICIO": "HOME",
+    "SOBRE MÍ": "ABOUT",
+    "GALERÍA": "GALLERY",
+    "CONTACTO": "CONTACT",
+    "foto original": "original photo",
+    "Gracias por ver": "Thanks for watching",
+    "Formato de la imagen": "Image format",
+    "Historia": "Story",
+    "Post": "Post"
 }
