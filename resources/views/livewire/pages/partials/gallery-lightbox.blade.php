@@ -243,17 +243,10 @@
                                 'technique' => implode(' · ', array_filter([$lb['shutter'] ?? null, $lb['focal_length'] ?? null])),
                                 'day' => $dateParts[0] ?? null,
                                 'month' => $dateParts[1] ?? null,
-                                'tags' => array_values($lb['tags'] ?? []),
                                 'credit' => filled($author) ? __('por :author', ['author' => $author]) : $shareCard['site'],
                                 'labels' => [
                                     'color' => __('Color'),
-                                    'typography' => __('Tipografía'),
-                                    'typographyNote' => __('La letra del sitio'),
-                                    'page' => __('Galería'),
-                                    'button' => __('ver galería'),
-                                    'nav' => [__('INICIO'), __('SOBRE MÍ'), __('GALERÍA'), __('CONTACTO')],
                                     'original' => __('foto original'),
-                                    'thanks' => __('Gracias por ver'),
                                 ],
                             ];
                         @endphp
