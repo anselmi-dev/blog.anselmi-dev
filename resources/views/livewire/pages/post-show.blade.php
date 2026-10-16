@@ -72,5 +72,14 @@
                 @endforeach
             </div>
         @endif
+
+        <section
+            data-reveal-item
+            class="flex flex-col gap-4 border-t border-zinc-200/90 pt-6 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-800"
+            aria-label="{{ __('Compartir este post') }}"
+        >
+            <p class="text-base font-semibold text-zinc-900 dark:text-zinc-100">{{ __('¿Te gustó? Compartilo') }}</p>
+            <x-share-buttons :url="url()->current()" :title="$entry['title'] ?? ''" :text="$entry['excerpt'] ?? null" />
+        </section>
     </div>
 </div>

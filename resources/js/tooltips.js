@@ -83,6 +83,12 @@ function position() {
         return;
     }
 
+    if (! activeTrigger.isConnected) {
+        hide();
+
+        return;
+    }
+
     const rect = activeTrigger.getBoundingClientRect();
     const width = bubble.offsetWidth;
     const height = bubble.offsetHeight;
@@ -106,9 +112,13 @@ function position() {
     bubble.style.transform = `translate3d(${Math.round(left)}px, ${Math.round(top)}px, 0)`;
 }
 
-function schedulePosition() {
-    cancelAnimationFrame(frame);
-    frame = requestAnimationFrame(position);
+/**
+ * Mientras está visible, sigue al elemento en cada cuadro: así acompaña el
+ * scroll y las animaciones de entrada que mueven el elemento.
+ */
+function follow() {
+    position();
+    frame = requestAnimationFrame(follow);
 }
 
 function show(trigger) {
@@ -136,8 +146,8 @@ function show(trigger) {
 
     requestAnimationFrame(() => bubble?.classList.add('tooltip-visible'));
 
-    window.addEventListener('scroll', schedulePosition, { passive: true, capture: true });
-    window.addEventListener('resize', schedulePosition, { passive: true });
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(follow);
 }
 
 function hide() {
@@ -151,9 +161,7 @@ function hide() {
     activeTrigger = null;
     bubble.classList.remove('tooltip-visible');
     bubble.hidden = true;
-
-    window.removeEventListener('scroll', schedulePosition, { capture: true });
-    window.removeEventListener('resize', schedulePosition);
+    cancelAnimationFrame(frame);
 }
 
 function showSoon(trigger) {

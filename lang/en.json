@@ -215,5 +215,12 @@
     "por :author": "by :author",
     "Formato de la imagen": "Image format",
     "Historia": "Story",
-    "Post": "Post"
+    "Post": "Post",
+    "Compartir este post": "Share this post",
+    "¿Te gustó? Compartilo": "Liked it? Share it",
+    "Copiar enlace": "Copy link",
+    "Compartir en :network": "Share on :network",
+    "Enlace copiado": "Link copied",
+    "Ya podés pegarlo donde quieras.": "You can paste it anywhere now.",
+    "No se pudo copiar el enlace": "Couldn't copy the link"
 }
