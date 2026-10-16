@@ -205,5 +205,11 @@
     "Tu navegador bloqueó el portapapeles. Seleccioná el código y copialo a mano.": "Your browser blocked the clipboard. Select the code and copy it manually.",
     "En construcción": "Under construction",
     "Sitio en construcción": "Site under construction",
-    "Estoy renovando algunas secciones, así que puede que encuentres cosas a medio terminar.": "I'm reworking a few sections, so you might run into some unfinished bits."
+    "Estoy renovando algunas secciones, así que puede que encuentres cosas a medio terminar.": "I'm reworking a few sections, so you might run into some unfinished bits.",
+    "Compartir": "Share",
+    "Descargar imagen": "Download image",
+    "Generando…": "Generating…",
+    "Imagen descargada": "Image downloaded",
+    "No se pudo generar la imagen": "Couldn't create the image",
+    "Probá de nuevo en unos segundos.": "Try again in a few seconds."
 }

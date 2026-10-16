@@ -6,6 +6,7 @@ import { initMotion } from './motion';
 import { initNotifications } from './notifications';
 import { initPageLoaders } from './page-loader';
 import { initPageTransition } from './page-transition';
+import { initPhotoShare } from './photo-share';
 import { initToolsWheels } from './tools-wheel';
 import { initTooltips } from './tooltips';
 
@@ -37,6 +38,7 @@ function boot(root = document) {
 initPageTransition();
 initNotifications();
 initTooltips();
+initPhotoShare();
 
 document.addEventListener('DOMContentLoaded', () => boot());
 

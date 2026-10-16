@@ -292,3 +292,31 @@ test('deleting a photo, video or quote removes it from its collections', functio
 
     expect(Gallery::query()->count())->toBe(0);
 });
+
+test('a photo in the viewer can be shared or downloaded as an image card', function () {
+    app()->setLocale('es');
+    $collection = Collection::create(['name' => 'Rambla', 'slug' => 'rambla']);
+    addToCollection($collection, Media::create([
+        'title' => 'Muelle de la Islita',
+        'category' => 'Fotografía',
+        'location' => 'Montevideo, Uruguay',
+        'camera' => 'NIKON Z50_2',
+        'iso' => 100,
+        'aperture' => 'f/5.0',
+        'width' => 1200,
+        'height' => 800,
+    ]), 0);
+    addToCollection($collection, Video::factory()->withPoster()->create(['title' => 'Olas']), 1);
+
+    Livewire::test(GalleryPage::class, ['slug' => 'rambla'])
+        ->call('openLightbox', 0)
+        ->assertSeeHtml('data-photo-share')
+        ->assertSeeHtml('photoShare(')
+        ->assertSee('Descargar imagen')
+        ->assertSee('Compartir')
+        ->assertSeeHtml('Muelle de la Islita')
+        ->assertSeeHtml('ISO 100')
+        ->assertSeeHtml('NIKON Z50_2')
+        ->call('openLightbox', 1)
+        ->assertDontSeeHtml('data-photo-share');
+});

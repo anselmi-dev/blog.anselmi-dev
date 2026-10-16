@@ -210,6 +210,60 @@
                             @endforeach
                         </div>
                     @endif
+
+                    @unless ($lbIsVideo)
+                        @php
+                            $shareCard = [
+                                'image' => $lb['medium_url'] ?? $lbUrl,
+                                'title' => $lb['title'],
+                                'date' => $lb['released_at'] ?? null,
+                                'location' => $lb['location'] ?? null,
+                                'camera' => $lb['camera'] ?? null,
+                                'technique' => array_values(array_filter([
+                                    filled($lb['iso'] ?? null) ? 'ISO '.$lb['iso'] : null,
+                                    $lb['aperture'] ?? null,
+                                    $lb['shutter'] ?? null,
+                                    $lb['focal_length'] ?? null,
+                                ])),
+                                'url' => url()->current(),
+                                'site' => \Illuminate\Support\Str::after((string) parse_url(config('app.url'), PHP_URL_HOST), 'www.'),
+                                'label' => trim(__('Galería').(filled($lb['category'] ?? null) ? ' · '.$lb['category'] : '')),
+                            ];
+                        @endphp
+
+                        <div
+                            wire:key="lightbox-share-{{ $lightboxIndex }}"
+                            x-data="photoShare(@js($shareCard), @js([
+                                'saved' => __('Imagen descargada'),
+                                'failed' => __('No se pudo generar la imagen'),
+                                'failedHint' => __('Probá de nuevo en unos segundos.'),
+                            ]))"
+                            class="flex flex-wrap gap-2 border-t border-zinc-200/90 pt-4"
+                            data-photo-share
+                        >
+                            <button
+                                type="button"
+                                x-show="canShare"
+                                x-cloak
+                                x-on:click="share()"
+                                x-bind:disabled="busy"
+                                class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 disabled:cursor-wait disabled:opacity-70"
+                            >
+                                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m8 7 4-4 4 4"/><path d="M20 14v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-5"/></svg>
+                                <span x-text="busy ? @js(__('Generando…')) : @js(__('Compartir'))">{{ __('Compartir') }}</span>
+                            </button>
+                            <button
+                                type="button"
+                                x-on:click="save()"
+                                x-bind:disabled="busy"
+                                x-bind:class="canShare ? 'border border-zinc-300 bg-white text-zinc-900 hover:border-zinc-400' : 'bg-zinc-900 text-white hover:bg-zinc-700'"
+                                class="inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 disabled:cursor-wait disabled:opacity-70"
+                            >
+                                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m16 11-4 4-4-4"/><path d="M20 15v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"/></svg>
+                                <span x-text="busy && ! canShare ? @js(__('Generando…')) : @js(__('Descargar imagen'))">{{ __('Descargar imagen') }}</span>
+                            </button>
+                        </div>
+                    @endunless
                 </footer>
             @endif
         </div>
