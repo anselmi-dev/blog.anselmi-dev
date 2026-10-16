@@ -1,52 +1,14 @@
 /**
  * Formato historia de Instagram (1080 × 1920) para compartir una foto de la
  * galería: la foto de fondo y, centrada encima, una ficha redondeada con la
- * foto, el título, la técnica, la fecha y la paleta de colores sacada de la
- * propia foto. Todo en <canvas>, sin librerías.
+ * foto, el título, el lugar, la exposición en badges y la paleta de colores
+ * de la propia foto en puntos. Todo en <canvas>, sin librerías.
  */
 
 import { drawPhoto, fontFamily, loadImage, roundedRect, wrapLines } from './photo-share';
 
 const WIDTH = 1080;
 const HEIGHT = 1920;
-
-const ICONS = {
-    aperture: ['M2 12a10 10 0 1 0 20 0 10 10 0 1 0-20 0', 'm14.31 8 5.74 9.94', 'M9.69 8h11.48', 'm7.38 12 5.74-9.94', 'M9.69 16 3.95 6.06', 'M14.31 16H2.83', 'm16.62 12-5.74 9.94'],
-};
-
-function drawIcon(context, name, x, y, size, color, lineWidth = 2) {
-    context.save();
-    context.translate(x, y);
-    context.scale(size / 24, size / 24);
-    context.strokeStyle = color;
-    context.lineWidth = lineWidth;
-    context.lineCap = 'round';
-    context.lineJoin = 'round';
-
-    for (const path of ICONS[name]) {
-        context.stroke(new Path2D(path));
-    }
-
-    context.restore();
-}
-
-/**
- * Texto con letras separadas (como "H O M E  P A G E").
- */
-function spacedText(context, text, x, y, spacing, align = 'left') {
-    const letters = [...text];
-    const width = letters.reduce((total, letter) => total + context.measureText(letter).width, 0) + spacing * (letters.length - 1);
-    let cursor = align === 'center' ? x - width / 2 : align === 'right' ? x - width : x;
-
-    for (const letter of letters) {
-        context.fillText(letter, cursor, y);
-        cursor += context.measureText(letter).width + spacing;
-    }
-}
-
-function toHex([red, green, blue]) {
-    return `#${[red, green, blue].map((value) => value.toString(16).padStart(2, '0')).join('').toUpperCase()}`;
-}
 
 function distance(a, b) {
     return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
@@ -141,8 +103,7 @@ export async function renderStoryCard(data) {
     const inset = 16;
     const heroHeight = 520;
     const infoHeight = 230;
-    const paletteHeight = 206;
-    const cardHeight = inset + heroHeight + 30 + infoHeight + paletteHeight;
+    const cardHeight = inset + heroHeight + 30 + infoHeight;
     const cardY = Math.round((HEIGHT - cardHeight) / 2);
 
     context.save();
@@ -201,94 +162,68 @@ export async function renderStoryCard(data) {
         }
     }
 
-    // Técnica, lugar y fecha.
-    const bottomY = heroY + heroHeight + 30;
+    // Lugar, cámara y fecha; abajo la exposición en badges y los colores en puntos.
+    const infoX = heroX + 16;
+    const infoWidth = heroWidth - 32;
+    const infoY = heroY + heroHeight + 30;
 
-    drawIcon(context, 'aperture', heroX + 40, bottomY, 64, '#f2c418', 2.4);
-
-    context.fillStyle = '#4a3b33';
-    context.font = `700 54px ${family}`;
-    context.fillText(data.aperture || data.focal || '', heroX + 8, bottomY + 140);
-    context.font = `500 38px ${family}`;
-    context.fillText(data.iso || '', heroX + 8, bottomY + 186);
-
-    const middleX = heroX + 260;
-    const middleWidth = 360;
-
-    context.fillStyle = '#4a3b33';
-    const sectionTitle = data.place || data.title || '';
-    fitFont(context, sectionTitle, 700, family, 42, middleWidth, 28);
-    context.fillText(wrapLines(context, sectionTitle, middleWidth, 1)[0] || '', middleX, bottomY + 82);
+    context.fillStyle = '#3f342e';
+    const place = data.place || data.title || '';
+    fitFont(context, place, 700, family, 40, infoWidth, 28);
+    context.fillText(wrapLines(context, place, infoWidth, 1)[0] || '', infoX, infoY + 44);
 
     context.font = `500 24px ${family}`;
-    context.fillStyle = '#5c4f48';
-    let detailY = bottomY + 124;
+    context.fillStyle = '#6b5e57';
+    const details = [data.camera, [data.date, data.credit].filter(Boolean).join(' · ')].filter(Boolean);
+    let detailY = infoY + 86;
 
-    for (const line of [data.camera, data.technique].filter(Boolean)) {
-        context.fillText(wrapLines(context, line, middleWidth, 1)[0], middleX, detailY);
+    for (const line of details) {
+        context.fillText(wrapLines(context, line, infoWidth, 1)[0], infoX, detailY);
         detailY += 34;
     }
 
-    const boxX = heroX + heroWidth - 160;
-    const boxY = bottomY + 40;
+    const rowY = infoY + 156;
+    const badgeHeight = 44;
 
-    context.strokeStyle = '#2b2b2b';
-    context.lineWidth = 2;
-    context.beginPath();
-    context.moveTo(boxX - 120, bottomY + 6);
-    context.lineTo(boxX - 40, bottomY + 6);
-    context.stroke();
-
-    context.fillStyle = '#2b2b2b';
-    context.font = `600 18px ${family}`;
-    context.fillText(data.labels?.original || 'foto original', boxX - 30, bottomY + 2);
-    context.fillText(data.credit || '', boxX - 30, bottomY + 26);
-
-    context.lineWidth = 3;
-    context.strokeStyle = '#5b6d7a';
-    roundedRect(context, boxX, boxY, 130, 160, 18);
-    context.stroke();
-    context.fillStyle = '#2b2b2b';
-    context.font = `700 64px ${family}`;
-    context.textAlign = 'center';
-    context.fillText(data.day || '', boxX + 65, boxY + 92);
-    context.font = `600 18px ${family}`;
-    context.fillText((data.month || '').toUpperCase(), boxX + 65, boxY + 130);
-    context.textAlign = 'left';
-
-    // Colores de la foto, dentro de la ficha.
-    const paletteY = bottomY + infoHeight;
-
-    context.strokeStyle = 'rgba(43, 43, 43, 0.12)';
-    context.lineWidth = 2;
-    context.beginPath();
-    context.moveTo(heroX + 8, paletteY);
-    context.lineTo(heroX + heroWidth - 8, paletteY);
-    context.stroke();
-
-    context.fillStyle = '#2b2b2b';
-    context.font = `700 22px ${family}`;
-    spacedText(context, (data.labels?.color || 'COLOR').toUpperCase(), heroX + 8, paletteY + 52, 3);
-
-    context.textAlign = 'center';
+    // Colores: puntos chicos a la derecha.
+    const dotRadius = 13;
+    const dotGap = 10;
+    const dotsWidth = palette.length * dotRadius * 2 + Math.max(0, palette.length - 1) * dotGap;
+    const dotsStart = infoX + infoWidth - dotsWidth;
 
     palette.forEach((color, index) => {
-        const centerX = heroX + 8 + (index + 0.5) * ((heroWidth - 16) / palette.length);
-
         context.beginPath();
-        context.arc(centerX, paletteY + 110, 30, 0, Math.PI * 2);
+        context.arc(dotsStart + dotRadius + index * (dotRadius * 2 + dotGap), rowY + badgeHeight / 2, dotRadius, 0, Math.PI * 2);
         context.fillStyle = `rgb(${color.join(',')})`;
         context.fill();
-        context.lineWidth = 2;
-        context.strokeStyle = 'rgba(43, 43, 43, 0.15)';
+        context.lineWidth = 1.5;
+        context.strokeStyle = 'rgba(43, 43, 43, 0.18)';
         context.stroke();
-
-        context.fillStyle = '#5c4f48';
-        context.font = `600 18px ${family}`;
-        context.fillText(toHex(color), centerX, paletteY + 170);
     });
 
-    context.textAlign = 'left';
+    // Exposición: badges minimalistas a la izquierda, sin pisar los puntos.
+    context.font = `600 21px ${family}`;
+    context.textBaseline = 'middle';
+    let badgeX = infoX;
+
+    for (const value of (data.exposure || []).filter(Boolean)) {
+        const width = context.measureText(value).width + 32;
+
+        if (badgeX + width > dotsStart - 20) {
+            break;
+        }
+
+        context.lineWidth = 1.5;
+        context.strokeStyle = 'rgba(43, 43, 43, 0.2)';
+        roundedRect(context, badgeX, rowY, width, badgeHeight, badgeHeight / 2);
+        context.stroke();
+
+        context.fillStyle = '#3f342e';
+        context.fillText(value, badgeX + 16, rowY + badgeHeight / 2 + 1);
+        badgeX += width + 10;
+    }
+
+    context.textBaseline = 'alphabetic';
 
     return new Promise((resolve, reject) => {
         canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('No se pudo generar la imagen.'))), 'image/png');

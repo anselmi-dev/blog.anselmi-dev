@@ -231,23 +231,19 @@
                             ];
 
                             $author = \App\Models\Setting::site()['author_name'] ?? null;
-                            $dateParts = explode(' ', (string) ($lb['released_at'] ?? ''), 2);
                             $shareCard['story'] = [
                                 'kicker' => $lb['location'] ?? ($lb['category'] ?? null),
                                 'description' => $lb['description'] ?? null,
                                 'place' => filled($lb['location'] ?? null) ? trim(\Illuminate\Support\Str::before($lb['location'], ',')) : ($lb['category'] ?? null),
                                 'camera' => $lb['camera'] ?? null,
-                                'aperture' => $lb['aperture'] ?? null,
-                                'focal' => $lb['focal_length'] ?? null,
-                                'iso' => filled($lb['iso'] ?? null) ? 'ISO '.$lb['iso'] : null,
-                                'technique' => implode(' · ', array_filter([$lb['shutter'] ?? null, $lb['focal_length'] ?? null])),
-                                'day' => $dateParts[0] ?? null,
-                                'month' => $dateParts[1] ?? null,
+                                'date' => $lb['released_at'] ?? null,
+                                'exposure' => array_values(array_filter([
+                                    $lb['aperture'] ?? null,
+                                    $lb['shutter'] ?? null,
+                                    filled($lb['iso'] ?? null) ? 'ISO '.$lb['iso'] : null,
+                                    $lb['focal_length'] ?? null,
+                                ])),
                                 'credit' => filled($author) ? __('por :author', ['author' => $author]) : $shareCard['site'],
-                                'labels' => [
-                                    'color' => __('Color'),
-                                    'original' => __('foto original'),
-                                ],
                             ];
                         @endphp
 
