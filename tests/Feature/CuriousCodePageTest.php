@@ -13,12 +13,22 @@ test('curious code page lists projects with the disclaimer', function () {
         ->assertSee('ascii-sharks');
 });
 
-test('curious code show page links to the original project', function () {
+test('curious code show page links to the original project and mounts its demo', function () {
     $response = $this->get(route('curious-code.show', 'ascii-sharks'));
 
     $response->assertOk()
         ->assertSee('ascii-sharks')
-        ->assertSee('https://github.com/stackedlol/ascii-sharks', false);
+        ->assertSee('https://github.com/stackedlol/ascii-sharks', false)
+        ->assertSee('data-ascii-ocean', false)
+        ->assertSee('Animación del proyecto original. Mové el mouse sobre el agua o hacé clic para chapotear.', false);
+});
+
+test('curious code show page translates the ascii sharks demo', function () {
+    $this->get(route('en.curious-code.show', 'ascii-sharks'))
+        ->assertOk()
+        ->assertSee('data-ascii-ocean', false)
+        ->assertSee('Animation from the original project. Move the mouse over the water or click to splash.', false)
+        ->assertSeeText('The animation on this page is the original project\'s demo.');
 });
 
 test('curious code show page 404s for an unknown slug', function () {

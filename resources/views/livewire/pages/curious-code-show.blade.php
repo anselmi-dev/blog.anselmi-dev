@@ -28,7 +28,7 @@
 
 <div class="pb-16 pt-4 sm:pb-20 sm:pt-6 lg:pb-24">
     <div
-        class="mx-auto max-w-3xl"
+        class="mx-auto max-w-5xl"
         data-reveal="fade-up"
         data-reveal-stagger="0.1"
         data-reveal-duration="0.85"
@@ -46,7 +46,7 @@
         {{-- Meta --}}
         <dl
             data-reveal-item
-            class="mb-10 grid grid-cols-2 gap-6 border-y border-zinc-200 py-6 sm:gap-8"
+            class="mb-10 grid max-w-3xl grid-cols-2 gap-6 border-y border-zinc-200 py-6 sm:gap-8"
         >
             <div>
                 <dt class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ __('Autor') }}</dt>
@@ -71,7 +71,21 @@
             </div>
         </dl>
 
-        @if (! empty($project['ascii_art']))
+        @if (($project['demo'] ?? null) === 'ascii-ocean')
+            <div data-reveal-item class="mb-10">
+                <div class="overflow-hidden rounded-2xl border border-zinc-800 bg-black shadow-inner">
+                    <canvas
+                        data-ascii-ocean
+                        role="img"
+                        aria-label="{{ __('Tiburones y peces dibujados en ASCII') }}"
+                        class="block h-[min(70vh,32rem)] w-full touch-none font-folio-mono"
+                    ></canvas>
+                </div>
+                <p class="mt-2 text-xs text-zinc-500">
+                    {{ __('Animación del proyecto original. Mové el mouse sobre el agua o hacé clic para chapotear.') }}
+                </p>
+            </div>
+        @elseif (! empty($project['ascii_art']))
             <div data-reveal-item class="mb-10">
                 <div
                     role="img"
@@ -91,7 +105,7 @@
         @endif
 
         @if (! empty($project['description']))
-            <div data-reveal-item class="space-y-4 text-base leading-relaxed text-zinc-600">
+            <div data-reveal-item class="max-w-3xl space-y-4 text-base leading-relaxed text-zinc-600">
                 @foreach ($project['description'] as $paragraph)
                     <p>{{ $paragraph }}</p>
                 @endforeach

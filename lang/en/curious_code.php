@@ -15,7 +15,7 @@ return [
         'excerpt' => 'Sharks and fish drawn with ASCII characters, animated on a canvas, written in TypeScript with zero dependencies.',
         'description' => [
             'ascii-sharks draws sharks and fish as ASCII art inside a canvas, with an engine (OceanEngine) you point at a species and shark size to generate the animation.',
-            'It is written in TypeScript with zero external dependencies, and ships a demo you can run in the browser with `npm install && npm run dev`.',
+            'It is written in TypeScript with zero external dependencies. The animation on this page is the original project\'s demo.',
         ],
     ],
 

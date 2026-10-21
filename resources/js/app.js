@@ -1,4 +1,5 @@
 import { createIcons, icons } from 'lucide';
+import { initAsciiOceans } from './ascii-ocean';
 import { initBookCarousels } from './book-carousel';
 import { initCustomCursor } from './custom-cursor';
 import { initLogoAnimation } from './logo-animation';
@@ -28,6 +29,7 @@ function initLucideIcons(root = document) {
 
 function boot(root = document) {
     initLucideIcons(root);
+    initAsciiOceans(root);
     initMotion(root);
     initBookCarousels(root);
     initCustomCursor(root);

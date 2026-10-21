@@ -16,8 +16,9 @@ return [
             'excerpt' => 'Tiburones y peces dibujados con caracteres ASCII, animados en un canvas, en TypeScript y sin dependencias.',
             'description' => [
                 'ascii-sharks dibuja tiburones y peces como arte ASCII dentro de un canvas, con un motor (OceanEngine) al que le indicás la especie y el tamaño del tiburón para generar la animación.',
-                'Está escrito en TypeScript, sin dependencias externas, e incluye una demo que corre en el navegador con `npm install && npm run dev`.',
+                'Está escrito en TypeScript, sin dependencias externas. La animación de esta página es la demo del proyecto original.',
             ],
+            'demo' => 'ascii-ocean',
             'author' => 'stackedlol',
             'author_url' => 'https://github.com/stackedlol',
             'repo_url' => 'https://github.com/stackedlol/ascii-sharks',
