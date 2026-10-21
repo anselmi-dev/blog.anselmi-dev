@@ -39,6 +39,7 @@ final class SiteMenu
                 'title' => __('Explorar'),
                 'links' => array_values(array_filter([
                     self::link(__('Proyectos'), __('Trabajos y casos de estudio'), 'projects', 'briefcase'),
+                    self::link(__('Código curioso'), __('Proyectos ajenos que me parecieron curiosos'), 'curious-code', 'sparkles'),
                     $flags['hasPublishedPosts'] ? self::link(__('Blog'), __('Notas sobre cómo trabajo'), 'blog', 'notebook-pen') : null,
                     $flags['hasPublishedGalleryPhotos'] ? self::link(__('Galería'), __('Lo que veo cuando no estoy codando'), 'gallery', 'camera') : null,
                     self::hasPlaylist() ? self::link(__('Mi playlist'), __('Lo que suena mientras trabajo'), 'playlist', 'music') : null,

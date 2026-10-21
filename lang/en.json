@@ -222,5 +222,14 @@
     "Compartir en :network": "Share on :network",
     "Enlace copiado": "Link copied",
     "Ya podés pegarlo donde quieras.": "You can paste it anywhere now.",
-    "No se pudo copiar el enlace": "Couldn't copy the link"
+    "No se pudo copiar el enlace": "Couldn't copy the link",
+    "Código curioso": "Curious code",
+    "Proyectos de otras personas que me llamaron la atención y quiero dar a conocer.": "Projects made by other people that caught my attention and that I want to share.",
+    "No son proyectos míos: son una forma de mostrar mi curiosidad por lo que hacen otros desarrolladores. Cada ficha enlaza al proyecto original.": "These aren't my own projects: this is a way to show my curiosity about what other developers build. Each entry links to the original project.",
+    "Proyectos ajenos que me parecieron curiosos": "Other people's projects I found curious",
+    "Autor": "Author",
+    "Lenguaje": "Language",
+    "Este no es un proyecto mío: lo comparto porque me pareció curioso y quiero darlo a conocer. Todo el crédito es de su autor.": "This isn't my own project: I'm sharing it because I found it curious and want to spread the word. All credit goes to its author.",
+    "Ver proyecto original": "View original project",
+    "Volver a código curioso": "Back to curious code"
 }

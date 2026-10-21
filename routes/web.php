@@ -3,6 +3,8 @@
 use App\Livewire\Pages\About;
 use App\Livewire\Pages\Collections;
 use App\Livewire\Pages\Colors;
+use App\Livewire\Pages\CuriousCode;
+use App\Livewire\Pages\CuriousCodeShow;
 use App\Livewire\Pages\Faq;
 use App\Livewire\Pages\Fonts;
 use App\Livewire\Pages\Gallery;
@@ -36,6 +38,9 @@ $registerSiteRoutes = function (array $paths): void {
     Route::livewire($paths['projects'], Projects::class)->name('projects');
     Route::livewire($paths['projects'].'/{slug}', ProjectShow::class)->name('projects.show');
 
+    Route::livewire($paths['curious_code'], CuriousCode::class)->name('curious-code');
+    Route::livewire($paths['curious_code'].'/{slug}', CuriousCodeShow::class)->name('curious-code.show');
+
     Route::livewire($paths['blog'], Posts::class)->name('blog');
     Route::livewire($paths['blog'].'/{slug}', PostShow::class)->name('blog.show');
 
@@ -51,6 +56,7 @@ Route::middleware(['locale:es', 'track'])->group(fn () => $registerSiteRoutes([
     'gallery' => '/galeria',
     'playlist' => '/playlist',
     'projects' => '/proyectos',
+    'curious_code' => '/cosas-curiosas',
     'blog' => '/blog',
     'fonts' => '/servicios/fuentes',
     'colors' => '/servicios/colores',
@@ -64,6 +70,7 @@ Route::prefix('en')->name('en.')->middleware(['locale:en', 'track'])->group(fn (
     'gallery' => '/gallery',
     'playlist' => '/playlist',
     'projects' => '/projects',
+    'curious_code' => '/curious-code',
     'blog' => '/blog',
     'fonts' => '/services/fonts',
     'colors' => '/services/colors',
