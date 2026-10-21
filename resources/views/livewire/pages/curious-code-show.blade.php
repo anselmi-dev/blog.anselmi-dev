@@ -55,7 +55,7 @@
             </div>
             <div class="mx-auto mt-3 max-w-8xl">
                 <p class="text-xs text-zinc-500">
-                    {{ __('Elegí hasta cuatro especies: la primera queda más grande. Mové el mouse sobre el agua o hacé clic para chapotear.') }}
+                    {{ __('Elegí hasta cuatro especies: la primera queda más grande. La quinta reemplaza a la más antigua. Mové el mouse sobre el agua o hacé clic para chapotear.') }}
                 </p>
                 <div class="mt-3 flex flex-wrap gap-2" role="group" aria-label="{{ __('Especies de tiburón') }}">
                     @foreach ([

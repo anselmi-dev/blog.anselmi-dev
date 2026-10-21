@@ -4,6 +4,7 @@
  * Al salir (wire:navigate) hay que destruirlo: registra listeners en window.
  *
  * ?sharks=mako,tiger elige hasta cuatro especies. La primera es la más grande.
+ * Una quinta reemplaza a la más antigua.
  * Sin parámetro, el agua muestra cuatro tiburones clásicos.
  */
 
@@ -102,9 +103,11 @@ function bindRoster(entry) {
 
             const selected = entry.kinds.includes(kind)
                 ? entry.kinds.filter((item) => item !== kind)
-                : [...entry.kinds, kind];
+                : entry.kinds.length < 4
+                    ? [...entry.kinds, kind]
+                    : [...entry.kinds.slice(1), kind];
 
-            entry.kinds = (selected.length ? selected : ['classic']).slice(0, 4);
+            entry.kinds = selected.length ? selected : ['classic'];
             writeKinds(entry.kinds);
             paintKinds(root, entry.kinds);
             mountOcean(entry);
