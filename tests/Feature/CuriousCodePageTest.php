@@ -10,7 +10,8 @@ test('curious code page lists projects with the disclaimer', function () {
     $response->assertOk()
         ->assertSee('Código curioso')
         ->assertSee('No son proyectos míos')
-        ->assertSee('ascii-sharks');
+        ->assertSee('ascii-sharks')
+        ->assertSee('images/curious-code/ascii-sharks.jpg', false);
 });
 
 test('curious code show page links to the original project and mounts its demo', function () {

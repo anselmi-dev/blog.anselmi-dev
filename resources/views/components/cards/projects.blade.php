@@ -5,6 +5,7 @@
     'index' => '',
     'color' => '#E87FBF',
     'tags' => [],
+    'image' => null,
 ])
 
 @php($safeColor = \App\Support\CssColor::hexOrNull($color) ?? '#E87FBF')
@@ -22,6 +23,15 @@
         aria-hidden="true"
     ></span>
 
+    @if (filled($image))
+        <span class="relative mb-4 block min-h-40 flex-1 overflow-hidden rounded-2xl bg-black">
+            <img
+                src="{{ asset($image) }}"
+                alt=""
+                class="absolute inset-0 size-full object-cover object-top"
+            />
+        </span>
+    @else
     <svg
         class="project-card-mark size-12 origin-center transition-transform duration-500 ease-out will-change-transform group-hover:rotate-[12deg]"
         viewBox="0 0 48 48"
@@ -36,6 +46,7 @@
         <circle class="project-card-mark-piece project-card-mark-dot" style="--i: 4" cx="15" cy="33" r="5" fill="var(--card-accent)" />
         <circle class="project-card-mark-piece project-card-mark-dot" style="--i: 5" cx="33" cy="15" r="5" fill="var(--card-accent)" />
     </svg>
+    @endif
 
     <div class="mt-auto">
         <p class="mb-1.5 text-sm font-bold tracking-[0.02em] text-zinc-900">{{ $index }}.</p>

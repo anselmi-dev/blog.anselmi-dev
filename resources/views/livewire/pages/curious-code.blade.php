@@ -33,6 +33,7 @@
                     :index="$project['index']"
                     :color="$project['color']"
                     :tags="$project['tags']"
+                    :image="$project['image'] ?? null"
                 />
             @endforeach
         </div>

@@ -19,6 +19,7 @@ return [
                 'Está escrito en TypeScript, sin dependencias externas. La animación de esta página es la demo del proyecto original.',
             ],
             'demo' => 'ascii-ocean',
+            'image' => 'images/curious-code/ascii-sharks.jpg',
             'author' => 'stackedlol',
             'author_url' => 'https://github.com/stackedlol',
             'repo_url' => 'https://github.com/stackedlol/ascii-sharks',
