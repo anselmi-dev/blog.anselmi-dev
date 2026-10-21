@@ -71,24 +71,21 @@
             </div>
         </dl>
 
-        @if (($project['demo'] ?? null) === 'ascii-sharks')
+        @if (! empty($project['ascii_art']))
             <div data-reveal-item class="mb-10">
-                <p class="mb-3 font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ __('En vivo') }}</p>
                 <div
-                    data-ascii-sharks
                     role="img"
-                    aria-label="{{ __('Animación ASCII de un tiburón nadando') }}"
+                    aria-label="{{ __('Ilustración ASCII de un tiburón') }}"
                     class="overflow-x-auto rounded-2xl border border-zinc-800 bg-zinc-950 p-4 shadow-inner"
                 >
                     <pre
-                        data-ascii-sharks-screen
                         aria-hidden="true"
                         class="m-0 w-fit select-none whitespace-pre font-mono leading-[1.15] text-emerald-400"
-                        style="font-size: clamp(7px, 2.6vw, 15px);"
-                    ></pre>
+                        style="font-size: clamp(6px, 1.9vw, 13px);"
+                    >{{ $project['ascii_art'] }}</pre>
                 </div>
                 <p class="mt-2 text-xs text-zinc-500">
-                    {{ __('Mi propia versión en ASCII, inspirada en la idea del proyecto: no reproduce su código.') }}
+                    {{ __('Mi propia versión en ASCII, inspirada en la idea del proyecto: no reproduce su código ni su arte.') }}
                 </p>
             </div>
         @endif

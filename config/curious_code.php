@@ -21,7 +21,38 @@ return [
             'author' => 'stackedlol',
             'author_url' => 'https://github.com/stackedlol',
             'repo_url' => 'https://github.com/stackedlol/ascii-sharks',
-            'demo' => 'ascii-sharks',
+            // Ilustración ASCII propia (no es el arte ni el código del repo original,
+            // que no tiene licencia): silueta de tiburón generada acá con funciones
+            // geométricas simples, pensada para leerse como una "foto convertida a
+            // ASCII" al estilo del README del proyecto, pero de diseño propio.
+            'ascii_art' => <<<'ART'
+                                     *
+                                     **
+                                    ***
+                                    ***                              ***
+                                   *****                             *****
+                                   *****                            ********
+                                   ******                           *******
+                                  ********                         *******
+                          %%%################%%                    ******
+                      %#####******************####%@              ******
+                    %#*****************************##%@           *****
+                   #%******+++++++++++++++++++*********#%%       *****
+                  #*%+%@++-+---+++++++++++++++++++++++*****#%%%********
+                 #++#======---=-+++++=++++====++++++++++++++***********
+                ^.-=#======--=--========================================
+                . ...----------=-===========-------------------=========
+                    *.::-------------------------------:::-=+*%==========
+                      =:::::::---------------:::::::::=#          =======
+                         +:::::::::::::::::::::::-*%               ====
+                          +++%#+-:::::::-=+*#%
+                          ++++++
+                           +++++
+                            ++++
+                            ++++
+                             +++
+                              +
+                ART,
             'language' => 'TypeScript',
             'tags' => ['TypeScript', 'ASCII Art', 'Canvas'],
             'color' => '#dce5eb',
