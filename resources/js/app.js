@@ -1,6 +1,7 @@
 import { createIcons, icons } from 'lucide';
 import { initBookCarousels } from './book-carousel';
 import { initCustomCursor } from './custom-cursor';
+import { initImageMetadataUploads } from './image-metadata-upload';
 import { initMotion } from './motion';
 
 /**
@@ -23,12 +24,30 @@ function boot(root = document) {
     initMotion(root);
     initBookCarousels(root);
     initCustomCursor(root);
+    initImageMetadataUploads(root);
+}
+
+let interfaceRefreshQueued = false;
+
+function queueInterfaceRefresh() {
+    if (interfaceRefreshQueued) {
+        return;
+    }
+
+    interfaceRefreshQueued = true;
+
+    queueMicrotask(() => {
+        initLucideIcons();
+        initImageMetadataUploads();
+        interfaceRefreshQueued = false;
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => boot());
 
 document.addEventListener('livewire:initialized', () => {
     queueMicrotask(() => boot());
+    window.Livewire?.hook('morph.updated', queueInterfaceRefresh);
 });
 
 document.addEventListener('livewire:navigated', () => {

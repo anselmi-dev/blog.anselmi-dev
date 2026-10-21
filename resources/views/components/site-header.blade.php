@@ -3,6 +3,7 @@
         ['label' => 'Mis fuentes', 'href' => route('services.fonts'), 'navigate' => true],
         ['label' => 'Mis colores', 'href' => route('services.colors'), 'navigate' => true],
         ['label' => 'Mis herramientas', 'href' => route('services.tools'), 'navigate' => true],
+        ['label' => 'Lector EXIF', 'href' => route('services.image_metadata'), 'navigate' => true],
     ];
 
     if ($hasPublishedGalleryPhotos ?? false) {
