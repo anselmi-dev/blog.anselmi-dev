@@ -106,7 +106,7 @@
     @endif
 
     <div
-        class="mx-auto max-w-3xl"
+        class="mx-auto max-w-8xl"
         data-reveal="fade-up"
         data-reveal-stagger="0.1"
         data-reveal-duration="0.85"
