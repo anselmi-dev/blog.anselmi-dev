@@ -11,6 +11,9 @@
                 {{ $project['excerpt'] }}
             </p>
         @endif
+        <p class="mt-4 max-w-2xl rounded-2xl border border-zinc-900/10 bg-white/50 px-4 py-3 text-sm leading-relaxed text-zinc-600">
+            {{ __('Este no es un proyecto mío: lo comparto porque me pareció curioso y quiero darlo a conocer. Todo el crédito es de su autor.') }}
+        </p>
         @if (! empty($project['tags']))
             <ul class="mt-6 flex flex-wrap gap-2">
                 @foreach ($project['tags'] as $tag)
@@ -40,13 +43,6 @@
             {{ __('Volver a código curioso') }}
         </a>
 
-        <p
-            data-reveal-item
-            class="mb-8 rounded-2xl border border-zinc-200 bg-zinc-50 px-5 py-4 text-sm leading-relaxed text-zinc-600"
-        >
-            {{ __('Este no es un proyecto mío: lo comparto porque me pareció curioso y quiero darlo a conocer. Todo el crédito es de su autor.') }}
-        </p>
-
         {{-- Meta --}}
         <dl
             data-reveal-item
@@ -74,6 +70,28 @@
                 <dd class="mt-1.5 text-sm font-semibold text-zinc-900">{{ $project['language'] ?? '—' }}</dd>
             </div>
         </dl>
+
+        @if (($project['demo'] ?? null) === 'ascii-sharks')
+            <div data-reveal-item class="mb-10">
+                <p class="mb-3 font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ __('En vivo') }}</p>
+                <div
+                    data-ascii-sharks
+                    role="img"
+                    aria-label="{{ __('Animación ASCII de un tiburón nadando') }}"
+                    class="overflow-x-auto rounded-2xl border border-zinc-800 bg-zinc-950 p-4 shadow-inner"
+                >
+                    <pre
+                        data-ascii-sharks-screen
+                        aria-hidden="true"
+                        class="m-0 w-fit select-none whitespace-pre font-mono leading-[1.15] text-emerald-400"
+                        style="font-size: clamp(7px, 2.6vw, 15px);"
+                    ></pre>
+                </div>
+                <p class="mt-2 text-xs text-zinc-500">
+                    {{ __('Mi propia versión en ASCII, inspirada en la idea del proyecto: no reproduce su código.') }}
+                </p>
+            </div>
+        @endif
 
         @if (! empty($project['description']))
             <div data-reveal-item class="space-y-4 text-base leading-relaxed text-zinc-600">

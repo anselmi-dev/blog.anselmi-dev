@@ -231,5 +231,8 @@
     "Lenguaje": "Language",
     "Este no es un proyecto mío: lo comparto porque me pareció curioso y quiero darlo a conocer. Todo el crédito es de su autor.": "This isn't my own project: I'm sharing it because I found it curious and want to spread the word. All credit goes to its author.",
     "Ver proyecto original": "View original project",
-    "Volver a código curioso": "Back to curious code"
+    "Volver a código curioso": "Back to curious code",
+    "En vivo": "Live",
+    "Animación ASCII de un tiburón nadando": "ASCII animation of a swimming shark",
+    "Mi propia versión en ASCII, inspirada en la idea del proyecto: no reproduce su código.": "My own ASCII take, inspired by the project's idea: it doesn't reproduce its code."
 }

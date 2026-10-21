@@ -21,6 +21,7 @@ return [
             'author' => 'stackedlol',
             'author_url' => 'https://github.com/stackedlol',
             'repo_url' => 'https://github.com/stackedlol/ascii-sharks',
+            'demo' => 'ascii-sharks',
             'language' => 'TypeScript',
             'tags' => ['TypeScript', 'ASCII Art', 'Canvas'],
             'color' => '#dce5eb',
