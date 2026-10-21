@@ -348,8 +348,11 @@ export class AsciiRenderer {
     this.width = width;
     this.height = height;
     this.dpr = dpr;
-    this.cw = clamp(Math.round(width / 124), 8, 13);
-    this.ch = Math.round(this.cw * 1.45);
+    // The original hero capped cells at 13px, so a wide page canvas drew each
+    // shark with about twenty samples and the shape disappeared. Smaller cells
+    // give the silhouette more pixels.
+    this.cw = clamp(Math.round(width / 156), 7, 11);
+    this.ch = Math.round(this.cw * 1.4);
     this.cols = Math.ceil(width / this.cw);
     this.rows = Math.ceil(height / this.ch);
 

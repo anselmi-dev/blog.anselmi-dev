@@ -137,7 +137,9 @@ export class World {
   seed() {
     const { width: W, height: H } = this;
     const minSide = Math.min(W, H);
-    const baseLength = clamp(minSide * 0.44, 170, 430);
+    // Longer than the original hero so the extra cells still form a body you
+    // can read, instead of a small coarse smear in a wide canvas.
+    const baseLength = clamp(minSide * 0.8, 280, 820);
     const sharkCount = this.sharkSpecs.length;
 
     this.sharks = [];
