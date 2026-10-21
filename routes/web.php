@@ -45,9 +45,41 @@ $registerSiteRoutes = function (array $paths): void {
     Route::livewire($paths['blog'], Posts::class)->name('blog');
     Route::livewire($paths['blog'].'/{slug}', PostShow::class)->name('blog.show');
 
-Route::livewire('/servicios/fuentes', Fonts::class)->name('services.fonts');
-Route::livewire('/servicios/colores', Colors::class)->name('services.colors');
-Route::livewire('/servicios/herramientas', Tools::class)->name('services.tools');
+    Route::livewire($paths['fonts'], Fonts::class)->name('services.fonts');
+    Route::livewire($paths['colors'], Colors::class)->name('services.colors');
+    Route::livewire($paths['tools'], Tools::class)->name('services.tools');
+    Route::livewire($paths['image_metadata'], ImageMetadata::class)->name('services.image_metadata');
+};
+
+Route::middleware(['locale:es', 'track'])->group(fn () => $registerSiteRoutes([
+    'home' => '/',
+    'about' => '/sobre-mi',
+    'faq' => '/faq',
+    'gallery' => '/galeria',
+    'playlist' => '/playlist',
+    'projects' => '/proyectos',
+    'curious_code' => '/cosas-curiosas',
+    'blog' => '/blog',
+    'fonts' => '/servicios/fuentes',
+    'colors' => '/servicios/colores',
+    'tools' => '/servicios/herramientas',
+    'image_metadata' => '/servicios/metadatos-imagen',
+]));
+
+Route::prefix('en')->name('en.')->middleware(['locale:en', 'track'])->group(fn () => $registerSiteRoutes([
+    'home' => '/',
+    'about' => '/about',
+    'faq' => '/faq',
+    'gallery' => '/gallery',
+    'playlist' => '/playlist',
+    'projects' => '/projects',
+    'curious_code' => '/curious-code',
+    'blog' => '/blog',
+    'fonts' => '/services/fonts',
+    'colors' => '/services/colors',
+    'tools' => '/services/tools',
+    'image_metadata' => '/services/image-metadata',
+]));
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::redirect('dashboard', '/admin')->name('dashboard');
