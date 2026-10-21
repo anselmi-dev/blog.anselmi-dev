@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Support\CursorStyle;
+use App\Support\Localization;
+use BackedEnum;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
 
 class Setting extends Model
 {
@@ -14,6 +19,58 @@ class Setting extends Model
         'key',
         'value',
     ];
+
+    /** Clave de la API de Anthropic (Claude), guardada cifrada con APP_KEY. */
+    public const string ANTHROPIC_API_KEY = 'ai.anthropic_api_key';
+
+    /**
+     * La clave guardada en Ajustes (descifrada) o, si no hay, la del .env
+     * (ANTHROPIC_API_KEY). Null si no hay ninguna o no se puede descifrar
+     * (por ejemplo, si cambió APP_KEY).
+     */
+    public static function anthropicApiKey(): ?string
+    {
+        $encrypted = static::get(self::ANTHROPIC_API_KEY);
+
+        if (filled($encrypted)) {
+            try {
+                return Crypt::decryptString((string) $encrypted);
+            } catch (DecryptException) {
+                return null;
+            }
+        }
+
+        $fromEnv = config('services.anthropic.key');
+
+        return filled($fromEnv) ? (string) $fromEnv : null;
+    }
+
+    /** Workspace de Anthropic para las claves que no pertenecen a uno (no es secreto). */
+    public const string ANTHROPIC_WORKSPACE_ID = 'ai.anthropic_workspace_id';
+
+    /**
+     * El workspace guardado en Ajustes o, si no hay, el del .env
+     * (ANTHROPIC_WORKSPACE_ID). Null si no hace falta.
+     */
+    public static function anthropicWorkspaceId(): ?string
+    {
+        $workspaceId = static::get(self::ANTHROPIC_WORKSPACE_ID) ?: config('services.anthropic.workspace_id');
+
+        return filled($workspaceId) ? trim((string) $workspaceId) : null;
+    }
+
+    public static function hasStoredAnthropicApiKey(): bool
+    {
+        return filled(static::get(self::ANTHROPIC_API_KEY));
+    }
+
+    /**
+     * Guarda la clave cifrada; con null o vacío la borra.
+     */
+    public static function storeAnthropicApiKey(?string $apiKey): void
+    {
+        static::put(self::ANTHROPIC_API_KEY, filled($apiKey) ? Crypt::encryptString(trim((string) $apiKey)) : null);
+    }
 
     public static function get(string $key, mixed $default = null): mixed
     {
@@ -105,6 +162,14 @@ class Setting extends Model
         return [
             'meta_description' => 'Desarrollador web: diseño y construyo productos digitales con foco en claridad, performance y experiencia de uso.',
             'author_name' => config('app.name', 'Sitio'),
+            'tools_loader' => false,
+            'cursor_style' => CursorStyle::Circle->value,
+            'background_squares' => true,
+            'background_squares_opacity' => 75,
+            'background_squares_speed' => 1,
+            'under_construction' => false,
+            'under_construction_title' => 'Sitio en construcción',
+            'under_construction_message' => 'Estoy renovando algunas secciones, así que puede que encuentres cosas a medio terminar.',
         ];
     }
 
@@ -142,11 +207,78 @@ class Setting extends Model
     }
 
     /**
-     * @return array{meta_description: string|null, author_name: string|null}
+     * @return array{meta_description: string|null, author_name: string|null, tools_loader: bool|null, cursor_style: string|null, background_squares: bool|null, background_squares_opacity: int|float|null, background_squares_speed: int|float|null, under_construction: bool|null, under_construction_title: string|null, under_construction_message: string|null}
      */
     public static function site(): array
     {
         return static::group('site', static::siteDefaults());
+    }
+
+    /**
+     * Textos de contacto que tienen versión en inglés ("{clave}_en").
+     *
+     * @var list<string>
+     */
+    public const TRANSLATABLE_CONTACT_KEYS = [
+        'email_label',
+        'email_description',
+        'location_label',
+        'location_description',
+        'schedule_label',
+        'schedule_description',
+        'form_title',
+        'form_description',
+        'submit_label',
+        'success_title',
+        'success_description',
+    ];
+
+    /**
+     * Ajustes de contacto en el idioma actual del sitio público.
+     *
+     * @return array<string, mixed>
+     */
+    public static function localizedContact(): array
+    {
+        return static::localize(static::contact(), self::TRANSLATABLE_CONTACT_KEYS);
+    }
+
+    /**
+     * Ajustes del sitio en el idioma actual del sitio público.
+     *
+     * @return array<string, mixed>
+     */
+    public static function localizedSite(): array
+    {
+        return static::localize(static::site(), ['meta_description', 'under_construction_title', 'under_construction_message']);
+    }
+
+    /**
+     * En inglés usa "{clave}_en" si tiene valor; si no, la traducción del texto
+     * en español cuando existe en lang/en.json (los textos por defecto la
+     * tienen) o el texto en español tal cual.
+     *
+     * @param  array<string, mixed>  $values
+     * @param  list<string>  $keys
+     * @return array<string, mixed>
+     */
+    protected static function localize(array $values, array $keys): array
+    {
+        if (! Localization::isEnglish()) {
+            return $values;
+        }
+
+        foreach ($keys as $key) {
+            $englishValue = $values[$key.'_en'] ?? null;
+
+            if (filled($englishValue)) {
+                $values[$key] = $englishValue;
+            } elseif (is_string($values[$key] ?? null) && filled($values[$key])) {
+                $values[$key] = __($values[$key]);
+            }
+        }
+
+        return $values;
     }
 
     public static function forgetGroupCache(string $group): void
@@ -170,6 +302,10 @@ class Setting extends Model
     {
         if ($value === null) {
             return null;
+        }
+
+        if ($value instanceof BackedEnum) {
+            return (string) $value->value;
         }
 
         if (is_bool($value) || is_int($value) || is_float($value) || is_array($value)) {

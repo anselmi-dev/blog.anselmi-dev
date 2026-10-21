@@ -1,3 +1,8 @@
+# Git workflow
+
+- Al terminar cada cambio (tests en verde y Pint aplicado), hacé commit y push directo a `main`, sin pedir confirmación.
+- Solo si `main` avanzó con cambios que no se integran limpio con los tuyos (no es fast-forward o hay conflictos), avisá antes de pushear.
+
 <laravel-boost-guidelines>
 === foundation rules ===
 

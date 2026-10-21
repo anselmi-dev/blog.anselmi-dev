@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Str;
 
 class Gallery extends Model
 {
@@ -43,9 +44,49 @@ class Gallery extends Model
         return $this->morphTo();
     }
 
+    /**
+     * Publicados y con su contenido todavía existente: una entrada cuya foto,
+     * video o cita se borró no se muestra (y no rompe la vista).
+     */
     public function scopePublished(Builder $query): Builder
     {
-        return $query->where('is_published', true)->orderBy('sort_order');
+        return $query
+            ->where('is_published', true)
+            ->whereHasMorph('galleryable', '*')
+            ->orderBy('sort_order');
+    }
+
+    /**
+     * Carga el contenido de cada entrada (y las etiquetas de las fotos) en
+     * pocas consultas.
+     */
+    public function scopeWithContent(Builder $query): Builder
+    {
+        return $query->with(['galleryable' => fn (MorphTo $morphTo) => $morphTo->morphWith([Media::class => ['tags']])]);
+    }
+
+    /**
+     * Miniatura y tipo para el panel: la foto, la portada del video o, si no
+     * hay imagen, solo el tipo (para mostrar un ícono).
+     *
+     * @return array{kind: string, image: string|null, label: string}
+     */
+    public function adminPreview(): array
+    {
+        return self::previewOf($this->galleryable);
+    }
+
+    /**
+     * @return array{kind: string, image: string|null, label: string}
+     */
+    public static function previewOf(?Model $item): array
+    {
+        return match (true) {
+            $item instanceof Media => ['kind' => 'photo', 'image' => $item->thumbUrl(), 'label' => $item->title ?: "Foto #{$item->id}"],
+            $item instanceof Video => ['kind' => 'video', 'image' => $item->posterUrl(), 'label' => $item->title ?: "Video #{$item->id}"],
+            $item instanceof Quote => ['kind' => 'quote', 'image' => null, 'label' => Str::limit($item->quote, 80)],
+            default => ['kind' => 'missing', 'image' => null, 'label' => 'Contenido borrado'],
+        };
     }
 
     /**

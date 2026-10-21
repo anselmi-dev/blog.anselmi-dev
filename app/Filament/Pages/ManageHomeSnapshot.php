@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Support\LanguageTabs;
 use App\Models\HomeSnapshot;
 use App\Support\SpotifyEmbed;
 use BackedEnum;
@@ -64,10 +65,23 @@ class ManageHomeSnapshot extends Page
                                 ->label('URL de Google Maps')
                                 ->url()
                                 ->maxLength(500),
-                            TextInput::make('map_label')
-                                ->label('Etiqueta')
-                                ->placeholder('MONTEVIDEO · URUGUAY')
-                                ->maxLength(120),
+                            LanguageTabs::make(
+                                spanish: [
+                                    TextInput::make('map_label')
+                                        ->label('Etiqueta')
+                                        ->placeholder('MONTEVIDEO · URUGUAY')
+                                        ->maxLength(120),
+                                ],
+                                translations: [
+                                    'en' => [
+                                        TextInput::make('map_label_en')
+                                            ->label('Label')
+                                            ->helperText('Si queda vacío, se usa la etiqueta en español.')
+                                            ->maxLength(120),
+                                    ],
+                                ],
+                                translatableFields: ['map_label'],
+                            ),
                         ]),
                     Section::make('Música')
                         ->schema([
@@ -79,6 +93,17 @@ class ManageHomeSnapshot extends Page
                                 ->rule(fn (): \Closure => function (string $attribute, mixed $value, \Closure $fail): void {
                                     if (filled($value) && ! SpotifyEmbed::isAllowed((string) $value)) {
                                         $fail('Solo se permiten embeds de open.spotify.com.');
+                                    }
+                                })
+                                ->columnSpanFull(),
+                            TextInput::make('playlist_url')
+                                ->label('Playlist de Spotify')
+                                ->url()
+                                ->helperText('Enlace de tu playlist (Compartir → Copiar enlace). Se muestra en la página /playlist.')
+                                ->maxLength(500)
+                                ->rule(fn (): \Closure => function (string $attribute, mixed $value, \Closure $fail): void {
+                                    if (filled($value) && SpotifyEmbed::toEmbedUrl((string) $value) === null) {
+                                        $fail('El enlace debe ser de una playlist o álbum de open.spotify.com.');
                                     }
                                 })
                                 ->columnSpanFull(),

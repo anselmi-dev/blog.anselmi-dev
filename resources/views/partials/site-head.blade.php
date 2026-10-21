@@ -1,10 +1,10 @@
 @php
     use App\Models\Setting;
 
-    $site = Setting::site();
+    $site = Setting::localizedSite();
     $appName = $site['author_name'] ?: config('app.name', 'Laravel');
-    $pageTitle = filled($title ?? null) ? $title.' — '.$appName : $appName;
-    $pageDescription = $description ?? ($site['meta_description'] ?: 'Desarrollador web: diseño y construyo productos digitales con foco en claridad, performance y experiencia de uso.');
+    $pageTitle = filled($title ?? null) ? __($title).' — '.$appName : $appName;
+    $pageDescription = $description ?? __($site['meta_description'] ?: 'Desarrollador web: diseño y construyo productos digitales con foco en claridad, performance y experiencia de uso.');
     $canonicalUrl = $canonical ?? url()->current();
     $shareImage = $ogImage ?? asset('android-chrome-512x512.png');
     $locale = str_replace('_', '-', app()->getLocale());
@@ -21,6 +21,12 @@
 <title>{{ $pageTitle }}</title>
 
 <link rel="canonical" href="{{ $canonicalUrl }}" />
+@if (request()->route()?->getName())
+    @foreach (\App\Support\Localization::LOCALES as $alternateLocale)
+        <link rel="alternate" hreflang="{{ $alternateLocale }}" href="{{ \App\Support\Localization::switchUrl($alternateLocale) }}" />
+    @endforeach
+    <link rel="alternate" hreflang="x-default" href="{{ \App\Support\Localization::switchUrl(\App\Support\Localization::DEFAULT_LOCALE) }}" />
+@endif
 
 {{-- Favicons / PWA --}}
 <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48" />

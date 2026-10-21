@@ -25,13 +25,13 @@
         data-reveal-duration="0.85"
     >
         <a
-            href="{{ route('blog') }}"
+            href="{{ localized_route('blog') }}"
             wire:navigate
             data-reveal-item
             class="inline-flex items-center gap-2 text-base font-medium text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
         >
             <x-icon name="arrow-left" class="size-4 shrink-0" />
-            Volver al blog
+            {{ __('Volver al blog') }}
         </a>
 
         @if (($entry['kind'] ?? '') === 'image')
@@ -72,5 +72,14 @@
                 @endforeach
             </div>
         @endif
+
+        <section
+            data-reveal-item
+            class="flex flex-col gap-4 border-t border-zinc-200/90 pt-6 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-800"
+            aria-label="{{ __('Compartir este post') }}"
+        >
+            <p class="text-base font-semibold text-zinc-900 dark:text-zinc-100">{{ __('¿Te gustó? Compartilo') }}</p>
+            <x-share-buttons :url="url()->current()" :title="$entry['title'] ?? ''" :text="$entry['excerpt'] ?? null" />
+        </section>
     </div>
 </div>

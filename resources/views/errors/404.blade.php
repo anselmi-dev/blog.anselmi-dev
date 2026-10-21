@@ -1,5 +1,6 @@
+@php(app()->setLocale(\App\Support\Localization::fromPath(request()->path())))
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-cursor="{{ \App\Support\CursorStyle::current()->value }}">
 
 <head>
     <meta charset="utf-8" />
@@ -25,14 +26,14 @@
                 class="absolute inset-0 size-full object-cover object-center grayscale rounded-xl" width="1600"
                 height="1200" decoding="async" />
 
-            <a href="{{ route('home') }}" data-reveal-item
+            <a href="{{ localized_route('home') }}" data-reveal-item
                 class="absolute left-0 top-0 z-20 inline-flex items-center rounded-br-[1.5rem] bg-white px-6 py-4 text-2xl font-extrabold tracking-tight text-zinc-900 transition hover:text-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 sm:rounded-br-[2.25rem] sm:px-8 sm:py-5 sm:text-3xl md:rounded-br-[2.5rem]">
                 {{ config('app.name', 'Site') }}
             </a>
 
             <p data-reveal-item
                 class="absolute bottom-0 right-0 z-10 inline-flex items-center rounded-tl-[1.5rem] bg-white px-6 py-4 text-sm font-medium text-zinc-900 sm:rounded-tl-[2.25rem] sm:px-8 sm:py-5 sm:text-base md:rounded-tl-[2.5rem]">
-                404 — Página no encontrada
+                404 — {{ __('Página no encontrada') }}
             </p>
         </x-site-frame>
     </div>

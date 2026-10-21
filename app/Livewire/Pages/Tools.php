@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pages;
 
+use App\Models\Setting;
 use App\Models\Tool;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -21,6 +22,7 @@ class Tools extends Component
 
         return view('livewire.pages.tools', [
             'tools' => $tools,
+            'showLoader' => (bool) (Setting::site()['tools_loader'] ?? false),
         ]);
     }
 }

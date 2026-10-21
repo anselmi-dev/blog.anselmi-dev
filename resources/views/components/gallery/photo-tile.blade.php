@@ -8,6 +8,10 @@
     'wide' => false,
     /** Si es true, el tile es un <button> (p. ej. abrir lightbox con wire:click). */
     'asButton' => false,
+    /** Video sin portada: se muestra su primer cuadro en lugar de la imagen. */
+    'videoUrl' => null,
+    /** Versiones de la imagen ("url 480w, url 1600w, …"); el navegador elige según sizes. */
+    'srcset' => null,
 ])
 
 @php
@@ -23,13 +27,28 @@
     <a href="{{ $href }}" {{ $attributes->class([$shell, 'block']) }}>
 @endif
     <div class="{{ $frame }}">
-        <img
-            src="{{ $imageUrl }}"
-            alt="{{ $title }} — {{ $category }}"
-            class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]"
-            loading="lazy"
-            decoding="async"
-        />
+        @if (blank($imageUrl) && filled($videoUrl))
+            <video
+                src="{{ $videoUrl }}#t=0.1"
+                class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                preload="metadata"
+                muted
+                playsinline
+                aria-label="{{ $title }}"
+            ></video>
+        @else
+            <img
+                src="{{ $imageUrl }}"
+                @if (filled($srcset))
+                    srcset="{{ $srcset }}"
+                    sizes="{{ $wide ? '(min-width: 1024px) 66vw, (min-width: 640px) 50vw, 100vw' : '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw' }}"
+                @endif
+                alt="{{ $title }} — {{ $category }}"
+                class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                loading="lazy"
+                decoding="async"
+            />
+        @endif
         <div
             class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/10 dark:from-black/85 dark:via-black/35"
             aria-hidden="true"
@@ -52,7 +71,7 @@
                 <span
                     class="inline-flex rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-widest text-white backdrop-blur-sm"
                 >
-                    Destacado
+                    {{ __('Destacado') }}
                 </span>
             </div>
         @endif

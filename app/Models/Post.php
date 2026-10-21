@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEnglishTranslations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
+    use HasEnglishTranslations;
+
     protected $fillable = [
         'slug',
         'kind',
@@ -24,16 +27,25 @@ class Post extends Model
         'bento_type',
         'bento_grid_class',
         'bento_sort',
+        'featured_in_menu',
         'sort_order',
         'is_published',
         'published_at',
+        'kicker_en',
+        'title_en',
+        'excerpt_en',
+        'body_en',
+        'caption_en',
+        'alt_en',
     ];
 
     protected function casts(): array
     {
         return [
+            'body_en' => 'array',
             'body' => 'array',
             'show_in_bento' => 'boolean',
+            'featured_in_menu' => 'boolean',
             'is_published' => 'boolean',
             'published_at' => 'datetime',
             'bento_sort' => 'integer',
@@ -49,6 +61,16 @@ class Post extends Model
     public function scopeInBento(Builder $query): Builder
     {
         return $query->where('show_in_bento', true)->orderBy('bento_sort');
+    }
+
+    /**
+     * Posts destacados en el menú del header, los más recientes primero.
+     */
+    public function scopeFeaturedInMenu(Builder $query): Builder
+    {
+        return $query->where('featured_in_menu', true)
+            ->orderByDesc('published_at')
+            ->orderByDesc('id');
     }
 
     public function imageUrl(?int $w = 900, ?int $h = 1100): ?string
@@ -78,12 +100,12 @@ class Post extends Model
     {
         return [
             'kind' => $this->kind,
-            'kicker' => $this->kicker,
-            'title' => $this->title,
-            'excerpt' => $this->excerpt,
-            'body' => $this->body ?? [],
-            'caption' => $this->caption,
-            'alt' => $this->alt,
+            'kicker' => $this->translated('kicker'),
+            'title' => $this->translated('title'),
+            'excerpt' => $this->translated('excerpt'),
+            'body' => $this->translated('body') ?? [],
+            'caption' => $this->translated('caption'),
+            'alt' => $this->translated('alt'),
             'slug' => $this->slug,
             'image_path' => $this->image_path,
             'image_url' => $this->imageUrl(),

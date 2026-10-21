@@ -53,13 +53,13 @@
         data-reveal-duration="0.85"
     >
         <a
-            href="{{ route('projects') }}"
+            href="{{ localized_route('projects') }}"
             wire:navigate
             data-reveal-item
             class="mb-8 inline-flex items-center gap-2 text-sm font-medium text-zinc-600 transition hover:text-zinc-900"
         >
             <x-icon name="arrow-left" class="size-4 shrink-0" />
-            Volver a proyectos
+            {{ __('Volver a proyectos') }}
         </a>
 
         {{-- Meta --}}
@@ -68,19 +68,19 @@
             class="mb-10 grid grid-cols-2 gap-6 border-y border-zinc-200 py-6 sm:grid-cols-4 sm:gap-8"
         >
             <div>
-                <dt class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">Rol</dt>
+                <dt class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ __('Rol') }}</dt>
                 <dd class="mt-1.5 text-sm font-semibold text-zinc-900">{{ $project['role'] ?? '—' }}</dd>
             </div>
             <div>
-                <dt class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">Año</dt>
+                <dt class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ __('Año') }}</dt>
                 <dd class="mt-1.5 text-sm font-semibold text-zinc-900">{{ $project['year'] ?? '—' }}</dd>
             </div>
             <div>
-                <dt class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">Cliente</dt>
+                <dt class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ __('Cliente') }}</dt>
                 <dd class="mt-1.5 text-sm font-semibold text-zinc-900">{{ $project['client'] ?? '—' }}</dd>
             </div>
             <div>
-                <dt class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">Sitio</dt>
+                <dt class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ __('Sitio') }}</dt>
                 <dd class="mt-1.5 text-sm font-semibold text-zinc-900">
                     @if (! empty($project['url']))
                         <a
@@ -89,7 +89,7 @@
                             rel="noopener noreferrer"
                             class="underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900"
                         >
-                            Visitar
+                            {{ __('Visitar') }}
                         </a>
                     @else
                         Próximamente
@@ -204,7 +204,7 @@
                                 type="button"
                                 class="pointer-events-auto inline-flex size-9 items-center justify-center rounded-full border-2 border-[var(--carousel-accent)] bg-white/55 text-zinc-900 opacity-55 shadow-md backdrop-blur-sm transition hover:scale-105 hover:bg-white/90 hover:opacity-100 focus-visible:bg-white/90 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:size-11"
                                 @click.stop="prev()"
-                                aria-label="Imagen anterior"
+                                aria-label="{{ __('Imagen anterior') }}"
                             >
                                 <x-icon name="arrow-left" class="size-4 sm:size-5" />
                             </button>
@@ -212,7 +212,7 @@
                                 type="button"
                                 class="pointer-events-auto inline-flex size-9 items-center justify-center rounded-full border-2 border-[var(--carousel-accent)] bg-white/55 text-zinc-900 opacity-55 shadow-md backdrop-blur-sm transition hover:scale-105 hover:bg-white/90 hover:opacity-100 focus-visible:bg-white/90 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:size-11"
                                 @click.stop="next()"
-                                aria-label="Imagen siguiente"
+                                aria-label="{{ __('Imagen siguiente') }}"
                             >
                                 <x-icon name="arrow-right" class="size-4 sm:size-5" />
                             </button>
@@ -235,7 +235,7 @@
                                         @click.stop="go({{ $index }})"
                                         class="relative size-9 shrink-0 overflow-hidden rounded-lg bg-white/15 shadow-lg transition hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:size-14 sm:rounded-xl md:size-24"
                                         :aria-current="active === {{ $index }} ? 'true' : 'false'"
-                                        aria-label="Ver captura {{ $index + 1 }}"
+                                        aria-label="{{ __('Ver captura :number', ['number' => $index + 1]) }}"
                                     >
                                         <img
                                             src="{{ $image['src'] }}"
@@ -334,7 +334,7 @@
     {{-- Prev / Next --}}
     <nav
         class="mx-auto mt-16 grid max-w-8xl gap-3 border-t border-zinc-200 pt-10 sm:mt-20 sm:grid-cols-2 sm:gap-4"
-        aria-label="Otros proyectos"
+        aria-label="{{ __('Otros proyectos') }}"
         data-reveal="fade-up"
         data-reveal-scroll
         data-reveal-stagger="0.1"
@@ -342,13 +342,13 @@
         @if ($previous)
             @php($prevColor = \App\Support\CssColor::hexOrNull($previous['color'] ?? null) ?? '#e8f38c')
             <a
-                href="{{ route('projects.show', $previous['slug']) }}"
+                href="{{ localized_route('projects.show', $previous['slug']) }}"
                 wire:navigate
                 data-reveal-item
                 style="--nav-accent-soft: color-mix(in srgb, {{ $prevColor }} 35%, white); --nav-accent-hover: color-mix(in srgb, {{ $prevColor }} 65%, white);"
                 class="group flex flex-col rounded-2xl border border-zinc-100 bg-[var(--nav-accent-soft)] px-5 py-5 transition hover:border-zinc-900/30 hover:bg-[var(--nav-accent-hover)] sm:px-6 sm:py-6"
             >
-                <span class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">Anterior</span>
+                <span class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ __('Anterior') }}</span>
                 <span class="mt-2 flex items-center gap-3 text-lg font-bold text-zinc-900">
                     <span
                         class="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-zinc-900 bg-transparent text-zinc-900 transition-[transform,background-color,color] duration-300 ease-out group-hover:-translate-x-0.5 group-hover:bg-zinc-900 group-hover:text-white"
@@ -383,13 +383,13 @@
         @if ($next)
             @php($nextColor = \App\Support\CssColor::hexOrNull($next['color'] ?? null) ?? '#e8f38c')
             <a
-                href="{{ route('projects.show', $next['slug']) }}"
+                href="{{ localized_route('projects.show', $next['slug']) }}"
                 wire:navigate
                 data-reveal-item
                 style="--nav-accent-soft: color-mix(in srgb, {{ $nextColor }} 35%, white); --nav-accent-hover: color-mix(in srgb, {{ $nextColor }} 65%, white);"
                 class="group flex flex-col rounded-2xl border border-zinc-100 bg-[var(--nav-accent-soft)] px-5 py-5 text-right transition hover:border-zinc-900/30 hover:bg-[var(--nav-accent-hover)] sm:items-end sm:px-6 sm:py-6"
             >
-                <span class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">Siguiente</span>
+                <span class="font-folio-mono text-[0.7rem] uppercase tracking-widest text-zinc-500">{{ __('Siguiente') }}</span>
                 <span class="mt-2 flex items-center gap-3 text-lg font-bold text-zinc-900">
                     {{ $next['title'] }}
                     <span

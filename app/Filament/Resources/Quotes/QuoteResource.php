@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Quotes;
 use App\Filament\Resources\Quotes\Pages\CreateQuote;
 use App\Filament\Resources\Quotes\Pages\EditQuote;
 use App\Filament\Resources\Quotes\Pages\ListQuotes;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Quote;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -42,13 +43,28 @@ class QuoteResource extends Resource
     {
         return $schema
             ->components([
-                Textarea::make('quote')
-                    ->label('Cita')
-                    ->required()
-                    ->rows(3)
-                    ->columnSpanFull(),
-                TextInput::make('attribution')
-                    ->label('Atribución'),
+                LanguageTabs::make(
+                    spanish: [
+                        Textarea::make('quote')
+                            ->label('Cita')
+                            ->required()
+                            ->rows(3)
+                            ->columnSpanFull(),
+                        TextInput::make('attribution')
+                            ->label('Atribución'),
+                    ],
+                    translations: [
+                        'en' => [
+                            Textarea::make('quote_en')
+                                ->label('Quote')
+                                ->rows(3),
+                            TextInput::make('attribution_en')
+                                ->label('Attribution')
+                                ->maxLength(255),
+                        ],
+                    ],
+                    translatableFields: ['quote', 'attribution'],
+                ),
             ]);
     }
 

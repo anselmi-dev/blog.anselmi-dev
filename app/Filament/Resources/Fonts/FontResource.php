@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Fonts;
 use App\Filament\Resources\Fonts\Pages\CreateFont;
 use App\Filament\Resources\Fonts\Pages\EditFont;
 use App\Filament\Resources\Fonts\Pages\ListFonts;
+use App\Filament\Support\CompleteWithAiAction;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Font;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -66,15 +68,47 @@ class FontResource extends Resource
                 TextInput::make('tailwind')
                     ->label('Clase Tailwind')
                     ->placeholder('font-sans'),
-                TextInput::make('category')
-                    ->label('Categoría')
-                    ->placeholder('Sans-serif'),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('category')
+                            ->label('Categoría')
+                            ->placeholder('Sans-serif'),
+                        TextInput::make('sample')
+                            ->label('Texto de muestra')
+                            ->default('Hakuna Matata'),
+                        Textarea::make('note')
+                            ->label('Nota')
+                            ->rows(2)
+                            ->columnSpanFull(),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('category_en')
+                                ->label('Category')
+                                ->maxLength(255),
+                            TextInput::make('sample_en')
+                                ->label('Sample text')
+                                ->maxLength(255),
+                            Textarea::make('note_en')
+                                ->label('Note')
+                                ->rows(3),
+                        ],
+                    ],
+                    translatableFields: ['category', 'sample', 'note'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'una tipografía de la sección /servicios/fuentes, donde muestro las fuentes que uso',
+                        guidance: [
+                            'category' => 'Clasificación de la fuente: Sans-serif, Serif, Monoespaciada, Display, Manuscrita…',
+                            'sample' => 'Frase corta para mostrar cómo se ve la letra (máximo 40 caracteres).',
+                            'note' => 'Quién la diseñó o de dónde viene y para qué funciona bien, en 1 o 2 oraciones (máximo 220 caracteres).',
+                        ],
+                        context: ['name' => 'Nombre', 'family' => 'CSS family', 'weights' => 'Pesos'],
+                        webSearch: true,
+                    ),
+                ),
                 TextInput::make('weights')
                     ->label('Pesos')
                     ->placeholder('400, 500, 600, 700'),
-                TextInput::make('sample')
-                    ->label('Texto de muestra')
-                    ->default('Hakuna Matata'),
                 TextInput::make('google_url')
                     ->label('URL Google Fonts')
                     ->url(),
@@ -84,10 +118,6 @@ class FontResource extends Resource
                 TextInput::make('css')
                     ->label('Snippet CSS')
                     ->placeholder("font-family: 'Plus Jakarta Sans', sans-serif;"),
-                Textarea::make('note')
-                    ->label('Nota')
-                    ->rows(2)
-                    ->columnSpanFull(),
                 TextInput::make('sort_order')
                     ->label('Orden')
                     ->numeric()

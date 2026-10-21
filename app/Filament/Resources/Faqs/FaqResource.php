@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Faqs;
 use App\Filament\Resources\Faqs\Pages\CreateFaq;
 use App\Filament\Resources\Faqs\Pages\EditFaq;
 use App\Filament\Resources\Faqs\Pages\ListFaqs;
+use App\Filament\Support\CompleteWithAiAction;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Faq;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -43,15 +45,37 @@ class FaqResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('question')
-                    ->label('Pregunta')
-                    ->required()
-                    ->columnSpanFull(),
-                Textarea::make('answer')
-                    ->label('Respuesta')
-                    ->required()
-                    ->rows(5)
-                    ->columnSpanFull(),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('question')
+                            ->label('Pregunta')
+                            ->required()
+                            ->columnSpanFull(),
+                        Textarea::make('answer')
+                            ->label('Respuesta')
+                            ->required()
+                            ->rows(5)
+                            ->columnSpanFull(),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('question_en')
+                                ->label('Question')
+                                ->maxLength(255),
+                            Textarea::make('answer_en')
+                                ->label('Answer')
+                                ->rows(4),
+                        ],
+                    ],
+                    translatableFields: ['question', 'answer'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'una pregunta frecuente de la sección FAQ, sobre cómo trabajo como desarrollador web freelance',
+                        guidance: [
+                            'question' => 'La pregunta, tal como la haría un cliente.',
+                            'answer' => 'Respuesta clara en 2 a 4 oraciones. No prometas precios, plazos ni servicios concretos que no estén en el contexto; si hace falta, invitá a escribir por el formulario de contacto.',
+                        ],
+                    ),
+                ),
                 TextInput::make('sort_order')
                     ->label('Orden')
                     ->numeric()

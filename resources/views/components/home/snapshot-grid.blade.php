@@ -11,6 +11,7 @@
 @php
     use App\Models\HomeSnapshot;
     use App\Models\ReadingBook;
+    use App\Models\Song;
     use App\Support\SpotifyEmbed;
 
     $snapshot = HomeSnapshot::current();
@@ -24,7 +25,7 @@
 
     $mapImage = $mapImage ?? $snapshot->mapImageUrl();
     $mapsUrl = $mapsUrl ?? $snapshot->maps_url;
-    $mapLabel = $mapLabel ?? ($snapshot->map_label ?: 'MONTEVIDEO · URUGUAY');
+    $mapLabel = $mapLabel ?? ($snapshot->translated('map_label') ?: 'MONTEVIDEO · URUGUAY');
     $spotifyEmbedUrl = SpotifyEmbed::sanitize($spotifyEmbedUrl ?? $snapshot->spotify_embed_url);
     $spotifyUrl = filled($spotifyEmbedUrl)
         ? preg_replace('#/embed/#', '/', explode('?', $spotifyEmbedUrl, 2)[0], 1)
@@ -34,6 +35,7 @@
     $showBooks = count($bookList) > 0;
     $showMap = filled($mapImage) || filled($mapsUrl);
     $showSpotify = filled($spotifyEmbedUrl);
+    $showPlaylistLink = $showSpotify && (filled($snapshot->playlist_url) || Song::query()->published()->exists());
 @endphp
 
 @if ($showBooks || $showMap || $showSpotify)
@@ -56,16 +58,16 @@
                     <div class="flex flex-col gap-2">
                         <div class="flex items-center justify-between gap-3">
                             <p class="text-lg font-normal uppercase leading-none tracking-tight text-zinc-500 lg:text-xl">
-                                Qué estoy leyendo
+                                {{ __('Qué estoy leyendo') }}
                             </p>
 
                             @if (count($bookList) > 1)
-                                <div class="flex shrink-0 items-center gap-1" aria-label="Controles del carrusel">
+                                <div class="flex shrink-0 items-center gap-1" aria-label="{{ __('Controles del carrusel') }}">
                                     <button
                                         type="button"
                                         data-book-prev
                                         class="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
-                                        aria-label="Libro anterior"
+                                        aria-label="{{ __('Libro anterior') }}"
                                     >
                                         <x-icon name="chevron-left" class="size-4" />
                                     </button>
@@ -73,7 +75,7 @@
                                         type="button"
                                         data-book-next
                                         class="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
-                                        aria-label="Libro siguiente"
+                                        aria-label="{{ __('Libro siguiente') }}"
                                     >
                                         <x-icon name="chevron-right" class="size-4" />
                                     </button>
@@ -84,8 +86,8 @@
                         <div
                             class="relative z-0 h-[152px] overflow-hidden rounded-xl bg-zinc-900/80 p-4 text-white shadow-sm ring-1 ring-white/5"
                             role="region"
-                            aria-roledescription="carrusel"
-                            aria-label="Libros que estoy leyendo"
+                            aria-roledescription="{{ __('carrusel') }}"
+                            aria-label="{{ __('Libros que estoy leyendo') }}"
                         >
                             @foreach ($bookList as $i => $book)
                                 <div
@@ -118,14 +120,14 @@
                                 <div
                                     class="absolute bottom-3 left-4 z-20 flex items-center gap-1.5"
                                     role="tablist"
-                                    aria-label="Elegir libro"
+                                    aria-label="{{ __('Elegir libro') }}"
                                 >
                                     @foreach ($bookList as $i => $book)
                                         <button
                                             type="button"
                                             data-book-dot
                                             class="size-1.5 rounded-full bg-white/35 transition-[background-color,transform] duration-300 hover:scale-125 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                                            aria-label="Mostrar {{ $book['title'] }}"
+                                            aria-label="{{ __('Mostrar :title', ['title' => $book['title']]) }}"
                                             @if ($i === 0) aria-current="true" @endif
                                         ></button>
                                     @endforeach
@@ -142,7 +144,7 @@
                     <div class="flex flex-col gap-2">
                         <div class="flex items-center justify-between gap-3">
                             <p class="text-lg font-normal uppercase leading-none tracking-tight text-zinc-500 lg:text-xl">
-                                ¿Dónde vivo?
+                                {{ __('¿Dónde vivo?') }}
                             </p>
                             @if (filled($mapsUrl))
                                 <a
@@ -150,7 +152,7 @@
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="inline-flex size-8 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
-                                    aria-label="Abrir mapa en Google Maps"
+                                    aria-label="{{ __('Abrir mapa en Google Maps') }}"
                                 >
                                     <x-icon name="external-link" class="size-4" />
                                 </a>
@@ -164,7 +166,7 @@
                             @if ($mapImage)
                                 <img
                                     src="{{ $mapImage }}"
-                                    alt="Mapa — {{ $mapLabel }}"
+                                    alt="{{ __('Mapa') }} — {{ $mapLabel }}"
                                     class="absolute inset-0 z-0 size-full min-h-full min-w-full object-cover object-bottom transition duration-300 group-hover:scale-[1.02]"
                                     width="800"
                                     height="400"
@@ -189,19 +191,31 @@
                     <div class="flex flex-col gap-2">
                         <div class="flex items-center justify-between gap-3">
                             <p class="text-lg font-normal uppercase leading-none tracking-tight text-zinc-500 lg:text-xl">
-                                ¿Qué escucho?
+                                {{ __('¿Qué escucho?') }}
                             </p>
-                            @if (filled($spotifyUrl))
-                                <a
-                                    href="{{ $spotifyUrl }}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="inline-flex size-8 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
-                                    aria-label="Abrir en Spotify"
-                                >
-                                    <x-icon name="external-link" class="size-4" />
-                                </a>
-                            @endif
+                            <div class="flex shrink-0 items-center gap-1">
+                                @if ($showPlaylistLink)
+                                    <a
+                                        href="{{ localized_route('playlist') }}"
+                                        wire:navigate
+                                        class="inline-flex h-8 items-center gap-1 rounded-full border border-zinc-200 px-3 text-sm text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                                    >
+                                        {{ __('Ver más') }}
+                                        <x-icon name="arrow-right" class="size-4" />
+                                    </a>
+                                @endif
+                                @if (filled($spotifyUrl))
+                                    <a
+                                        href="{{ $spotifyUrl }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-flex size-8 items-center justify-center rounded-full border border-zinc-200 text-zinc-500 transition hover:border-brand-lime hover:bg-brand-lime hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                                        aria-label="{{ __('Abrir en Spotify') }}"
+                                    >
+                                        <x-icon name="external-link" class="size-4" />
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                         <div class="overflow-hidden rounded-xl bg-zinc-900/80 ring-1 ring-white/10">
                             <iframe
@@ -214,7 +228,7 @@
                                 sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
                                 loading="lazy"
                                 referrerpolicy="strict-origin-when-cross-origin"
-                                title="Spotify — canción actual"
+                                title="Spotify — {{ __('canción actual') }}"
                             ></iframe>
                         </div>
                     </div>

@@ -1,0 +1,71 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Support;
+
+use Filament\Actions\Action;
+use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Components\Component;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+
+/**
+ * Pestañas por idioma para los textos traducibles de un formulario: español
+ * primero (con el botón opcional "Completar con IA") y luego una por cada otro
+ * idioma, con el botón para traducir con IA.
+ */
+class LanguageTabs
+{
+    /**
+     * @param  array<int, Component>  $spanish  Campos en español.
+     * @param  array<string, array<int, Component>>  $translations  Idioma => campos "{campo}_{idioma}".
+     * @param  list<string>  $translatableFields  Campos en español que se traducen con el botón.
+     * @param  string|null  $key  Para usar más de un grupo de pestañas en el mismo formulario.
+     * @param  Action|null  $completion  Botón "Completar con IA" (CompleteWithAiAction) para la pestaña Español.
+     */
+    public static function make(array $spanish, array $translations, array $translatableFields, ?string $key = null, ?Action $completion = null): Tabs
+    {
+        if ($completion !== null) {
+            $spanish = [
+                Actions::make([$completion])
+                    ->key('es-completar')
+                    ->columnSpanFull(),
+                ...$spanish,
+            ];
+        }
+
+        $tabs = [
+            Tab::make('Español')
+                ->icon('heroicon-o-language')
+                ->columns(2)
+                ->schema($spanish),
+        ];
+
+        foreach ($translations as $locale => $components) {
+            $tabs[] = Tab::make(self::label($locale))
+                ->columns(2)
+                ->badge(strtoupper($locale))
+                ->schema([
+                    Actions::make([TranslateFromSpanishAction::make($translatableFields)])
+                        ->key("{$locale}-traducir")
+                        ->columnSpanFull(),
+                    ...$components,
+                ]);
+        }
+
+        $tabs = Tabs::make('Idiomas')
+            ->tabs($tabs)
+            ->columnSpanFull();
+
+        return $key !== null ? $tabs->key($key) : $tabs;
+    }
+
+    private static function label(string $locale): string
+    {
+        return match ($locale) {
+            'en' => 'English',
+            default => strtoupper($locale),
+        };
+    }
+}

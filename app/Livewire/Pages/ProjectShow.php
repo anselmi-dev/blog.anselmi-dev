@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pages;
 
+use App\Support\ProjectCatalog;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -22,7 +23,7 @@ class ProjectShow extends Component
     public function mount(string $slug): void
     {
         $this->slug = $slug;
-        $entries = config('projects.entries', []);
+        $entries = ProjectCatalog::entries();
 
         if (! isset($entries[$slug])) {
             abort(404);
@@ -65,7 +66,7 @@ class ProjectShow extends Component
     public function render()
     {
         return view('livewire.pages.project-show')
-            ->title($this->project['title'].' — Proyectos')
+            ->title($this->project['title'].' — '.__('Proyectos'))
             ->layoutData([
                 'themeColor' => $this->project['color'] ?? null,
             ]);

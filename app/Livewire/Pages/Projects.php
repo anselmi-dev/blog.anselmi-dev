@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pages;
 
+use App\Support\ProjectCatalog;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -13,7 +14,7 @@ class Projects extends Component
     public function render()
     {
         return view('livewire.pages.projects', [
-            'projects' => config('projects.entries', []),
+            'projects' => ProjectCatalog::entries(),
         ]);
     }
 }

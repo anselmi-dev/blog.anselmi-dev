@@ -5,14 +5,15 @@ namespace App\Livewire\Pages;
 use App\Models\Collection;
 use App\Models\Gallery as GalleryModel;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.site')]
-#[Title('Galería')]
 class Gallery extends Component
 {
     private const int LIGHTBOX_CLOSE_MS = 400;
+
+    /** Tipos de ítem que se abren en el visor (las citas no). */
+    private const array VIEWER_KINDS = ['photo', 'video'];
 
     public bool $lightboxShow = false;
 
@@ -28,18 +29,29 @@ class Gallery extends Component
      */
     public array $items = [];
 
-    public function mount(): void
-    {
-        $collection = Collection::query()->published()->first();
+    /**
+     * @var array{name: string, description: string|null}
+     */
+    public array $collection = ['name' => '', 'description' => null];
 
-        $this->items = $collection
-            ? $collection->items()
-                ->published()
-                ->with('galleryable')
-                ->get()
-                ->map(fn (GalleryModel $item): array => $item->toViewArray())
-                ->all()
-            : [];
+    public function mount(string $slug): void
+    {
+        $collection = Collection::query()
+            ->published()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $this->collection = [
+            'name' => (string) $collection->translated('name'),
+            'description' => $collection->translated('description'),
+        ];
+
+        $this->items = $collection->items()
+            ->published()
+            ->withContent()
+            ->get()
+            ->map(fn (GalleryModel $item): array => $item->toViewArray())
+            ->all();
     }
 
     public function updatedLightboxShow(bool $value): void
@@ -51,7 +63,7 @@ class Gallery extends Component
 
     public function openLightbox(int $index): void
     {
-        if (! isset($this->items[$index]) || ($this->items[$index]['kind'] ?? '') !== 'photo') {
+        if (! isset($this->items[$index]) || ! in_array($this->items[$index]['kind'] ?? '', self::VIEWER_KINDS, true)) {
             return;
         }
 
@@ -92,11 +104,11 @@ class Gallery extends Component
     /**
      * @return list<int>
      */
-    public function photoOnlyIndices(): array
+    public function viewerIndices(): array
     {
         $out = [];
         foreach ($this->items as $i => $item) {
-            if (($item['kind'] ?? '') === 'photo') {
+            if (in_array($item['kind'] ?? '', self::VIEWER_KINDS, true)) {
                 $out[] = $i;
             }
         }
@@ -110,7 +122,7 @@ class Gallery extends Component
             return;
         }
 
-        $photos = $this->photoOnlyIndices();
+        $photos = $this->viewerIndices();
         $pos = array_search($this->lightboxIndex, $photos, true);
         if ($pos === false) {
             return;
@@ -125,7 +137,7 @@ class Gallery extends Component
             return;
         }
 
-        $photos = $this->photoOnlyIndices();
+        $photos = $this->viewerIndices();
         $pos = array_search($this->lightboxIndex, $photos, true);
         if ($pos === false) {
             return;
@@ -158,6 +170,6 @@ class Gallery extends Component
 
     public function render()
     {
-        return view('livewire.pages.gallery');
+        return view('livewire.pages.gallery')->title($this->collection['name'].' — '.__('Galería'));
     }
 }

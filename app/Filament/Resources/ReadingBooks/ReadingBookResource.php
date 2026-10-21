@@ -5,6 +5,8 @@ namespace App\Filament\Resources\ReadingBooks;
 use App\Filament\Resources\ReadingBooks\Pages\CreateReadingBook;
 use App\Filament\Resources\ReadingBooks\Pages\EditReadingBook;
 use App\Filament\Resources\ReadingBooks\Pages\ListReadingBooks;
+use App\Filament\Support\CompleteWithAiAction;
+use App\Filament\Support\LanguageTabs;
 use App\Models\ReadingBook;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -44,14 +46,37 @@ class ReadingBookResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('title')
-                    ->label('Título')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('author')
-                    ->label('Autor')
-                    ->required()
-                    ->maxLength(255),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('title')
+                            ->label('Título')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('author')
+                            ->label('Autor')
+                            ->required()
+                            ->maxLength(255),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('title_en')
+                                ->label('Title')
+                                ->maxLength(255),
+                            TextInput::make('author_en')
+                                ->label('Author')
+                                ->maxLength(255),
+                        ],
+                    ],
+                    translatableFields: ['title', 'author'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'un libro que estoy leyendo o leí (sale en la home). En inglés, el título es el de la edición en inglés si existe',
+                        guidance: [
+                            'title' => 'Título del libro tal como se publicó en español.',
+                            'author' => 'Nombre completo del autor o la autora.',
+                        ],
+                        webSearch: true,
+                    ),
+                ),
                 FileUpload::make('image_path')
                     ->label('Portada')
                     ->image()

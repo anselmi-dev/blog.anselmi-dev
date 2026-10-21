@@ -1,8 +1,8 @@
 @props([
-    'galleryHref' => route('gallery'),
-    'kicker' => '07. fotografía',
-    'titleLine1' => 'Lo que veo cuando',
-    'titleItalic' => 'no estoy codando',
+    'galleryHref' => localized_route('gallery'),
+    'kicker' => __('07. fotografía'),
+    'titleLine1' => __('Lo que veo cuando'),
+    'titleItalic' => __('no estoy codando'),
     'items' => null,
 ])
 
@@ -11,13 +11,13 @@
     use App\Models\Gallery;
     use App\Models\Media;
 
-    $galleryUrl = $galleryHref ?? route('gallery');
+    $galleryUrl = $galleryHref ?? localized_route('gallery');
 
     $photos = $items ?? (Collection::query()->published()->first()
         ?->items()
         ->published()
         ->where('galleryable_type', Media::class)
-        ->with('galleryable')
+        ->withContent()
         ->take(12)
         ->get()
         ->map(fn (Gallery $item): array => $item->toViewArray())
@@ -59,7 +59,7 @@
             <x-section-head
                 kicker="{{ $kicker }}"
                 title="{{ $titleLine1 }}"
-                actionTitle="Ver galería"
+                :actionTitle="__('Ver galería')"
                 actionHref="{{ $galleryHref }}"
             />
 
@@ -78,6 +78,10 @@
                     >
                         <img
                             src="{{ $photo['thumb_url'] ?? $photo['image_url'] }}"
+                            @if (filled($photo['srcset'] ?? null))
+                                srcset="{{ $photo['srcset'] }}"
+                                sizes="{{ str_contains($spanFor($photo), 'col-span-2') ? '(min-width: 1024px) 50vw, 100vw' : '(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw' }}"
+                            @endif
                             alt="{{ $photo['title'] ?? '' }}"
                             class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]"
                             loading="lazy"
@@ -93,7 +97,7 @@
                     wire:navigate
                     class="text-sm text-folio-muted-dark transition-colors hover:text-folio-fg dark:text-folio-muted dark:hover:text-zinc-100"
                 >
-                    Ver galería completa →
+                    {{ __('Ver galería completa') }} →
                 </a>
             </div>
         </div>

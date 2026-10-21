@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Controllers\LivewireFileUploadController;
+use App\Http\Middleware\SetLocale;
 use App\Support\SiteNavAvailability;
 use Carbon\CarbonImmutable;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Features\SupportFileUploads\FileUploadController as LivewireUploadController;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
         $this->configureRateLimiting();
         $this->shareSiteNavAvailability();
+
+        Livewire::addPersistentMiddleware([SetLocale::class]);
     }
 
     /**

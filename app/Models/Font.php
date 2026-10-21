@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEnglishTranslations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Font extends Model
 {
+    use HasEnglishTranslations;
+
     protected $fillable = [
         'slug',
         'name',
@@ -23,6 +26,9 @@ class Font extends Model
         'note',
         'sort_order',
         'is_published',
+        'category_en',
+        'sample_en',
+        'note_en',
     ];
 
     protected function casts(): array
@@ -47,13 +53,13 @@ class Font extends Model
             'name' => $this->name,
             'family' => $this->family,
             'tailwind' => $this->tailwind,
-            'category' => $this->category,
+            'category' => $this->translated('category'),
             'weights' => $this->weights,
-            'sample' => $this->sample,
+            'sample' => $this->translated('sample'),
             'google' => $this->google_url,
             'bunny' => $this->bunny_url,
             'css' => $this->css,
-            'note' => $this->note,
+            'note' => $this->translated('note'),
         ];
     }
 }

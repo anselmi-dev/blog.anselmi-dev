@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html id="top" lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+<html id="top" lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth" data-cursor="{{ \App\Support\CursorStyle::current()->value }}">
 <head>
     @include('partials.site-head')
     @stack('meta')
@@ -10,13 +10,25 @@
     x-on:contact-modal-open.window="contactModalOpen = true"
     x-on:contact-modal-close.window="contactModalOpen = false"
     x-bind:class="{ 'overflow-hidden': contactModalOpen }"
-    @php($safeThemeColor = \App\Support\CssColor::hexOrNull($themeColor ?? null))
-    @if ($safeThemeColor)
-        style="--color-brand-lime: {{ $safeThemeColor }}; --color-brand-lime-50: color-mix(in srgb, {{ $safeThemeColor }} 35%, white); --color-brand-lime-100: color-mix(in srgb, {{ $safeThemeColor }} 65%, white); --color-brand-lime-200: color-mix(in srgb, {{ $safeThemeColor }} 80%, white);"
+    @php($safeThemeColor = \App\Support\CssColor::hexOrNull($themeColor ?? null) ?? \App\Support\PageColor::current())
+    @php($pageInk = \App\Support\PageColor::currentInk())
+    @if ($pageInk)
+        data-page-ink
+    @endif
+    @if ($safeThemeColor || $pageInk)
+        style="@if ($safeThemeColor)--color-brand-lime: {{ $safeThemeColor }}; --color-brand-lime-50: color-mix(in srgb, {{ $safeThemeColor }} 35%, white); --color-brand-lime-100: color-mix(in srgb, {{ $safeThemeColor }} 65%, white); --color-brand-lime-200: color-mix(in srgb, {{ $safeThemeColor }} 80%, white);@endif @if ($pageInk)--page-ink: {{ $pageInk }};@endif"
     @endif
 >
+    @if (\App\Models\Setting::site()['background_squares'] ?? true)
+        @persist('rising-squares')
+            <x-rising-squares
+                :opacity="\App\Models\Setting::site()['background_squares_opacity'] ?? 75"
+                :speed="\App\Models\Setting::site()['background_squares_speed'] ?? 1"
+            />
+        @endpersist
+    @endif
 
-    <div class="flex flex-col min-h-screen px-4 pt-6 pb-4 sm:px-6 sm:pt-8 lg:px-8 lg:pt-10">
+    <div class="flex flex-col min-h-screen px-4 pt-6 pb-4 sm:px-6 sm:pt-8 lg:px-8 lg:pt-10" data-page-transition>
         <x-site-header/>
 
         <main class="flex-1">
@@ -27,6 +39,11 @@
     </div>
 
     <livewire:contact-modal />
+
+    @persist('notifications')
+        <x-notification.stack />
+        <x-notification.under-construction />
+    @endpersist
 
     @livewireScripts
 </body>

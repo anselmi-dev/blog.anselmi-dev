@@ -2,10 +2,10 @@
     @section('header-content')
         <x-hero-content>
             <h1 class="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
-                Preguntas frecuentes
+                {{ __('Preguntas frecuentes') }}
             </h1>
             <p class="mt-4 text-base leading-relaxed text-zinc-600 sm:text-lg">
-                Respuestas directas sobre cómo trabajo, plazos y formas de colaboración. Si no está acá, escribime desde contacto.
+                {{ __('Respuestas directas sobre cómo trabajo, plazos y formas de colaboración. Si no está acá, escribime desde contacto.') }}
             </p>
         </x-hero-content>
     @endsection
@@ -46,14 +46,14 @@
         data-reveal="fade-up"
         data-reveal-scroll
     >
-        ¿Seguís con dudas?
+        {{ __('¿Seguís con dudas?') }}
         <button
             type="button"
             class="font-semibold text-zinc-800 underline decoration-zinc-300 underline-offset-2 transition hover:decoration-zinc-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
             x-data
             x-on:click="Livewire.dispatch('open-contact-modal')"
         >
-            Escribime
+            {{ __('Escribime') }}
         </button>
     </p>
 </div>

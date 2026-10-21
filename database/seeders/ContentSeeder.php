@@ -12,8 +12,10 @@ use App\Models\Post;
 use App\Models\Quote;
 use App\Models\ReadingBook;
 use App\Models\SiteColor;
+use App\Models\Tag;
 use App\Models\Tool;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ContentSeeder extends Seeder
 {
@@ -27,6 +29,9 @@ class ContentSeeder extends Seeder
         $this->seedTools();
         $this->seedSnapshot();
         $this->seedReadingBooks();
+        $this->call(SongSeeder::class);
+        $this->call(EnglishContentSeeder::class);
+        $this->call(ToolDescriptionSeeder::class);
     }
 
     private function seedPosts(): void
@@ -96,7 +101,7 @@ class ContentSeeder extends Seeder
             [
                 'kind' => 'photo', 'span' => 'wide', 'width' => 1200, 'height' => 675,
                 'category' => 'Viajes', 'title' => 'Línea del horizonte, otra vez', 'featured' => true, 'play' => false,
-                'released_at' => '12 mar 2025', 'location' => 'Ruta 40, Santa Cruz',
+                'released_on' => '2025-03-12', 'location' => 'Ruta 40, Santa Cruz',
                 'description' => 'Una tarde sin viento y el lago quieto. La idea era esperar el último rayo; al final quedó la calma entera en el encuadre.',
                 'iso' => '100', 'aperture' => 'f/8', 'shutter' => '1/125s', 'focal_length' => '24mm', 'camera' => 'Sony A7 IV',
                 'tags' => ['paisaje', 'patagonia', 'luz natural'],
@@ -104,7 +109,7 @@ class ContentSeeder extends Seeder
             [
                 'kind' => 'photo', 'span' => 'tall', 'width' => 800, 'height' => 1200,
                 'category' => 'Calles', 'title' => 'Domingo de lluvia', 'featured' => false, 'play' => true,
-                'released_at' => '03 feb 2025', 'location' => 'Montevideo, UY',
+                'released_on' => '2025-02-03', 'location' => 'Montevideo, UY',
                 'description' => 'Reflejos en vereda y sombrillas cerradas. Audio ambiente: colectivos y charcos.',
                 'iso' => '800', 'aperture' => 'f/2.8', 'shutter' => '1/160s', 'focal_length' => '35mm', 'camera' => 'Fujifilm X-T5',
                 'tags' => ['urbano', 'lluvia', 'color'],
@@ -112,7 +117,7 @@ class ContentSeeder extends Seeder
             [
                 'kind' => 'photo', 'span' => 'tall', 'width' => 800, 'height' => 1200,
                 'category' => 'Naturaleza', 'title' => 'Bosque y silencio', 'featured' => false, 'play' => false,
-                'released_at' => '18 ene 2025', 'location' => 'Delta del Paraná, AR',
+                'released_on' => '2025-01-18', 'location' => 'Delta del Paraná, AR',
                 'description' => 'Sendero angosto, musgo húmedo. Poca luz: trípode y paciencia.',
                 'iso' => '400', 'aperture' => 'f/4', 'shutter' => '0,5s', 'focal_length' => '28mm', 'camera' => 'Nikon Z6 II',
                 'tags' => ['bosque', 'verde', 'larga exposición'],
@@ -125,7 +130,7 @@ class ContentSeeder extends Seeder
             [
                 'kind' => 'photo', 'span' => 'tall', 'width' => 800, 'height' => 1200,
                 'category' => 'Arquitectura', 'title' => 'Escaleras que suben a ningún lado', 'featured' => false, 'play' => false,
-                'released_at' => '07 nov 2024', 'location' => 'Buenos Aires, AR',
+                'released_on' => '2024-11-07', 'location' => 'Buenos Aires, AR',
                 'description' => 'Edificio público, mediodía duro. Busqué sombras limpias y una geometría que no aburra.',
                 'iso' => '200', 'aperture' => 'f/5.6', 'shutter' => '1/320s', 'focal_length' => '50mm', 'camera' => 'Canon R6',
                 'tags' => ['arquitectura', 'sombras', 'bn propuesto'],
@@ -133,7 +138,7 @@ class ContentSeeder extends Seeder
             [
                 'kind' => 'photo', 'span' => 'tall', 'width' => 800, 'height' => 1200,
                 'category' => 'Costa', 'title' => 'Marea baja', 'featured' => false, 'play' => false,
-                'released_at' => '22 oct 2024', 'location' => 'Mar del Plata, AR',
+                'released_on' => '2024-10-22', 'location' => 'Mar del Plata, AR',
                 'description' => 'Algas, arena húmeda y un cielo que no prometía nada y terminó en rosa.',
                 'iso' => '100', 'aperture' => 'f/11', 'shutter' => '1/60s', 'focal_length' => '18mm', 'camera' => 'Sony A7 IV',
                 'tags' => ['costa', 'atardecer', 'gran angular'],
@@ -141,7 +146,7 @@ class ContentSeeder extends Seeder
             [
                 'kind' => 'photo', 'span' => 'wide', 'width' => 1200, 'height' => 675,
                 'category' => 'Destinos', 'title' => 'Guía exprés de montaña', 'featured' => false, 'play' => true,
-                'released_at' => '01 sep 2024', 'location' => 'Bariloche, AR',
+                'released_on' => '2024-09-01', 'location' => 'Bariloche, AR',
                 'description' => 'Cumbre ventosa, manos frías. La toma es del descenso, cuando el cielo abrió un poco.',
                 'iso' => '320', 'aperture' => 'f/5.6', 'shutter' => '1/500s', 'focal_length' => '70mm', 'camera' => 'Nikon Z6 II',
                 'tags' => ['montaña', 'viaje', 'viento'],
@@ -149,7 +154,7 @@ class ContentSeeder extends Seeder
             [
                 'kind' => 'photo', 'span' => 'tall', 'width' => 800, 'height' => 1200,
                 'category' => 'Interior', 'title' => 'Ventana y taza fría', 'featured' => true, 'play' => false,
-                'released_at' => '14 ago 2024', 'location' => 'Estudio, CABA',
+                'released_on' => '2024-08-14', 'location' => 'Estudio, CABA',
                 'description' => 'Luz de mañana lateral. Nada de flash: solo cortina y café ya frío.',
                 'iso' => '400', 'aperture' => 'f/2', 'shutter' => '1/200s', 'focal_length' => '50mm', 'camera' => 'Fujifilm X-T5',
                 'tags' => ['interior', 'luz natural', 'still'],
@@ -157,7 +162,7 @@ class ContentSeeder extends Seeder
             [
                 'kind' => 'photo', 'span' => 'tall', 'width' => 800, 'height' => 1200,
                 'category' => 'Ciudad', 'title' => 'Neón después del cine', 'featured' => false, 'play' => false,
-                'released_at' => '30 jul 2024', 'location' => 'CABA',
+                'released_on' => '2024-07-30', 'location' => 'CABA',
                 'description' => 'Salida de función, mano alzada, ISO alto y aceptar el grano como parte del cuento.',
                 'iso' => '3200', 'aperture' => 'f/1.8', 'shutter' => '1/80s', 'focal_length' => '35mm', 'camera' => 'Sony A7 IV',
                 'tags' => ['nocturno', 'neón', 'ciudad'],
@@ -165,7 +170,7 @@ class ContentSeeder extends Seeder
             [
                 'kind' => 'photo', 'span' => 'tall', 'width' => 800, 'height' => 1200,
                 'category' => 'Serie', 'title' => 'Último carrete del verano', 'featured' => false, 'play' => false,
-                'released_at' => '19 jul 2024', 'location' => 'Colonia, UY',
+                'released_on' => '2024-07-19', 'location' => 'Colonia, UY',
                 'description' => 'Película 400, escaneo casero. El borde del mar y gente que no mira a cámara.',
                 'iso' => '400', 'aperture' => 'f/5.6', 'shutter' => '1/250s', 'focal_length' => '40mm', 'camera' => 'Leica M6 + Portra',
                 'tags' => ['analógico', 'playa', 'serie'],
@@ -188,9 +193,19 @@ class ContentSeeder extends Seeder
             $play = $item['play'] ?? false;
             $attributes = array_diff_key($item, array_flip(['kind', 'span', 'featured', 'play']));
 
+            $tagNames = $attributes['tags'] ?? [];
+            unset($attributes['tags']);
+
             $galleryable = $kind === 'quote'
                 ? Quote::query()->create($attributes)
                 : Media::query()->create($attributes);
+
+            if ($galleryable instanceof Media) {
+                foreach ($tagNames as $position => $name) {
+                    $tag = Tag::query()->firstOrCreate(['slug' => Str::slug($name)], ['name' => $name]);
+                    $galleryable->tags()->attach($tag, ['sort_order' => $position]);
+                }
+            }
 
             Gallery::query()->create([
                 'collection_id' => $collection->id,

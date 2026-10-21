@@ -6,13 +6,19 @@ use App\Actions\Media\ExtractExifData;
 use App\Filament\Resources\Media\Pages\CreateMedia;
 use App\Filament\Resources\Media\Pages\EditMedia;
 use App\Filament\Resources\Media\Pages\ListMedia;
+use App\Filament\Resources\Tags\TagResource;
+use App\Filament\Support\CompleteWithAiAction;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Media as MediaModel;
+use App\Models\Tag;
 use BackedEnum;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -24,6 +30,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use UnitEnum;
 
@@ -51,34 +58,78 @@ class MediaResource extends Resource
             ->components([
                 Section::make('Foto')
                     ->columns(2)
+                    ->columnSpanFull()
                     ->schema([
-                        TextInput::make('title')
-                            ->label('Título'),
-                        TextInput::make('category')
-                            ->label('Categoría'),
                         FileUpload::make('image_path')
                             ->label('Imagen')
+                            ->helperText('Al guardar se generan la miniatura (480 px) y una versión mediana (1600 px) y, si están vacíos, se completan el ancho y el alto.')
                             ->image()
                             ->disk('public')
                             ->directory('media')
                             ->visibility('public')
                             ->imageEditor()
                             ->columnSpanFull(),
+                        DatePicker::make('released_on')
+                            ->label('Fecha')
+                            ->native(false)
+                            ->displayFormat('j M Y')
+                            ->closeOnDateSelection(),
+                        Select::make('tags')
+                            ->label('Etiquetas')
+                            ->relationship('tags', 'name')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->getOptionLabelFromRecordUsing(fn (Tag $record): string => filled($record->name_en) ? "{$record->name} · {$record->name_en}" : $record->name)
+                            ->createOptionForm(TagResource::fields())
+                            ->createOptionModalHeading('Nueva etiqueta'),
+                    ]),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('title')
+                            ->label('Título'),
+                        TextInput::make('category')
+                            ->label('Categoría'),
                         Textarea::make('description')
                             ->label('Descripción')
                             ->rows(3)
                             ->columnSpanFull(),
                         TextInput::make('location')
                             ->label('Lugar'),
-                        TextInput::make('released_at')
-                            ->label('Fecha (texto)')
-                            ->placeholder('12 mar 2025'),
-                        TagsInput::make('tags')
-                            ->label('Tags')
-                            ->columnSpanFull(),
-                    ]),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('title_en')
+                                ->label('Title')
+                                ->maxLength(255),
+                            TextInput::make('category_en')
+                                ->label('Category')
+                                ->maxLength(255),
+                            Textarea::make('description_en')
+                                ->label('Description')
+                                ->rows(3)
+                                ->columnSpanFull(),
+                            TextInput::make('location_en')
+                                ->label('Location')
+                                ->maxLength(255),
+                        ],
+                    ],
+                    translatableFields: ['title', 'category', 'description', 'location'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'una foto de mi galería de fotografía (la imagen va adjunta)',
+                        guidance: [
+                            'title' => 'Título corto y evocador (máximo 60 caracteres).',
+                            'category' => 'Rubro de la foto en 1 o 2 palabras: Paisaje, Calles, Retrato, Arquitectura, Naturaleza…',
+                            'description' => 'Una o dos oraciones sobre lo que muestra la foto, sin inventar cómo ni por qué la saqué.',
+                            'location' => 'Lugar donde se tomó. Solo si está en el contexto o se reconoce sin duda en la imagen; si no, dejalo vacío.',
+                        ],
+                        context: ['released_on' => 'Fecha', 'camera' => 'Cámara'],
+                        image: 'image_path',
+                    ),
+                ),
                 Section::make('Datos EXIF / cámara')
                     ->columns(3)
+                    ->columnSpanFull()
                     ->collapsed()
                     ->schema([
                         FileUpload::make('exif_source')
@@ -143,9 +194,18 @@ class MediaResource extends Resource
                 TextColumn::make('category')
                     ->label('Categoría')
                     ->toggleable(),
+                TextColumn::make('tags.name')
+                    ->label('Etiquetas')
+                    ->badge()
+                    ->toggleable(),
+                TextColumn::make('released_on')
+                    ->label('Fecha')
+                    ->date('j M Y')
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('camera')
                     ->label('Cámara')
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->label('Creada')
                     ->dateTime()
@@ -156,6 +216,21 @@ class MediaResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('regenerateThumbnails')
+                        ->label('Regenerar miniaturas')
+                        ->icon(Heroicon::OutlinedPhoto)
+                        ->action(function (Collection $records): void {
+                            $records->each(function (MediaModel $media): void {
+                                $media->generateImageVariants(force: true);
+                                $media->saveQuietly();
+                            });
+
+                            Notification::make()
+                                ->success()
+                                ->title('Miniaturas regeneradas')
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     DeleteBulkAction::make(),
                 ]),
             ]);

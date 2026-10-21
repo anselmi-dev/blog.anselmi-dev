@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Collections;
 use App\Filament\Resources\Collections\Pages\CreateCollection;
 use App\Filament\Resources\Collections\Pages\EditCollection;
 use App\Filament\Resources\Collections\Pages\ListCollections;
+use App\Filament\Support\CompleteWithAiAction;
+use App\Filament\Support\LanguageTabs;
 use App\Models\Collection;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -46,23 +48,45 @@ class CollectionResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Nombre')
-                    ->required()
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (Set $set, ?string $state, ?string $old, Get $get): void {
-                        if (filled($get('slug')) && $get('slug') !== Str::slug((string) $old)) {
-                            return;
-                        }
-                        $set('slug', Str::slug((string) $state));
-                    }),
+                LanguageTabs::make(
+                    spanish: [
+                        TextInput::make('name')
+                            ->label('Nombre')
+                            ->required()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (Set $set, ?string $state, ?string $old, Get $get): void {
+                                if (filled($get('slug')) && $get('slug') !== Str::slug((string) $old)) {
+                                    return;
+                                }
+                                $set('slug', Str::slug((string) $state));
+                            }),
+                        Textarea::make('description')
+                            ->label('Descripción')
+                            ->rows(3)
+                            ->columnSpanFull(),
+                    ],
+                    translations: [
+                        'en' => [
+                            TextInput::make('name_en')
+                                ->label('Name')
+                                ->maxLength(255),
+                            Textarea::make('description_en')
+                                ->label('Description')
+                                ->rows(3),
+                        ],
+                    ],
+                    translatableFields: ['name', 'description'],
+                    completion: CompleteWithAiAction::make(
+                        about: 'una colección de la galería de fotos (agrupa fotos, videos y citas)',
+                        guidance: [
+                            'name' => 'Nombre corto de la colección.',
+                            'description' => 'Una o dos oraciones que presenten la colección, sin inventar lugares, fechas ni historias que no estén en el contexto.',
+                        ],
+                    ),
+                ),
                 TextInput::make('slug')
                     ->required()
                     ->unique(ignoreRecord: true),
-                Textarea::make('description')
-                    ->label('Descripción')
-                    ->rows(3)
-                    ->columnSpanFull(),
                 TextInput::make('sort_order')
                     ->label('Orden')
                     ->numeric()

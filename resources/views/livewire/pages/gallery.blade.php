@@ -1,15 +1,22 @@
 <div class="pb-16 pt-4 sm:pb-20 sm:pt-6 lg:pb-24">
     @section('header-content')
         <x-hero-content>
-            <p class="mb-2 font-folio-mono text-xs font-medium uppercase tracking-widest text-folio-forest dark:text-folio-muted">
-                Fotografía
-            </p>
+            <a
+                href="{{ localized_route('gallery') }}"
+                wire:navigate
+                class="mb-3 inline-flex items-center gap-1.5 font-folio-mono text-xs font-medium uppercase tracking-widest text-folio-forest transition hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+            >
+                <x-icon name="arrow-left" class="size-3.5" />
+                {{ __('Colecciones') }}
+            </a>
             <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
-                Galería
+                {{ $collection['name'] }}
             </h1>
-            <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg">
-                Serie de tomas y notas visuales: mismo criterio que en el resto del sitio — bordes finos, sombra suave, mucho aire.
-            </p>
+            @if (filled($collection['description']))
+                <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg">
+                    {{ $collection['description'] }}
+                </p>
+            @endif
         </x-hero-content>
     @endsection
 
@@ -33,10 +40,31 @@
                             'lg:col-span-1' => ($item['span'] ?? 'tall') !== 'wide',
                         ])
                     />
+                @elseif ($item['kind'] === 'video')
+                    @php
+                        $wide = ($item['span'] ?? 'tall') === 'wide';
+                    @endphp
+                    <x-gallery.photo-tile
+                        data-reveal-item
+                        :image-url="$item['poster_url']"
+                        :video-url="$item['video_url']"
+                        :category="$item['category']"
+                        :title="$item['title']"
+                        :featured="(bool) ($item['featured'] ?? false)"
+                        show-play
+                        :wide="$wide"
+                        as-button
+                        wire:click.prevent="openLightbox({{ $index }})"
+                        wire:key="gallery-thumb-{{ $index }}"
+                        @class([
+                            'lg:col-span-2' => $wide,
+                            'lg:col-span-1' => ! $wide,
+                        ])
+                    />
                 @else
                     @php
                         $wide = ($item['span'] ?? 'tall') === 'wide';
-                        $url = $item['thumb_url'] ?? $item['image_url'] ?? sprintf(
+                        $url = $item['medium_url'] ?? $item['thumb_url'] ?? $item['image_url'] ?? sprintf(
                             'https://picsum.photos/seed/gallery-fallback/%d/%d',
                             (int) ($item['w'] ?? 800),
                             (int) ($item['h'] ?? 1200)
@@ -45,6 +73,7 @@
                     <x-gallery.photo-tile
                         data-reveal-item
                         :image-url="$url"
+                        :srcset="$item['srcset'] ?? null"
                         :category="$item['category']"
                         :title="$item['title']"
                         :featured="(bool) ($item['featured'] ?? false)"
@@ -67,14 +96,14 @@
             data-reveal="fade-up"
             data-reveal-scroll
         >
-            ¿Querés encargar sesión o licencia de uso?
+            {{ __('¿Querés encargar sesión o licencia de uso?') }}
             <button
                 type="button"
                 class="font-semibold text-zinc-800 underline decoration-zinc-300 underline-offset-2 transition hover:decoration-zinc-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 dark:text-zinc-200 dark:decoration-zinc-600 dark:hover:decoration-zinc-400"
                 x-data
                 x-on:click="Livewire.dispatch('open-contact-modal')"
             >
-                Escribime
+                {{ __('Escribime') }}
             </button>
         </p>
     </div>

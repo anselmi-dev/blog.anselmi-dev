@@ -1,8 +1,15 @@
 import { createIcons, icons } from 'lucide';
 import { initBookCarousels } from './book-carousel';
 import { initCustomCursor } from './custom-cursor';
+import { initLogoAnimation } from './logo-animation';
 import { initImageMetadataUploads } from './image-metadata-upload';
 import { initMotion } from './motion';
+import { initNotifications } from './notifications';
+import { initPageLoaders } from './page-loader';
+import { initPageTransition } from './page-transition';
+import { initPhotoShare } from './photo-share';
+import { initToolsWheels } from './tools-wheel';
+import { initTooltips } from './tooltips';
 
 /**
  * Reemplaza nodos `<i data-lucide="nombre">` por SVG de Lucide.
@@ -24,6 +31,9 @@ function boot(root = document) {
     initMotion(root);
     initBookCarousels(root);
     initCustomCursor(root);
+    initLogoAnimation(root);
+    initPageLoaders(root);
+    initToolsWheels(root);
     initImageMetadataUploads(root);
 }
 
@@ -42,6 +52,11 @@ function queueInterfaceRefresh() {
         interfaceRefreshQueued = false;
     });
 }
+
+initPageTransition();
+initNotifications();
+initTooltips();
+initPhotoShare();
 
 document.addEventListener('DOMContentLoaded', () => boot());
 

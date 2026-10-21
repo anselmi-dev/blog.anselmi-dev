@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEnglishTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class HomeSnapshot extends Model
 {
+    use HasEnglishTranslations;
+
     protected $fillable = [
         'map_image_path',
         'maps_url',
         'map_label',
         'spotify_embed_url',
+        'playlist_url',
         'carousel_interval',
+        'map_label_en',
     ];
 
     protected function casts(): array
@@ -30,6 +35,7 @@ class HomeSnapshot extends Model
             'maps_url' => 'https://maps.app.goo.gl/6jtvkALmD64tEbkY9',
             'map_label' => 'MONTEVIDEO · URUGUAY',
             'spotify_embed_url' => 'https://open.spotify.com/embed/track/6MjfEIHOMW6MaDO3LpFcmW?utm_source=generator',
+            'playlist_url' => 'https://open.spotify.com/playlist/6zZEmocQXHdXIFunj8UJUS',
             'carousel_interval' => 4500,
         ]);
     }
